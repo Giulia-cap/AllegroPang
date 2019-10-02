@@ -4,6 +4,9 @@
 
 class DynamicObject:public Object
 {
+	protected:
+	float bouncer_x;
+	float bouncer_y; 
 	public:
 		DynamicObject(int,Type);
 		virtual~DynamicObject();
@@ -11,5 +14,10 @@ class DynamicObject:public Object
 		virtual void render()=0;
 		virtual void die()=0;
 		virtual void move(int,int)=0; 
+
+		void setBouncer_x(float);
+		void setBouncer_y(float);
+		float getBouncer_x();
+		float getBouncer_y();
 };
 #endif

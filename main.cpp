@@ -20,14 +20,13 @@ enum MYKEYS {
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
-float bouncer_x = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
-float bouncer_y = SCREEN_H- BOUNCER_SIZE;
+
 bool key[2] = { false, false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
 bool redraw = true;
 bool doexit = false;
 
-vector<Balls*> object;
-
+vector<DynamicObject*> object;
+//Bullet *bullet;
 
 /*-------------FUNZIONI................*/
 void init();
@@ -39,27 +38,26 @@ int main(int argc, char **argv)
   while(!doexit)
    {
       ALLEGRO_EVENT ev;
-      al_wait_for_event(event_queue, &ev);
-      /*----------------------------------------MOVIMENTO PALLE----------------------*/
-   /*    for(int i=0;i<object.size();i++)
-      {
-         object[0]->move(SCREEN_W,SCREEN_H);
-      }*/
-
-      /*-------------------MOVIMENTO PLAYER---------------------*/
+     	 al_wait_for_event(event_queue, &ev);
  
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
-         if(key[KEY_LEFT] && bouncer_x >= 4.0) {
-            bouncer_x -= 4.0;
-         }
+         /*-------------------MOVIMENTO PLAYER---------------------*/
+         if(key[KEY_LEFT] )  
+            player->move(SCREEN_W,0);
 
-         if(key[KEY_RIGHT] && bouncer_x <= SCREEN_W - BOUNCER_SIZE - 4.0) {
-            bouncer_x += 4.0;
-         }
+         if(key[KEY_RIGHT])
+             player->move(SCREEN_W,1);
 
+         /*-------------------MOVIMENTO BALLS---------------------*/
+
+         for(int i=0;i<object.size();i++)
+            object[i]->move(SCREEN_W,SCREEN_H);
+         /*-------------------------------------------------------*/
          redraw = true;
       }
+    
+
       else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
          break;
       }
@@ -91,6 +89,8 @@ int main(int argc, char **argv)
                break;
          }
       }
+
+      /*-------------------DRAW.......................................*/
  
       if(redraw && al_is_event_queue_empty(event_queue)) 
       {
@@ -98,15 +98,15 @@ int main(int argc, char **argv)
 
          al_clear_to_color(al_map_rgb(0,0,0));
 
-         player->move(bouncer_x,bouncer_y);
- 
+         player->render();
+ 		
+    		for(int i=0;i<object.size();i++)
+    		   object[i]->render();
+
          al_flip_display();
 
       }
-
-        //al_flip_display();
-
-      /*-------------------------------------------------------------------------------------------------------------*/
+      /*--------------------------------------------------------------*/
   
    }
 
@@ -142,23 +142,25 @@ void init()
    }
  
    display = al_create_display(SCREEN_W, SCREEN_H);
-   if(!display) {
+   if(!display) 
+   {
       fprintf(stderr, "failed to create display!\n");
       al_destroy_timer(timer);
       return;
    }
  
    player=new Player(3,PLAYER);
+   player->setBouncer_x(SCREEN_W / 2.0 - player->BOUNCER_SIZE / 2.0);
+   player->setBouncer_y(SCREEN_H - player->BOUNCER_SIZE );
 
    generateBalls();
 
    al_set_target_bitmap(player->image);
-
    al_clear_to_color(al_map_rgb(255, 0, 255));
 
 
  for(int i=0;i<object.size();i++)
- 	{ cout<<"ciao";
+ 	{ 
      	al_set_target_bitmap(object[i]->image);
        al_clear_to_color(al_map_rgb(255, 0, 255));
    }
@@ -185,7 +187,6 @@ void init()
    al_flip_display();
  
    al_start_timer(timer);
-
 }
 
 

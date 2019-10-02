@@ -12,11 +12,20 @@ Player::~Player()
 	al_destroy_bitmap(image);
 }
 
-void Player::move(int bouncer_x, int bouncer_y)
+void Player::move(int SCREEN_W,int k)
+{
+   if(k==0 && bouncer_x >= 4.0) //MOVIMENTO A SINISTRA
+      bouncer_x -= 4.0;
+   
+   if(k==1 && bouncer_x <= SCREEN_W - BOUNCER_SIZE - 4.0) //MOVIMENTO A DESTRA
+      bouncer_x += 4.0;
+   
+}
+
+void Player::tick(){}
+void Player::render()
 {
    al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
 }
-void Player::tick(){}
-void Player::render(){}
 void Player::loadImage(){}
 void Player::die(){}
