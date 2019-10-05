@@ -12,8 +12,10 @@ const float FPS = 60;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 const int BOUNCER_SIZE = 32;
-int bulletDelay=0;
+
+int bulletDelay=10.0f;
 const int firerate=10.0f;
+
 Player *player;
 enum MYKEYS {
    KEY_LEFT, KEY_RIGHT , SPACE_BAR 
@@ -32,6 +34,8 @@ vector<DynamicObject*> object;
 /*-------------FUNZIONI................*/
 void init();
 void generateBalls();
+void gameOver();
+bool checkCollision(vector<DynamicObject*>::iterator  );
 
 int main(int argc, char **argv)
 {
@@ -39,7 +43,7 @@ int main(int argc, char **argv)
   while(!doexit)
    {
       ALLEGRO_EVENT ev;
-     	 al_wait_for_event(event_queue, &ev);
+       al_wait_for_event(event_queue, &ev);
  
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
@@ -52,22 +56,40 @@ int main(int argc, char **argv)
 
          if(key[SPACE_BAR])
          {
-            if (bulletDelay >= firerate) {
-            Bullet *bullet=new Bullet(1,BULLET,player->getBouncer_x(),player->getBouncer_y());
-            object.push_back(bullet);
-            /*al_set_target_bitmap(bullet->image);---->vedi commento costruttore bullet
-            al_clear_to_color(al_map_rgb(255, 0, 255));*/
-            al_set_target_bitmap(al_get_backbuffer(display));
-            bulletDelay=0;
-         }
-         bulletDelay++;
+            if (bulletDelay >= firerate)
+            {
+               Bullet *bullet=new Bullet(1,BULLET,player->getBouncer_x(),player->getBouncer_y());
+               object.push_back(bullet);
+               /*al_set_target_bitmap(bullet->image);---->vedi commento costruttore bullet
+               al_clear_to_color(al_map_rgb(255, 0, 255));*/
+               al_set_target_bitmap(al_get_backbuffer(display));
+               bulletDelay=0;
+            }
+            bulletDelay++;
          }
 
-         /*-------------------MOVIMENTO BALLS/BULLET---------------------*/
+         /*--------------------------MOVIMENTO-------------------------*/
 
-         for(int i=0;i<object.size();i++)
-            object[i]->move(SCREEN_W,SCREEN_H);
-         /*-------------------------------------------------------*/
+         for(vector<DynamicObject*>::iterator it=object.begin();it!=object.end();)
+         {
+            (*it)->move(SCREEN_W,SCREEN_H);
+         /*------------------------------------------------------------*/
+
+            /*------------------COLLISIONI-----------------------*/
+            if((*it)->getType()==BALL)
+            {
+                  if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
+                     gameOver();
+                   it++;
+                  }
+                  else if(checkCollision(it))
+                    it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
+                  else it++;
+            }
+            else it++;
+            /*----------------------------------------------------*/
+
+         }
          redraw = true;
       }
     
@@ -122,9 +144,9 @@ int main(int argc, char **argv)
          al_clear_to_color(al_map_rgb(0,0,0));
 
          player->render();
- 		
-    		for(int i=0;i<object.size();i++)
-    		   object[i]->render();
+      
+         for(int i=0;i<object.size();i++)
+            object[i]->render();
 
          al_flip_display();
 
@@ -183,8 +205,8 @@ void init()
 
 
  for(int i=0;i<object.size();i++)
- 	{ 
-     	al_set_target_bitmap(object[i]->image);
+   { 
+      al_set_target_bitmap(object[i]->image);
        al_clear_to_color(al_map_rgb(255, 0, 255));
    }
 
@@ -221,5 +243,28 @@ void generateBalls()
     object.push_back(b);
     object.push_back(b2);
     object.push_back(b3);
+   return;
+}
+
+bool checkCollision( vector<DynamicObject*>::iterator  it)
+{ 
+  for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+   {
+      if((*it2)->getType()==BULLET) 
+      {
+         Object *o=(*it2);
+         if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
+         {
+            object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+            return true;
+         }
+      }
+   }
+   return false;
+}
+
+void gameOver()
+{
+   cout<<"YOU LOOOOOOOOOOSE!"<<endl;
    return;
 }
