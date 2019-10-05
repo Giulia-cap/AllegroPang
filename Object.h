@@ -4,7 +4,7 @@ using namespace std;
 #ifndef Object_H
 #define Object_H
 
-enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS };
+enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS,BULLET };
 class Object
 {
 	private:

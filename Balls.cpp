@@ -1,12 +1,19 @@
 #include "Balls.h"
 #include<iostream>
+#include <random>
+#include <cstdlib>
+#include <time.h>
 using namespace std;
 
-Balls::Balls(int l,Type t,int s):DynamicObject(l,t)
+Balls::Balls(int l,Type t,int s,float initialPosX, float initialPosY, float dx,float dy ):DynamicObject(l,t)
 {
 	BOUNCER_SIZE=s;
-	bouncer_x = 640 / 2.0 - BOUNCER_SIZE / 2.0;
-	bouncer_y = 480 / 2.0 - BOUNCER_SIZE / 2.0;
+   
+   bouncer_dx=dx;
+   bouncer_dy=dy;
+	bouncer_x = initialPosX / 2.0 - BOUNCER_SIZE / 2.0;
+	bouncer_y = initialPosY / 2.0 - BOUNCER_SIZE / 2.0;
+   cout<<"CREATA PALLA IN POSIZIONE : "<<bouncer_x<<" "<<bouncer_y<<endl;
 	image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 }
 
@@ -27,6 +34,12 @@ void Balls::move(int SCREEN_W,int SCREEN_H)
 
          bouncer_x += bouncer_dx;
          bouncer_y += bouncer_dy;   
+         if(bouncer_dy!=24)
+         if(bouncer_dy>14.0) bouncer_dy-=0.3; // se aumenti il 24 aumenta anche la grandezza del salto
+         else
+         bouncer_dy+=0.3;
+         
+         //cout<<"X: "<<bouncer_dx<<" Y:"<<bouncer_dy<<endl;
 }
 void Balls::tick(){}
 void Balls::render()

@@ -5,10 +5,10 @@
 class Balls:public DynamicObject
 {
 	private:
-		float bouncer_dx = -4.0;
-		float bouncer_dy = 4.0;
+		float bouncer_dx;
+		float bouncer_dy;
 	public:
-		Balls(int,Type,int);
+		Balls(int,Type,int,float,float,float,float);
 		~Balls();
 		void move(int,int);
 		void loadImage();

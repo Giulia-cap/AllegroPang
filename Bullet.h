@@ -3,7 +3,8 @@
 #define Bullet_H
 class Bullet:public DynamicObject
 {
-	Bullet(int,Type);
+	public:
+	Bullet(int,Type,float,float);
 	~Bullet();
 	void tick();
 	void render();

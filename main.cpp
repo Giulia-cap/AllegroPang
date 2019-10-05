@@ -2,6 +2,7 @@
 #include <allegro5/allegro.h>
 #include "Player.h"
 #include "Balls.h"
+#include "Bullet.h"
 #include "Object.h"
 #include <iostream>
 #include <vector>
@@ -11,22 +12,22 @@ const float FPS = 60;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 const int BOUNCER_SIZE = 32;
-
+int bulletDelay=0;
+const int firerate=10.0f;
 Player *player;
 enum MYKEYS {
-   KEY_LEFT, KEY_RIGHT
+   KEY_LEFT, KEY_RIGHT , SPACE_BAR 
 };
 
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
-bool key[2] = { false, false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
+bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
 bool redraw = true;
 bool doexit = false;
 
 vector<DynamicObject*> object;
-//Bullet *bullet;
 
 /*-------------FUNZIONI................*/
 void init();
@@ -49,7 +50,20 @@ int main(int argc, char **argv)
          if(key[KEY_RIGHT])
              player->move(SCREEN_W,1);
 
-         /*-------------------MOVIMENTO BALLS---------------------*/
+         if(key[SPACE_BAR])
+         {
+            if (bulletDelay >= firerate) {
+            Bullet *bullet=new Bullet(1,BULLET,player->getBouncer_x(),player->getBouncer_y());
+            object.push_back(bullet);
+            /*al_set_target_bitmap(bullet->image);---->vedi commento costruttore bullet
+            al_clear_to_color(al_map_rgb(255, 0, 255));*/
+            al_set_target_bitmap(al_get_backbuffer(display));
+            bulletDelay=0;
+         }
+         bulletDelay++;
+         }
+
+         /*-------------------MOVIMENTO BALLS/BULLET---------------------*/
 
          for(int i=0;i<object.size();i++)
             object[i]->move(SCREEN_W,SCREEN_H);
@@ -71,6 +85,10 @@ int main(int argc, char **argv)
             case ALLEGRO_KEY_RIGHT:
                key[KEY_RIGHT] = true;
                break;
+
+            case ALLEGRO_KEY_SPACE:
+               key[SPACE_BAR]=true;
+               break;
          }
       }
       else if(ev.type == ALLEGRO_EVENT_KEY_UP) {  //tasto rilasciato (si setta a false)
@@ -84,9 +102,14 @@ int main(int argc, char **argv)
                key[KEY_RIGHT] = false;
                break;
 
+            case ALLEGRO_KEY_SPACE:
+               key[SPACE_BAR]=false;
+               break;
+
             case ALLEGRO_KEY_ESCAPE:
                doexit = true;
                break;
+
          }
       }
 
@@ -192,7 +215,11 @@ void init()
 
 void generateBalls()
 {
-   Balls *b=new Balls(1,BALL,32);
-   object.push_back(b);
+
+      Balls *b=new Balls(1,BALL,32,320,120,2,3),*b2=new Balls(1,BALL,32,420,160,-2,4),*b3=new Balls(1,BALL,32,120,220,2,-4);
+
+    object.push_back(b);
+    object.push_back(b2);
+    object.push_back(b3);
    return;
 }
