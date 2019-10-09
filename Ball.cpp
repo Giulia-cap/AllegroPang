@@ -15,11 +15,13 @@ Ball::Ball(int l,Type t,int s,float initialPosX, float initialPosY, float dx,flo
 	bouncer_y = initialPosY / 2.0 - BOUNCER_SIZE / 2.0;
    cout<<"CREATA PALLA IN POSIZIONE : "<<bouncer_x<<" "<<bouncer_y<<endl;
 	image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
+   al_set_target_bitmap(image);               /*  --------------------------> questo posso metterlo direttamente 
+                                                         su object così non devo farlo nel main (vedi funzione init)*/
+   al_clear_to_color(al_map_rgb(255, 0, 255)); /*idem*/
 }
 
 Ball::~Ball()
 { 
-   al_destroy_bitmap(image);
 }
 
 void Ball::move(int SCREEN_W,int SCREEN_H)

@@ -15,7 +15,6 @@ Bullet::Bullet(int l,Type t,float posx ,float posy):DynamicObject(l,t)
 }
 Bullet::~Bullet()
 {
-	al_destroy_bitmap(image);
 }
 
 void Bullet::move(int SCREEN_W,int SCREEN_H)

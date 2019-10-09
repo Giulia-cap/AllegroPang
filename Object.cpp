@@ -2,7 +2,10 @@
 using namespace std;
 
 Object::Object( int l, Type t):life(l),type(t){}
-Object::~Object(){al_destroy_bitmap(image);}
+Object::~Object()
+{
+    al_destroy_bitmap(image);
+}
 
 int Object::getLife(){return life;}
 void Object::setLife(int l){life=l;}

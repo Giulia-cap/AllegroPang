@@ -3,15 +3,15 @@
 #include "Game.h"
 #include <iostream>
 using namespace std;
- 
+
+int livello=1;
+
 int main(int argc, char **argv)
 {
-   Game game (640,480);
-   game.init();
-   game.tick();
-   /*-----DELETE-------*/
-   //delete player;  //----------->CREA L'ERRORE ALLA FINE!
-   //delete object[0];
- 
+	
+	Game game (640,480);
+   	game.init();
+   	game.tick();
+   
    return 0;
 }

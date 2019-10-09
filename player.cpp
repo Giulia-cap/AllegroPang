@@ -7,9 +7,9 @@ Player::Player(int l,Type t):DynamicObject(l,t)
 	BOUNCER_SIZE=32;
 	image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 }
+
 Player::~Player()
 {
-	al_destroy_bitmap(image);
 }
 
 void Player::move(int SCREEN_W,int k)
