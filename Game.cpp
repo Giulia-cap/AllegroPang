@@ -155,7 +155,14 @@ void Game::tick()
       }
 
       /*-------------------DRAW.......................................*/
- 
+      for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
+       if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         object.erase(it2);
+        else 
+        	(*it2)->decreaseTtl();
+    	
+     }
+     cout<<"SIZE: "<<object.size()<<endl;
      render();
       /*--------------------------------------------------------------*/
    if(object.size()!=0&&checkLevelOver()){ 
@@ -196,17 +203,10 @@ void Game::generateBalls()
 
 bool Game::checkCollision(vector<DynamicObject*>::iterator it )
 {
-   cout<<"SIZE OBJECT "<<object.size()<<endl;
 	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
-   {
-      if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-         object.erase(it2);
-      
-      else{
-
+   {      
          if((*it2)->getType()==BULLET) 
          {
-         (*it2)->decreaseTtl();
             Object *o=(*it2);
             if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
             {
@@ -214,7 +214,6 @@ bool Game::checkCollision(vector<DynamicObject*>::iterator it )
                return true;
             }
          }
-      }
    }
 }
    return false;
