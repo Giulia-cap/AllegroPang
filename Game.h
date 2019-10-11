@@ -32,6 +32,7 @@ class Game
 		bool checkCollision(vector<DynamicObject*>::iterator );
 		void tick();
 		void render();
+		bool checkLevelOver();
 
 
 

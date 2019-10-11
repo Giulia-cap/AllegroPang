@@ -27,4 +27,5 @@ void Bullet::render()
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
 }
 void Bullet::loadImage(){}
-void Bullet::die(){}
+void Bullet::die(){
+}
