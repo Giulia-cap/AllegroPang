@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 #include "Game.h"
+#include "allegro5/allegro_image.h"
+#include "allegro5/allegro_primitives.h"
 
 using namespace std;
 
@@ -87,8 +89,8 @@ void Game::tick()
                   else if(checkCollision(it))
                   {
                     it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-                    b4=new Ball(1,BALL,16,320,120,2,3);
-                    object.push_back(b4);
+                    b4=new Ball(1,BALL,16,320,120,2,3);  //FACCIAMO SDOPPIARE LA PALLA DISTRUTTA
+                    object.push_back(b4);   
                     al_set_target_bitmap(al_get_backbuffer(display));
                   }
                   else it++;
@@ -205,6 +207,7 @@ void Game::init()
          fprintf(stderr, "failed to initialize allegro!\n");
          return;
       }
+
  
    if(!al_install_keyboard()) {
       fprintf(stderr, "failed to initialize the keyboard!\n");
@@ -217,8 +220,17 @@ void Game::init()
       fprintf(stderr, "failed to create timer!\n");
       return;
    }
- 
+
+   //
+   /*ALLEGRO_MONITOR_INFO disp_data;
+   al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
+   
+   SCREEN_W= disp_data.x2 - disp_data.x1;;
+   SCREEN_H= disp_data.y2 - disp_data.y1;
+   //
    display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);*/
+    display = al_create_display(SCREEN_W, SCREEN_H);
 
    if(!display) 
    {
