@@ -20,7 +20,7 @@ bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato del
 bool redraw = true;
 bool doexit = false;
 
-Ball *b,*b2,*b3,*b4;
+Ball *b,*b2,*b3,*b4,*b5;
 Bullet *bullet;
 
 Game::Game(int w, int h)
@@ -88,9 +88,17 @@ void Game::tick()
                   }
                   else if(checkCollision(it))
                   {
+                   if((*it)->BOUNCER_SIZE/2>=8){
+                    b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),2,3);
+                    b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-2,3);
                     it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-                    b4=new Ball(1,BALL,16,320,120,2,3);  //FACCIAMO SDOPPIARE LA PALLA DISTRUTTA
+
                     object.push_back(b4);   
+                    object.push_back(b5);
+                 }else{
+                    it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
+
+                 }
                     al_set_target_bitmap(al_get_backbuffer(display));
                   }
                   else it++;
@@ -149,11 +157,22 @@ void Game::tick()
       }
 
       /*-------------------DRAW.......................................*/
- 
+      for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
+       if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         object.erase(it2);
+        else 
+        	(*it2)->decreaseTtl();
+    	
+     }
+     cout<<"SIZE: "<<object.size()<<endl;
      render();
       /*--------------------------------------------------------------*/
-  
+   if(object.size()!=0&&checkLevelOver()){ 
+      cout<<"LEVEL OVER";
+      doexit=true;
    }
+   }
+  
 }
 
 void Game::render()
@@ -186,18 +205,19 @@ void Game::generateBalls()
 
 bool Game::checkCollision(vector<DynamicObject*>::iterator it )
 {
-	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
-   {
-      if((*it2)->getType()==BULLET) 
-      {
-         Object *o=(*it2);
-         if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
+	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
+   {      
+         if((*it2)->getType()==BULLET) 
          {
-            object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
-            return true;
+            Object *o=(*it2);
+            if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
+            {
+               object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+               return true;
+            }
          }
-      }
    }
+}
    return false;
 }
 
@@ -286,3 +306,13 @@ void Game::gameOver()
    return;
 }
 
+bool Game::checkLevelOver()
+{
+   int numbBalls=0;
+   if(object.size()!=0){
+   for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+      if((*it2)->getType()==BALL) numbBalls++;
+   if(numbBalls==0) return true;
+   }
+   return false;
+}

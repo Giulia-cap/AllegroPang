@@ -24,6 +24,7 @@ Ball::~Ball()
 { 
 }
 
+
 void Ball::move(int SCREEN_W,int SCREEN_H)
 {
 	 if(bouncer_x < 0 || bouncer_x > SCREEN_W - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 

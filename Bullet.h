@@ -11,5 +11,6 @@ class Bullet:public DynamicObject
 	void die();
   void move(int,int); 
   void loadImage();
+
 };
 #endif

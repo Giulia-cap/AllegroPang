@@ -4,6 +4,8 @@
 
 class DynamicObject:public Object
 {
+private:
+	int ttl;
 	public:
 		DynamicObject(int,Type);
 		virtual~DynamicObject();
@@ -11,5 +13,7 @@ class DynamicObject:public Object
 		virtual void render()=0;
 		virtual void die()=0;
 		virtual void move(int,int)=0;
+		int getTtl();
+  		void decreaseTtl();
 };
 #endif
