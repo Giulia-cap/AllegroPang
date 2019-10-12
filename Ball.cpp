@@ -13,11 +13,23 @@ Ball::Ball(int l,Type t,int s,float initialPosX, float initialPosY, float dx,flo
    bouncer_dy=dy;
 	bouncer_x = initialPosX / 2.0 - BOUNCER_SIZE / 2.0;
 	bouncer_y = initialPosY / 2.0 - BOUNCER_SIZE / 2.0;
-   cout<<"CREATA PALLA IN POSIZIONE : "<<bouncer_x<<" "<<bouncer_y<<endl;
-	image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
-   al_set_target_bitmap(image);               /*  --------------------------> questo posso metterlo direttamente 
-                                                         su object così non devo farlo nel main (vedi funzione init)*/
-   al_clear_to_color(al_map_rgb(255, 0, 255)); /*idem*/
+  // cout<<"CREATA PALLA IN POSIZIONE : "<<bouncer_x<<" "<<bouncer_y<<endl;
+	/*image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
+   al_set_target_bitmap(image);               
+   al_clear_to_color(al_map_rgb(255, 0, 255)); */
+
+  /* ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH); //--> funziona anche così
+   al_set_path_filename(path,"./resources/ballGrande.bmp");
+   image = al_load_bitmap(al_path_cstr(path, '/'));*/
+
+   if(s==32)
+   image=al_load_bitmap("./resources/ballGrande.bmp"); 
+   else if(s==16)
+      image=al_load_bitmap("./resources/ballMedia.bmp"); 
+   else
+      image=al_load_bitmap("./resources/ballPiccola.bmp"); 
+   if(!image)
+      cout<<"ERROR TO LOAD IMMAGE";
 }
 
 Ball::~Ball()

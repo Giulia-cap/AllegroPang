@@ -9,8 +9,8 @@ class Bullet:public DynamicObject
 	void tick();
 	void render();
 	void die();
-  void move(int,int); 
-  void loadImage();
+  	void move(int,int); 
+  	void loadImage();
 
 };
 #endif

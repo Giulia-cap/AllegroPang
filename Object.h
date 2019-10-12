@@ -15,7 +15,7 @@ class Object
 		float bouncer_y; 
 	public:
 		int BOUNCER_SIZE; //dimensione quadrato
-		ALLEGRO_BITMAP *image;
+		ALLEGRO_BITMAP *image=NULL;
 
 		Object(int,Type);
 		virtual ~Object();

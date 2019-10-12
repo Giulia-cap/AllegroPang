@@ -23,6 +23,8 @@ bool doexit = false;
 Ball *b,*b2,*b3,*b4,*b5;
 Bullet *bullet;
 
+ALLEGRO_BITMAP * sfondo=NULL; //--> poi facciamo una lista di sfondi per ogni livello
+
 Game::Game(int w, int h)
 {
 	int SCREEN_W=w;
@@ -73,7 +75,7 @@ void Game::tick()
          }
 
          /*--------------------------MOVIMENTO-------------------------*/
-
+         int i=0;
          for(vector<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
             (*it)->move(SCREEN_W,SCREEN_H);
@@ -82,30 +84,32 @@ void Game::tick()
             /*------------------COLLISIONI-----------------------*/
             if((*it)->getType()==BALL)
             {
-                  if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
+                  if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
+                  {
                      gameOver();
-                   it++;
+                     it++; i++;
                   }
                   else if(checkCollision(it))
                   {
-                   if((*it)->BOUNCER_SIZE/2>=8){
-                    b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),2,3);
-                    b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-2,3);
-                    it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
+                     if((*it)->BOUNCER_SIZE/2>=6)
+                     {
+                        b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),2,3);
+                        b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-2,3);
+                        it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
 
-                    object.push_back(b4);   
-                    object.push_back(b5);
-                 }else{
-                    it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
+                        object.push_back(b4);   
+                        object.push_back(b5);
+                     }
+                     else
+                      it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
 
-                 }
-                    al_set_target_bitmap(al_get_backbuffer(display));
+                      al_set_target_bitmap(al_get_backbuffer(display));
                   }
-                  else it++;
+                  else {it++; i++;}
             }
-            else it++;
+            else {it++; i++;} 
             /*----------------------------------------------------*/
-
+            //cout<<"FOR 1:"<<i<<" "<<object.size()<<endl;
          }
 
          redraw = true;
@@ -155,20 +159,25 @@ void Game::tick()
 
          }
       }
-
+ int j=0;
       /*-------------------DRAW.......................................*/
-      for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
-       if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-         object.erase(it2);
-        else 
-        	(*it2)->decreaseTtl();
-    	
+      for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
+      {
+  
+         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  {//((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+           it2=object.erase(it2); j++;}
+          else 
+          {
+          	(*it2)->decreaseTtl();
+            it2++; j++;
+          }
+    	 //cout<<"FOR2:"<<j<<" "<<object.size()<<endl;
      }
-     cout<<"SIZE: "<<object.size()<<endl;
+    // cout<<"SIZE: "<<object.size()<<endl;
      render();
       /*--------------------------------------------------------------*/
    if(object.size()!=0&&checkLevelOver()){ 
-      cout<<"LEVEL OVER";
+     // cout<<"LEVEL OVER";
       doexit=true;
    }
    }
@@ -185,8 +194,9 @@ void Game::render()
 
          player->render();
       
-         for(int i=0;i<object.size();i++)
+         for(int i=0;i<object.size();i++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
             object[i]->render();
+         }
 
          al_flip_display();
 
@@ -205,19 +215,23 @@ void Game::generateBalls()
 
 bool Game::checkCollision(vector<DynamicObject*>::iterator it )
 {
-	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++){
-   {      
-         if((*it2)->getType()==BULLET) 
-         {
-            Object *o=(*it2);
-            if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
-            {
-               object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
-               return true;
-            }
-         }
-   }
-}
+  int i=0;
+	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+  {
+     {      
+           if((*it2)->getType()==BULLET) 
+           {
+              Object *o=(*it2);
+              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
+              {
+                 object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+                 return true;
+              }
+           }
+     }
+     i++;
+    // cout<<"FOR 4:"<<i<<" "<<object.size()<<endl;
+  }
    return false;
 }
 
@@ -240,17 +254,23 @@ void Game::init()
       fprintf(stderr, "failed to create timer!\n");
       return;
    }
+//
+   if(!al_init_image_addon()) {
+       fprintf(stderr, "failed to create image!\n");
+      return ;
+   }
+//
 
    //
    /*ALLEGRO_MONITOR_INFO disp_data;
    al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
    
-   SCREEN_W= disp_data.x2 - disp_data.x1;;
-   SCREEN_H= disp_data.y2 - disp_data.y1;
+   SCREEN_W= (disp_data.x2 - disp_data.x1)-62;
+   SCREEN_H= (disp_data.y2 - disp_data.y1)-60;
    //
    display = al_create_display(SCREEN_W, SCREEN_H);
    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);*/
-    display = al_create_display(SCREEN_W, SCREEN_H);
+   display = al_create_display(SCREEN_W, SCREEN_H);
 
    if(!display) 
    {
@@ -265,15 +285,19 @@ void Game::init()
 
    generateBalls();
 
-   al_set_target_bitmap(player->image);
-   al_clear_to_color(al_map_rgb(255, 0, 255));
+   //al_set_target_bitmap(player->image); -------->li ho commentati per inserire le immagini. Perchè se la carico da file l'immagine queste due istruzioni non ci vanno
+   //al_clear_to_color(al_map_rgb(255, 0, 255));
 
 
-   for(int i=0;i<object.size();i++)
+   /*for(int i=0;i<object.size();i++)
    { 
       al_set_target_bitmap(object[i]->image);
       al_clear_to_color(al_map_rgb(255, 0, 255));
-   }
+   }*/
+
+   //
+   sfondo=al_load_bitmap("./resources/sfondo1.bmp"); 
+   //
 
    al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -286,7 +310,11 @@ void Game::init()
       al_destroy_timer(timer);
       return;
    }
- 
+
+   //
+ // al_init_image_addon();
+  //
+
    al_register_event_source(event_queue, al_get_display_event_source(display));
  
    al_register_event_source(event_queue, al_get_timer_event_source(timer));
