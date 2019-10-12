@@ -227,6 +227,12 @@ bool Game::checkCollision(vector<DynamicObject*>::iterator it )
                  object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
+              if((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y())
+              {
+                //cout<<(*it)->getBouncer_x()<<" = "<<o->getBouncer_x()<<" e "<<(*it)->getBouncer_y()<<" > "<<o->getBouncer_y()<<endl;
+                 object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+                 return true;
+              }
            }
      }
      i++;
@@ -234,6 +240,7 @@ bool Game::checkCollision(vector<DynamicObject*>::iterator it )
   }
    return false;
 }
+
 
 void Game::init()
 {
