@@ -5,7 +5,7 @@
 #include "Bullet.h"
 #include "Object.h"
 #include <iostream>
-#include <vector>
+#include <list>
 #include "Game.h"
 #include "allegro5/allegro_image.h"
 #include "allegro5/allegro_primitives.h"
@@ -76,7 +76,7 @@ void Game::tick()
 
          /*--------------------------MOVIMENTO-------------------------*/
          int i=0;
-         for(vector<DynamicObject*>::iterator it=object.begin();it!=object.end();)
+         for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
             (*it)->move(SCREEN_W,SCREEN_H);
          /*------------------------------------------------------------*/
@@ -161,7 +161,7 @@ void Game::tick()
       }
  int j=0;
       /*-------------------DRAW.......................................*/
-      for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
+      for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
          if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  {//((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
@@ -194,8 +194,8 @@ void Game::render()
 
          player->render();
       
-         for(int i=0;i<object.size();i++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
-            object[i]->render();
+         for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();it++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
+            (*it)->render();
          }
 
          al_flip_display();
@@ -213,10 +213,10 @@ void Game::generateBalls()
    return;	
 }
 
-bool Game::checkCollision(vector<DynamicObject*>::iterator it )
+bool Game::checkCollision(list<DynamicObject*>::iterator it )
 {
   int i=0;
-	for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+	for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
   {
      {      
            if((*it2)->getType()==BULLET) 
@@ -224,18 +224,18 @@ bool Game::checkCollision(vector<DynamicObject*>::iterator it )
               Object *o=(*it2);
               if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
               {
-                 object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+                 it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
               if((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y())
               {
                 //cout<<(*it)->getBouncer_x()<<" = "<<o->getBouncer_x()<<" e "<<(*it)->getBouncer_y()<<" > "<<o->getBouncer_y()<<endl;
-                 object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+                 it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
            }
      }
-     i++;
+     it2++;
     // cout<<"FOR 4:"<<i<<" "<<object.size()<<endl;
   }
    return false;
@@ -345,7 +345,7 @@ bool Game::checkLevelOver()
 {
    int numbBalls=0;
    if(object.size()!=0){
-   for(vector<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
       if((*it2)->getType()==BALL) numbBalls++;
    if(numbBalls==0) return true;
    }

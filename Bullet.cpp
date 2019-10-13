@@ -6,13 +6,15 @@ ALLEGRO_BITMAP *chain;
 Bullet::Bullet(int l,Type t,float posx ,float posy):DynamicObject(l,t)
 {
 	BOUNCER_SIZE=10;
-	image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
+	/*image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 	chain= al_create_bitmap(5, 5);
-	al_set_target_bitmap(chain);               /*  --------------------------> questo posso metterlo direttamente 														su object così non devo farlo nel main (vedi funzione init)*/
+	al_set_target_bitmap(chain);              
     al_clear_to_color(al_map_rgb(255, 0, 255));
-	al_set_target_bitmap(image);               /*  --------------------------> questo posso metterlo direttamente 
-																			su object così non devo farlo nel main (vedi funzione init)*/
-    al_clear_to_color(al_map_rgb(255, 0, 255));
+	al_set_target_bitmap(image);               
+																			
+    al_clear_to_color(al_map_rgb(255, 0, 255));*/
+    image=al_load_bitmap("./resources/anchor.png");
+    chain=al_load_bitmap("./resources/coda.png");  
 	bouncer_x=posx+4;
 	bouncer_y=posy-50;
 }

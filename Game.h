@@ -5,7 +5,7 @@
 #include "Bullet.h"
 #include "Object.h"
 #include <iostream>
-#include <vector>
+#include <list>
 #ifndef Game_H
 #define Game_H
 
@@ -19,7 +19,7 @@ class Game
 	int SCREEN_W=640; 
 	int SCREEN_H=480;
 	Player *player;
-	vector<DynamicObject*> object;
+	list<DynamicObject*> object;
 	int bulletDelay=10.0f;
 	int firerate=10.0f;
 
@@ -29,7 +29,7 @@ class Game
 		void init();
 		void generateBalls();
 		void gameOver();
-		bool checkCollision(vector<DynamicObject*>::iterator );
+		bool checkCollision(list<DynamicObject*>::iterator );
 		void tick();
 		void render();
 		bool checkLevelOver();
