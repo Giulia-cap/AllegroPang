@@ -75,7 +75,6 @@ void Game::tick()
          }
 
          /*--------------------------MOVIMENTO-------------------------*/
-         int i=0;
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
             (*it)->move(SCREEN_W,SCREEN_H);
@@ -87,7 +86,7 @@ void Game::tick()
                   if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
                   {
                      gameOver();
-                     it++; i++;
+                     it++; 
                   }
                   else if(checkCollision(it))
                   {
@@ -105,11 +104,10 @@ void Game::tick()
 
                       al_set_target_bitmap(al_get_backbuffer(display));
                   }
-                  else {it++; i++;}
+                  else it++;
             }
-            else {it++; i++;} 
+            else it++; 
             /*----------------------------------------------------*/
-            //cout<<"FOR 1:"<<i<<" "<<object.size()<<endl;
          }
 
          redraw = true;
@@ -159,25 +157,23 @@ void Game::tick()
 
          }
       }
- int j=0;
       /*-------------------DRAW.......................................*/
       for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
-         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  {//((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-           it2=object.erase(it2); j++;}
+         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+           it2=object.erase(it2); 
           else 
           {
           	(*it2)->decreaseTtl();
-            it2++; j++;
+            it2++;
           }
-    	 //cout<<"FOR2:"<<j<<" "<<object.size()<<endl;
      }
     // cout<<"SIZE: "<<object.size()<<endl;
      render();
       /*--------------------------------------------------------------*/
    if(object.size()!=0&&checkLevelOver()){ 
-     // cout<<"LEVEL OVER";
+     cout<<"LEVEL OVER";
       doexit=true;
    }
    }
@@ -215,7 +211,6 @@ void Game::generateBalls()
 
 bool Game::checkCollision(list<DynamicObject*>::iterator it )
 {
-  int i=0;
 	for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
   {
      {      
@@ -236,7 +231,6 @@ bool Game::checkCollision(list<DynamicObject*>::iterator it )
            }
      }
      it2++;
-    // cout<<"FOR 4:"<<i<<" "<<object.size()<<endl;
   }
    return false;
 }
@@ -269,15 +263,15 @@ void Game::init()
 //
 
    //
-   /*ALLEGRO_MONITOR_INFO disp_data;
+   ALLEGRO_MONITOR_INFO disp_data;
    al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
    
    SCREEN_W= (disp_data.x2 - disp_data.x1)-62;
    SCREEN_H= (disp_data.y2 - disp_data.y1)-60;
    //
    display = al_create_display(SCREEN_W, SCREEN_H);
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);*/
-   display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+  // display = al_create_display(SCREEN_W, SCREEN_H);
 
    if(!display) 
    {
