@@ -13,7 +13,7 @@ Player::Player(int l,Type t):DynamicObject(l,t)
  	al_set_path_filename(path,"./resources/player.bmp");
  	image = al_load_bitmap(al_path_cstr(path, '/'));*/
 
-	image=al_load_bitmap("./resources/player.bmp"); 
+	image=al_load_bitmap("./resources/player.png"); 
 	if(!image)
 		cout<<"ERROR TO LOAD IMMAGE";
 }
