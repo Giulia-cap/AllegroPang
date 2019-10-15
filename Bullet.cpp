@@ -31,8 +31,9 @@ void Bullet::tick(){}
 void Bullet::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
+	
 	for(int i=bouncer_y;i<640;i++)
-	al_draw_bitmap(chain, bouncer_x+3,i, 0);
+		al_draw_bitmap(chain, bouncer_x+3,i, 0);
 }
 void Bullet::loadImage(){}
 void Bullet::die(){

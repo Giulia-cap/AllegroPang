@@ -5,12 +5,12 @@
 
 class Player:public DynamicObject
 {
-	/*private:
-		vector<ALLEGRO_BITMAP *> imagedx;
+	private:
+		vector<ALLEGRO_BITMAP *> imagedx;  //vettori per le immagini destra e sinistra
 		vector<ALLEGRO_BITMAP *> imagesx;
-		int movDx=0;
-		int moSx=0;
-		bool dx=false,sx=false;*/
+		int movDx=0; //indice dell'immagine del vector da renderizzare
+		int movSx=0;
+		bool dx=false,sx=true; // booleana che indica se ci stiamo muovendo a dx o a sx
 	public:
 		Player(int,Type);
 		~Player();

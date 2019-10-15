@@ -157,7 +157,7 @@ void Game::tick()
 
          }
       }
-      /*-------------------DRAW.......................................*/
+     
       for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
@@ -263,15 +263,15 @@ void Game::init()
 //
 
    //
-   ALLEGRO_MONITOR_INFO disp_data;
+  /* ALLEGRO_MONITOR_INFO disp_data;
    al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
    
    SCREEN_W= (disp_data.x2 - disp_data.x1)-62;
    SCREEN_H= (disp_data.y2 - disp_data.y1)-60;
    //
    display = al_create_display(SCREEN_W, SCREEN_H);
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-  // display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);*/
+   display = al_create_display(SCREEN_W, SCREEN_H);
 
    if(!display) 
    {
