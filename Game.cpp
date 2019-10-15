@@ -92,8 +92,10 @@ void Game::tick()
                   {
                      if((*it)->BOUNCER_SIZE/2>=6)
                      {
-                        b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),2,3);
-                        b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-2,3);
+                        b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
+                        b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
+                                                 // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
+
                         it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
 
                         object.push_back(b4);   
@@ -170,6 +172,7 @@ void Game::tick()
           }
      }
     // cout<<"SIZE: "<<object.size()<<endl;
+
      render();
       /*--------------------------------------------------------------*/
    if(object.size()!=0&&checkLevelOver()){ 

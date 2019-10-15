@@ -7,6 +7,8 @@ class DynamicObject:public Object
 private:
 	int ttl;
 	public:
+		float bouncer_dx;
+		float bouncer_dy;
 		DynamicObject(int,Type);
 		virtual~DynamicObject();
 		virtual void tick()=0;

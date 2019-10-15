@@ -4,9 +4,6 @@
 
 class Ball:public DynamicObject
 {
-	private:
-		float bouncer_dx;
-		float bouncer_dy;
 	public:
 		Ball(int,Type,int,float,float,float,float);
 		~Ball();
@@ -15,5 +12,7 @@ class Ball:public DynamicObject
 		void tick();
 		void render();
 		void die();
+
+
 };
 #endif

@@ -11,8 +11,10 @@ Ball::Ball(int l,Type t,int s,float initialPosX, float initialPosY, float dx,flo
    
    bouncer_dx=dx;
    bouncer_dy=dy;
-	bouncer_x = initialPosX / 2.0 - BOUNCER_SIZE / 2.0;
-	bouncer_y = initialPosY / 2.0 - BOUNCER_SIZE / 2.0;
+	bouncer_x=initialPosX;
+   bouncer_y=initialPosY;
+   //bouncer_x = initialPosX / 2.0 - BOUNCER_SIZE / 2.0;
+	//bouncer_y = initialPosY / 2.0 - BOUNCER_SIZE / 2.0;
   // cout<<"CREATA PALLA IN POSIZIONE : "<<bouncer_x<<" "<<bouncer_y<<endl;
 	/*image= al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
    al_set_target_bitmap(image);               
@@ -56,9 +58,11 @@ void Ball::move(int SCREEN_W,int SCREEN_H)
          
          //cout<<"X: "<<bouncer_dx<<" Y:"<<bouncer_dy<<endl;
 }
-void Ball::tick(){}
+void Ball::tick(){
+}
 void Ball::render()
 {   
+   //cout<<"POSIZIONE PALLA X:"<<bouncer_x<<" Y:"<<bouncer_y<<endl;
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
 }   
 void Ball::loadImage(){}
