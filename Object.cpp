@@ -35,3 +35,9 @@ bool Object::collision(float xp, float yp, int sizep)
     return true;
 }
 //ALLEGRO_BITMAP Object::getImage(){return image;}
+float Object::getGameAreaW(){
+    return gameAreaW;
+}
+float Object::getGameAreaH(){
+    return gameAreaH;
+}

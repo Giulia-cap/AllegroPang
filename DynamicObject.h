@@ -4,8 +4,8 @@
 
 class DynamicObject:public Object
 {
-private:
-	int ttl;
+	private:
+		int ttl;
 	public:
 		float bouncer_dx;
 		float bouncer_dy;

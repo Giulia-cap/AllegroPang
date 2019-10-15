@@ -13,6 +13,8 @@ class Object
 	protected:
 		float bouncer_x;   //posizione oggetto
 		float bouncer_y; 
+		float gameAreaW=1100;
+		float gameAreaH=500;
 	public:
 		int BOUNCER_SIZE; //dimensione quadrato
 		ALLEGRO_BITMAP *image=NULL;
@@ -39,6 +41,9 @@ class Object
 		virtual void render()=0;
 		virtual void die()=0;
 		virtual void loadImage()=0;
+		float getGameAreaW();
+		float getGameAreaH();
 };
+
 #endif
 

@@ -39,13 +39,13 @@ Ball::~Ball()
 }
 
 
-void Ball::move(int SCREEN_W,int SCREEN_H)
+void Ball::move(int SCREEN_W,int SCREEN_H)  //togliere
 {
-	 if(bouncer_x < 0 || bouncer_x > SCREEN_W - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
+	 if(bouncer_x < 0 || bouncer_x > gameAreaW - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
             bouncer_dx = -bouncer_dx;                                //si sposti alla stessa velocità su qualsiasi computer.
          }
 
-         if(bouncer_y < 0 || bouncer_y > SCREEN_H - BOUNCER_SIZE) {
+         if(bouncer_y < 0 || bouncer_y > gameAreaH - BOUNCER_SIZE) {
             bouncer_dy = -bouncer_dy;
          }
 

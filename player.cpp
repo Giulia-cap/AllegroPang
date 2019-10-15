@@ -45,7 +45,7 @@ void Player::move(int SCREEN_W,int k)
       bouncer_x -= 4.0;
    }
    
-   if(k==1 && bouncer_x <= SCREEN_W - BOUNCER_SIZE - 4.0) //MOVIMENTO A DESTRA
+   if(k==1 && bouncer_x <= gameAreaW - BOUNCER_SIZE - 4.0) //MOVIMENTO A DESTRA
    {
    	  if(movDx<imagedx.size()-1)
    	  	movDx++;
