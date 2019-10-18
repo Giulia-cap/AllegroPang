@@ -1,6 +1,15 @@
 #include "Game.h"
+#include "GameState.h"
+#include "MenuState.h"
 
 ALLEGRO_DISPLAY *display = NULL;
+ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+
+enum _State{MENU, LEVEL1, LEVEL2, LEVEL3};
+_State state=MENU;
+
+GameState *gamestate;
+MenuState *menuState;
 
 Game::Game(int w, int h)
 {
@@ -12,6 +21,8 @@ Game::Game(int w, int h)
 Game::~Game()
 {
   al_destroy_display(display);
+  al_destroy_event_queue(event_queue);
+  delete menuState;
   delete gamestate;
 }
 
@@ -39,20 +50,53 @@ void Game::init()
       return;
    }
 
+    event_queue = al_create_event_queue();
+
+   if(!event_queue) 
+   {
+      fprintf(stderr, "failed to create event_queue!\n");
+      al_destroy_display(display);
+      return;
+   }
+
+   al_register_event_source(event_queue, al_get_display_event_source(display));
+
    al_clear_to_color(al_map_rgb(0,0,0));
    
    al_flip_display();
+  
+  gamestate = new GameState(display,event_queue,SCREEN_W,SCREEN_H);
+  menuState= new MenuState(display,event_queue,SCREEN_W,SCREEN_H);
 
-   //al_set_target_bitmap(al_get_backbuffer(display));
- 
-  gamestate = new GameState(display,SCREEN_W,SCREEN_H);
-  gamestate->init();
+  menuState->init();
 
-   tick();
+  tick();
 }
 
 
 void Game::tick()
 {
-  gamestate->tick();
+  bool esci=false;
+   while(!esci)
+   {
+      switch(state)
+      {
+        case MENU:
+        {
+          menuState->tick();
+          if(menuState->press) //non so perchè ma se tolgo questo si comporta in modo strano
+          {
+            state=LEVEL1;
+          }
+          gamestate->init();
+        }
+        case LEVEL1:
+        {
+          gamestate->tick();
+          if(gamestate->finish)
+            esci=true;
+        }
+      }
+  }
+ 
 }

@@ -12,7 +12,7 @@
 using namespace std;
 
 float FPS = 60;
-ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+//ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
 bool redraw = true;
@@ -23,14 +23,14 @@ Bullet *bullet;
 
 ALLEGRO_BITMAP * sfondo=NULL; //--> poi facciamo una lista di sfondi per ogni livello
 
-GameState::GameState(ALLEGRO_DISPLAY * &d,int w,int h):State(d,w,h)
+GameState::GameState(ALLEGRO_DISPLAY * & d, ALLEGRO_EVENT_QUEUE * & e,int w,int h):State(d,e,w,h)
 {
 }
 
 GameState::~GameState()
 {
 	al_destroy_timer(timer);
-	al_destroy_event_queue(event_queue);
+	//al_destroy_event_queue(event_queue);
   //al_destroy_display(display);
   delete b,b2,b3;
 	delete player;
@@ -39,10 +39,6 @@ GameState::~GameState()
 
 void GameState::tick()
 {
- 
-   ALLEGRO_EVENT ev;
-   al_wait_for_event(event_queue, &ev);
-
    while(!doexit)
    {
       ALLEGRO_EVENT ev;
@@ -163,7 +159,7 @@ void GameState::tick()
            it2=object.erase(it2); 
           else 
           {
-          	(*it2)->decreaseTtl();
+            (*it2)->decreaseTtl();
             it2++;
           }
      }
@@ -171,11 +167,14 @@ void GameState::tick()
 
      render();
       /*--------------------------------------------------------------*/
-   if(object.size()!=0&&checkLevelOver()){ 
-     cout<<"LEVEL OVER";
-      doexit=true;
+     if(object.size()!=0&&checkLevelOver()){ 
+       cout<<"LEVEL OVER";
+        doexit=true;
+     }
    }
-   }
+  
+
+   finish=true;
   
 }
 
@@ -237,12 +236,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
 
 void GameState::init()
 {
-   /*if(!al_init()) {
-         fprintf(stderr, "failed to initialize allegro!\n");
-         return;
-      }*/
 
- 
    if(!al_install_keyboard()) {
       fprintf(stderr, "failed to initialize the keyboard!\n");
       return;
@@ -259,25 +253,6 @@ void GameState::init()
        fprintf(stderr, "failed to create image!\n");
       return ;
    }
-//
-
-   //
-  /*ALLEGRO_MONITOR_INFO disp_data;
-   al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
-   
-   SCREEN_W= (disp_data.x2 - disp_data.x1)-62;
-   SCREEN_H= (disp_data.y2 - disp_data.y1)-60;
-   //
-   display = al_create_display(SCREEN_W, SCREEN_H);
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-   //display = al_create_display(SCREEN_W, SCREEN_H);
-
-   if(!display) 
-   {
-      fprintf(stderr, "failed to create display!\n");
-      al_destroy_timer(timer);
-      return;
-   }*/
  
    player=new Player(3,PLAYER);
    player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
@@ -285,38 +260,9 @@ void GameState::init()
 
    generateBalls();
 
-   //al_set_target_bitmap(player->image); -------->li ho commentati per inserire le immagini. Perchè se la carico da file l'immagine queste due istruzioni non ci vanno
-   //al_clear_to_color(al_map_rgb(255, 0, 255));
-
-
-   /*for(int i=0;i<object.size();i++)
-   { 
-      al_set_target_bitmap(object[i]->image);
-      al_clear_to_color(al_map_rgb(255, 0, 255));
-   }*/
-
-   //
    sfondo=al_load_bitmap("./resources/sfondo1.bmp"); 
-   //
-
    al_set_target_bitmap(al_get_backbuffer(display));
 
-   event_queue = al_create_event_queue();
-
-   if(!event_queue) 
-   {
-      fprintf(stderr, "failed to create event_queue!\n");
-      //al_destroy_display(display);
-      al_destroy_timer(timer);
-      return;
-   }
-
-   //
- // al_init_image_addon();
-  //
-
-   al_register_event_source(event_queue, al_get_display_event_source(display));
- 
    al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
    al_register_event_source(event_queue, al_get_keyboard_event_source());

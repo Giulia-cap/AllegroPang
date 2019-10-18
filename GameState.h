@@ -22,7 +22,7 @@ class GameState:public State
 		int bulletDelay=10.0f;
 		int firerate=10.0f;
 	public:
-		GameState(ALLEGRO_DISPLAY * &,int,int);
+		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &, int,int);
 		~GameState();
 		
 		void generateBalls();
@@ -33,5 +33,7 @@ class GameState:public State
 		void init();
 		void tick();
 		void render();
+
+		bool finish=false;
 };
 #endif
