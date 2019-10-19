@@ -69,3 +69,5 @@ void Player::render()
 }
 void Player::loadImage(){}
 void Player::die(){}
+
+void Player::reset(){ this->setLife(3);}

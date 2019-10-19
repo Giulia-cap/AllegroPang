@@ -19,5 +19,7 @@ class Player:public DynamicObject
 		void tick();
 		void render();
 		void die();
+
+		void reset();
 };
 #endif

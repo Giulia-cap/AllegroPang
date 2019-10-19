@@ -94,7 +94,23 @@ void Game::tick()
         {
           gamestate->tick();
           if(gamestate->finish)
+          {
+            state=LEVEL2;
+            //esci=true;
+          }
+          gamestate->setLevel(2);
+          gamestate->init();
+        }
+         case LEVEL2:
+        {
+          gamestate->tick();
+          if(gamestate->finish)
+          {
+            //state=LEVEL2;
             esci=true;
+          }
+          //gamestate->setLevel(2);
+          //gamestate->init();
         }
       }
   }

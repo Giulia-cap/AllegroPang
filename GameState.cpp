@@ -15,8 +15,8 @@ float FPS = 60;
 //ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
-bool redraw = true;
-bool doexit = false;
+bool redraw;
+bool doexit;
 
 Ball *b,*b2,*b3,*b4,*b5;
 Bullet *bullet;
@@ -30,9 +30,10 @@ GameState::GameState(ALLEGRO_DISPLAY * & d, ALLEGRO_EVENT_QUEUE * & e,int w,int 
 GameState::~GameState()
 {
 	al_destroy_timer(timer);
+  al_destroy_bitmap(sfondo);
 	//al_destroy_event_queue(event_queue);
   //al_destroy_display(display);
-  delete b,b2,b3;
+  delete b,b2,b3,b4,b5;
 	delete player;
   delete bullet;
 }
@@ -199,12 +200,20 @@ void GameState::render()
 
 void GameState::generateBalls()
 {
-
-   b=new Ball(1,BALL,32,320,120,2,3),b2=new Ball(1,BALL,32,420,160,-2,4),b3=new Ball(1,BALL,32,120,220,2,-4);
-   object.push_back(b);
-   object.push_back(b2);
-   object.push_back(b3);
-   return;	
+  if(level==1)
+  {
+     b=new Ball(1,BALL,32,320,120,2,3);
+     object.push_back(b);
+     return;
+  }
+   else if(level==2)
+  {
+      b=new Ball(1,BALL,32,320,120,2,3),b2=new Ball(1,BALL,32,420,160,-2,4),b3=new Ball(1,BALL,32,120,220,2,-4);
+     object.push_back(b);
+     object.push_back(b2);
+     object.push_back(b3);
+     return;
+  }	
 }
 
 bool GameState::checkCollision(list<DynamicObject*>::iterator it )
@@ -236,42 +245,73 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
 
 void GameState::init()
 {
+  finish=false;
+  redraw = true;
+  doexit = false;
+  bulletDelay=10.0f;
+  firerate=10.0f;
 
-   if(!al_install_keyboard()) {
-      fprintf(stderr, "failed to initialize the keyboard!\n");
-      return;
-   }
+  if(level==1)
+  {
+     if(!al_install_keyboard()) {
+        fprintf(stderr, "failed to initialize the keyboard!\n");
+        return;
+     }
 
-   timer = al_create_timer(1.0 / FPS);
+     timer = al_create_timer(1.0 / FPS);
 
-   if(!timer) {
-      fprintf(stderr, "failed to create timer!\n");
-      return;
-   }
-//
-   if(!al_init_image_addon()) {
-       fprintf(stderr, "failed to create image!\n");
-      return ;
-   }
- 
-   player=new Player(3,PLAYER);
-   player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
-   player->setBouncer_y(player->getGameAreaH() - player->BOUNCER_SIZE );
+     if(!timer) {
+        fprintf(stderr, "failed to create timer!\n");
+        return;
+     }
+  //
+     if(!al_init_image_addon()) {
+         fprintf(stderr, "failed to create image!\n");
+        return ;
+     }
+   
+     player=new Player(3,PLAYER);
+     player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
+     player->setBouncer_y(player->getGameAreaH() - player->BOUNCER_SIZE );
 
-   generateBalls();
+     generateBalls();
 
-   sfondo=al_load_bitmap("./resources/sfondo1.bmp"); 
+     sfondo=al_load_bitmap("./resources/sfondo1.bmp"); 
+ }
+ else
+ {
+    reset();
+ }
+
    al_set_target_bitmap(al_get_backbuffer(display));
 
-   al_register_event_source(event_queue, al_get_timer_event_source(timer));
+     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
-   al_register_event_source(event_queue, al_get_keyboard_event_source());
+     al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-   al_clear_to_color(al_map_rgb(0,0,0));
- 
-   al_flip_display();
- 
-   al_start_timer(timer);	
+     al_clear_to_color(al_map_rgb(0,0,0));
+   
+     al_flip_display();
+   
+     al_start_timer(timer); 
+}
+
+void GameState::reset()
+{
+  al_destroy_timer(timer);
+  timer = al_create_timer(1.0 / FPS);
+
+     if(!timer) {
+        fprintf(stderr, "failed to create timer!\n");
+        return;
+     }
+
+  player->reset();
+  player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
+  player->setBouncer_y(player->getGameAreaH() - player->BOUNCER_SIZE );
+
+  object.clear();
+  generateBalls();
 }
 
 void GameState::gameOver()

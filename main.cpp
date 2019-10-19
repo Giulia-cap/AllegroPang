@@ -10,7 +10,6 @@ int main(int argc, char **argv)
 {
 	Game game (640,480);
    	game.init();
-   	//game.tick();
    
    return 0;
 }
