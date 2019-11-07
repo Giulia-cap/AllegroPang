@@ -7,6 +7,9 @@
 #include <iostream>
 #include <list>
 #include "State.h"
+#include "Bonus.h"
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #ifndef GameState_H
 #define GameState_H
 
@@ -19,11 +22,13 @@ class GameState:public State
 	private:
 		Player *player;
 		list<DynamicObject*> object;
+		list<Bonus*> bonus;
 		int bulletDelay;
 		int firerate;
 		int level=1;
+		ALLEGRO_FONT * pangFont;
 	public:
-		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &, int,int);
+		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~GameState();
 		
 		void generateBalls();
@@ -31,6 +36,9 @@ class GameState:public State
 		bool checkCollision(list<DynamicObject*>::iterator );
 		bool checkLevelOver();
 		void reset();
+		void findPower(int);
+		void drawLife();
+		
 
 		void init();
 		void tick();

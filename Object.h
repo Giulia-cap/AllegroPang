@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
+#include<iostream>
 using namespace std;
 #ifndef Object_H
 #define Object_H
 
 enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS,BULLET };
+
 class Object
 {
-	private:
+	protected:
 		int life;
 		Type type;
-	protected:
 		float bouncer_x;   //posizione oggetto
 		float bouncer_y; 
 		float gameAreaW=1100;

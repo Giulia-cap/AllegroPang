@@ -5,7 +5,7 @@
 class MenuState:public State
 {
 	public:
-		MenuState(ALLEGRO_DISPLAY * &, ALLEGRO_EVENT_QUEUE * &, int,int);
+		MenuState(ALLEGRO_DISPLAY * &, ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~MenuState();
 		void init();
 		void tick();

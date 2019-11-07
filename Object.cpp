@@ -22,10 +22,10 @@ float Object::getBouncer_y(){return bouncer_y;}
 
 bool Object::collision(float xp, float yp, int sizep)
 {
-   if ((bouncer_x > xp + sizep - 1) || // is b1 on the right side of b2?
-        (bouncer_y > yp + sizep - 1) || // is b1 under b2?
-        (xp > bouncer_x + BOUNCER_SIZE - 1) || // is b2 on the right side of b1?
-        (yp > bouncer_y + BOUNCER_SIZE - 1))   // is b2 under b1?
+   if ((bouncer_x > xp + sizep ) || // is b1 on the right side of b2?
+        (bouncer_y > yp + sizep ) || // is b1 under b2?
+        (xp > bouncer_x + BOUNCER_SIZE ) || // is b2 on the right side of b1?
+        (yp > bouncer_y + BOUNCER_SIZE ))   // is b2 under b1?
     {
         // no collision
         return false;

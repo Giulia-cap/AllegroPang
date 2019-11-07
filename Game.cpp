@@ -2,8 +2,10 @@
 #include "GameState.h"
 #include "MenuState.h"
 
+float FPS = 60;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+ALLEGRO_TIMER *timer = NULL;
 
 enum _State{MENU, LEVEL1, LEVEL2, LEVEL3};
 _State state=MENU;
@@ -22,6 +24,7 @@ Game::~Game()
 {
   al_destroy_display(display);
   al_destroy_event_queue(event_queue);
+
   delete menuState;
   delete gamestate;
 }
@@ -50,7 +53,7 @@ void Game::init()
       return;
    }
 
-    event_queue = al_create_event_queue();
+  event_queue = al_create_event_queue();
 
    if(!event_queue) 
    {
@@ -59,14 +62,24 @@ void Game::init()
       return;
    }
 
+   timer = al_create_timer(1.0 / FPS);
+    if(!timer) {
+        fprintf(stderr, "failed to create timer!\n");
+        return;
+     }
+
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+
    al_register_event_source(event_queue, al_get_display_event_source(display));
 
    al_clear_to_color(al_map_rgb(0,0,0));
+
+   al_start_timer(timer);
    
    al_flip_display();
   
-  gamestate = new GameState(display,event_queue,SCREEN_W,SCREEN_H);
-  menuState= new MenuState(display,event_queue,SCREEN_W,SCREEN_H);
+  gamestate = new GameState(display,event_queue,timer,SCREEN_W,SCREEN_H);
+  menuState= new MenuState(display,event_queue,timer,SCREEN_W,SCREEN_H);
 
   menuState->init();
 
