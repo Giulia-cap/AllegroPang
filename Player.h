@@ -14,9 +14,7 @@ class Player:public DynamicObject
 	public:
 		Player(int,Type);
 		~Player();
-		void move(int,int);
-		void loadImage();
-		void tick();
+		void move(int);
 		void render();
 		void die();
 

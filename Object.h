@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <allegro5/allegro.h>
-#include<iostream>
-using namespace std;
+#include "includes.h"
+
 #ifndef Object_H
 #define Object_H
 
@@ -14,8 +12,7 @@ class Object
 		Type type;
 		float bouncer_x;   //posizione oggetto
 		float bouncer_y; 
-		float gameAreaW=1100;
-		float gameAreaH=500;
+
 	public:
 		int BOUNCER_SIZE; //dimensione quadrato
 		ALLEGRO_BITMAP *image=NULL;
@@ -38,12 +35,8 @@ class Object
 
 		bool collision(float, float, int);
 
-		virtual void tick()=0;
 		virtual void render()=0;
 		virtual void die()=0;
-		virtual void loadImage()=0;
-		float getGameAreaW();
-		float getGameAreaH();
 };
 
 #endif

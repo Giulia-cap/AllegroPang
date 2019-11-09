@@ -6,11 +6,9 @@ class Bullet:public DynamicObject
 	public:
 	Bullet(int,Type,float,float);
 	~Bullet();
-	void tick();
 	void render();
 	void die();
-  	void move(int,int); 
-  	void loadImage();
+  	void move(int); 
 
 };
 #endif

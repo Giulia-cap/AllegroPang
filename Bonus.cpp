@@ -14,16 +14,10 @@ Bonus::Bonus(int l, Type t, BonusType bt,int posX, int posY):DynamicObject(l,t)
 
 Bonus::~Bonus(){}
 
-void Bonus::move(int a, int b)
+void Bonus::move(int a)
 {
 	if(bouncer_y<=(gameAreaH-32)) ///mettere variabile
 		bouncer_y += 4.0;
-}
-
-void Bonus::tick()
-{
-	 //if()
-	
 }
 
 void Bonus::render()
@@ -35,8 +29,4 @@ void Bonus::die()
 {
 	 //if()
 	
-}
-void Bonus::loadImage()
-{
-
 }

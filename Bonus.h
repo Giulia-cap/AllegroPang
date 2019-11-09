@@ -15,10 +15,8 @@ class Bonus:public DynamicObject
 
 		Bonus(int, Type, BonusType, int, int);
 		~Bonus();  //CONTROLLARE SE DISTRUGGE LA BITMAP VISTO CHE È VIRTUAL
-		void tick();
 		void render();
 		void die();
-		void loadImage();
-		void move(int, int);
+		void move(int);
 };
 #endif

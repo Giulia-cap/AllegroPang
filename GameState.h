@@ -8,8 +8,7 @@
 #include <list>
 #include "State.h"
 #include "Bonus.h"
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
+#include "includes.h"
 #ifndef GameState_H
 #define GameState_H
 
@@ -30,19 +29,30 @@ class GameState:public State
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~GameState();
-		
-		void generateBalls();
-		void gameOver();
-		bool checkCollision(list<DynamicObject*>::iterator );
-		bool checkLevelOver();
-		void reset();
-		void findPower(int);
-		void drawLife();
-		
 
-		void init();
-		void tick();
+		void init(); //INIZIALIZZA IL LIVELLO
+		void generateBalls(); //CHIAMATA IN INIT E RESET, CREA LE PALLE AD INIZIO LIVELLO
+		void tick(); //CONTROLLORE DEL LIVELLO, FA IL REFRESH DEL GIOCO	
+		//CHIAMATO NEL TICK RENDERIZZA IL GIOCO A SCHERMO
 		void render();
+		//CHIAMATA NEL RENDER SERVE A VISUALIZZARE LE BARRE SOTTO E A LATO DELLA FINESTRA DI GIOCO
+		void drawLife();
+		void setKey(ALLEGRO_EVENT ); //GESTISCE IL MOUSE 
+
+		//GESTISCE LE COLLISIONI DEGLI OGGETTI
+		void objectCollision(list<DynamicObject*>::iterator &);
+		//CHIAMATA IN OBJECTCOLLISION VERIFICA SE C'È STATA EFFETTIVAMENTE UNA COLLISIONE
+		bool checkCollision(list<DynamicObject*>::iterator );
+		//CHIAMATA IN objectCollision DECIDE SE CREARE UN BONUS QUANDO UNA PALLA VIENE COLPITA
+		void createBonus(int, int);
+		//CHIAMATA NEL TICK VERIFICA SE E QUALE POTERE HA IL GIOCATORE IN QUEL MOMENTO
+		void findPower(int);
+		//CHIAMATA NEL TICK GESTISCE I TTL DEGLI OGGETTI
+		void TtlManager();
+
+		void gameOver(); 
+		bool checkLevelOver();
+		void reset(); //RESETTA IL LIVELLO
 
 		bool finish;
 

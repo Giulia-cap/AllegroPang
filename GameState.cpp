@@ -1,17 +1,7 @@
-#include <stdio.h>
-#include "Player.h"
-#include "Ball.h"
-#include "Bullet.h"
-#include "Object.h"
-#include <iostream>
 #include <list>
 #include "GameState.h"
-#include "allegro5/allegro_image.h"
-#include "allegro5/allegro_primitives.h"
-#include <cstdlib>
 #include <ctime>
 
-using namespace std;
 //ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 
 bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
@@ -27,21 +17,24 @@ bool orologio;
 
 ALLEGRO_BITMAP * sfondo=NULL; //--> poi facciamo una lista di sfondi per ogni livello
 
+
+
+//-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h)
 {}
 
 GameState::~GameState()
 {
   al_destroy_bitmap(sfondo);
-  //al_destroy_event_queue(event_queue);
-  //al_destroy_display(display);
   delete b,b2,b3,b4,b5;
   delete player;
   delete bullet;
   delete newBonus;
 }
+//--------------------------------------------------------------------------------------------------------
 
-void GameState::init()
+
+//++++++++++++++++++++++++++++++++++BLOCCO FUNZIONI 2++++++++++++++++++++++++++++++++++++++++++++++++++++++
 {
   finish=false;
   redraw = true;
@@ -67,8 +60,8 @@ void GameState::init()
     cout<<"NO FONT";
    
      player=new Player(3,PLAYER);
-     player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
-     player->setBouncer_y(player->getGameAreaH() - player->BOUNCER_SIZE );
+     player->setBouncer_x(gameAreaW / 2.0 - player->BOUNCER_SIZE / 2.0);
+     player->setBouncer_y(gameAreaH - player->BOUNCER_SIZE );
 
      generateBalls();
 
@@ -92,6 +85,24 @@ void GameState::init()
      //al_start_timer(timer); 
 }
 
+void GameState::generateBalls()
+{
+  if(level==1)
+  {
+     b=new Ball(1,BALL,32,320,120,2,3);
+     object.push_back(b);
+     return;
+  }
+   else if(level==2)
+  {
+      b=new Ball(1,BALL,32,320,120,2,3),b2=new Ball(1,BALL,32,420,160,-2,4),b3=new Ball(1,BALL,32,120,220,2,-4);
+     object.push_back(b);
+     object.push_back(b2);
+     object.push_back(b3);
+     return;
+  } 
+}
+
 void GameState::tick()
 {
    while(!doexit)
@@ -103,10 +114,10 @@ void GameState::tick()
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
          if(key[KEY_LEFT] )  
-            player->move(SCREEN_W,0);
+            player->move(0);
 
          if(key[KEY_RIGHT])
-             player->move(SCREEN_W,1);
+             player->move(1);
 
          if(key[SPACE_BAR])
          {
@@ -126,54 +137,15 @@ void GameState::tick()
          {
              //AGGIUNGERE UN TIMER CHE DOPO TOT SECONDI SBLOCCA LE PALLE
             if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
-              (*it)->move(SCREEN_W,SCREEN_H);
+              (*it)->move(SCREEN_W);
             else if(orologio==false)
-              (*it)->move(SCREEN_W,SCREEN_H);
+              (*it)->move(SCREEN_W);
          /*------------------------------------------------------------*/
-
+            
            /*------------------COLLISIONI OBJECT-----------------------*/
             if((*it)->getType()==BALL)
-            {
-              int posX=(*it)->getBouncer_x();
-              int posY=(*it)->getBouncer_y();
-
-                  if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
-                  {
-                     gameOver();
-                     it++; 
-                  }
-                  else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
-                  {
-                     if((*it)->BOUNCER_SIZE/2>=6) //CREA LE PALLE PICCOLE 
-                     {
-                        b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
-                        b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
-                                                 // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
-
-                        it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-
-                        object.push_back(b4);   
-                        object.push_back(b5);
-                     }
-                     else
-                      it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-
-                    //---------------CREO I BONUS RANDOMICAMENTE-------------//
-
-                      //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
-                    //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-                   srand(time(NULL));
-                    ran=rand()%2;
-                   if(ran!=0 && bonus.size()<=4)
-                    {
-                      newBonus=new Bonus(1,BONUS,OROLOGIO,posX,posY);
-                      bonus.push_back(newBonus);
-                      //cout<<"CREATO BUNUS"<<endl;
-                    }
-                    //-------------------------------------------------------//
-                      al_set_target_bitmap(al_get_backbuffer(display));
-                  }
-                  else it++;
+            { 
+              objectCollision(it);
             }
             else it++; 
             /*----------------------------------------------------*/
@@ -182,7 +154,7 @@ void GameState::tick()
           //----------------COLLISIONI E MOVIMENTO BONUS---------------------
            for(list<Bonus*>::iterator it4=bonus.begin();it4!=bonus.end();)
             {
-              (*it4)->move(0,0);
+              (*it4)->move(0);
               //SE IL PLAYER PRENDE IL BONUS
                if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
               {
@@ -201,7 +173,68 @@ void GameState::tick()
       else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
          break;
       
-      else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) //tasto premuto (lo stato del tasto nell'array si setta a true)
+    setKey(ev);
+
+    TtlManager(); 
+    /*  for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
+      {
+  
+         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+           it2=object.erase(it2); 
+          else 
+          {
+            (*it2)->decreaseTtl();
+            it2++;
+          }
+      }*/
+    // cout<<"SIZE: "<<object.size()<<endl;
+
+     render();
+      /*--------------------------------------------------------------*/
+     if(object.size()!=0&&checkLevelOver())
+     { 
+       cout<<"LEVEL OVER";
+        doexit=true;
+     }
+  }
+
+   finish=true;
+  
+}
+
+void GameState::render()
+{
+      if(redraw && al_is_event_queue_empty(event_queue)) 
+      {
+         redraw = false;
+
+         al_clear_to_color(al_map_rgb(0,0,0));
+
+         player->render();
+      
+         for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();it++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
+            (*it)->render();
+         }
+
+        for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
+            (*it2)->render(); 
+         }
+
+         drawLife();
+
+         al_flip_display();
+
+      }
+}
+
+void GameState:: drawLife()
+{
+  al_draw_text(pangFont, al_map_rgb(0,0,0), 82, 2,ALLEGRO_ALIGN_LEFT, "prova");
+}
+
+void GameState::setKey(ALLEGRO_EVENT ev)
+{
+  if(ev.type == ALLEGRO_EVENT_KEY_DOWN) //tasto premuto (lo stato del tasto nell'array si setta a true)
       {  
          switch(ev.keyboard.keycode) 
          {
@@ -241,79 +274,49 @@ void GameState::tick()
 
          }
       }
-     
-      for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
-      {
-  
-         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-           it2=object.erase(it2); 
-          else 
-          {
-            (*it2)->decreaseTtl();
-            it2++;
-          }
-      }
-    // cout<<"SIZE: "<<object.size()<<endl;
-
-     render();
-      /*--------------------------------------------------------------*/
-     if(object.size()!=0&&checkLevelOver())
-     { 
-       cout<<"LEVEL OVER";
-        doexit=true;
-     }
-   }
-
-   finish=true;
-  
 }
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void GameState::render()
+
+
+//----------------------------BLOCCO FUNZIONI 3--------------------------------------------------------
+
+void GameState::objectCollision(list<DynamicObject*>::iterator &it)
 {
-      if(redraw && al_is_event_queue_empty(event_queue)) 
-      {
-         redraw = false;
+  int posX=(*it)->getBouncer_x();
+  int posY=(*it)->getBouncer_y();
 
-         al_clear_to_color(al_map_rgb(0,0,0));
+    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
+    {
+       gameOver();
+       it++;
+       return; 
+    }
+    else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
+    {
+       if((*it)->BOUNCER_SIZE/2>=6) //CREA LE PALLE PICCOLE 
+       {
+          b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
+                                   // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
 
-         player->render();
-      
-         for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();it++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
-            (*it)->render();
-         }
+          it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
 
-        for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
-            (*it2)->render(); 
-         }
+          object.push_back(b4);   
+          object.push_back(b5);
+       }
+       else
+        it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
 
-         drawLife();
-
-         al_flip_display();
-
-      }
-}
-
-void GameState:: drawLife()
-{
-  al_draw_text(pangFont, al_map_rgb(0,0,0), 82, 2,ALLEGRO_ALIGN_LEFT, "prova");
-}
-
-void GameState::generateBalls()
-{
-  if(level==1)
-  {
-     b=new Ball(1,BALL,32,320,120,2,3);
-     object.push_back(b);
-     return;
-  }
-   else if(level==2)
-  {
-      b=new Ball(1,BALL,32,320,120,2,3),b2=new Ball(1,BALL,32,420,160,-2,4),b3=new Ball(1,BALL,32,120,220,2,-4);
-     object.push_back(b);
-     object.push_back(b2);
-     object.push_back(b3);
-     return;
-  } 
+      //---------------CREO I BONUS RANDOMICAMENTE-------------//
+      srand(time(NULL));
+      createBonus(posX,posY);
+      //-------------------------------------------------------//
+        al_set_target_bitmap(al_get_backbuffer(display));
+      return;
+    }
+    else it++;
+  return;
 }
 
 bool GameState::checkCollision(list<DynamicObject*>::iterator it )
@@ -342,25 +345,44 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
    return false;
 }
 
-
-void GameState::reset()
+void GameState::createBonus(int posX, int posY)
 {
- /* al_destroy_timer(timer);
-  timer = al_create_timer(1.0 / FPS);*/
-
-     if(!timer) {
-        fprintf(stderr, "failed to create timer!\n");
-        return;
-     }
-
-  player->reset();
-  player->setBouncer_x(player->getGameAreaW() / 2.0 - player->BOUNCER_SIZE / 2.0);
-  player->setBouncer_y(player->getGameAreaH() - player->BOUNCER_SIZE );
-
-  object.clear();
-  bonus.clear();
-  generateBalls();
+   //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
+      //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
+      ran=rand()%2;
+     if(ran!=0 && bonus.size()<=4)
+      {
+        newBonus=new Bonus(1,BONUS,OROLOGIO,posX,posY);
+        bonus.push_back(newBonus);
+        //cout<<"CREATO BUNUS"<<endl;
+      }
 }
+
+void GameState::findPower(int t)
+{
+  if(t==OROLOGIO){ cout<<"preso potere"<<endl;
+    orologio=true;
+  }
+}
+
+void GameState::TtlManager()
+{
+  for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
+      {
+  
+         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+           it2=object.erase(it2); 
+          else 
+          {
+            (*it2)->decreaseTtl();
+            it2++;
+          }
+      }
+}
+
+
+
+//++++++++++++++++++++++++++++BLOCCO FUNZIONI 4++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void GameState::gameOver()
 {
@@ -379,9 +401,25 @@ bool GameState::checkLevelOver()
    return false;
 }
 
-void GameState::findPower(int t)
+void GameState::reset()
 {
-  if(t==OROLOGIO){ cout<<"preso potere"<<endl;
-    orologio=true;
-  }
+ /* al_destroy_timer(timer);
+  timer = al_create_timer(1.0 / FPS);*/
+
+     if(!timer) {
+        fprintf(stderr, "failed to create timer!\n");
+        return;
+     }
+
+  player->reset();
+  player->setBouncer_x(gameAreaW / 2.0 - player->BOUNCER_SIZE / 2.0);
+  player->setBouncer_y(gameAreaH - player->BOUNCER_SIZE );
+
+  object.clear();
+  bonus.clear();
+  generateBalls();
 }
+
+
+
+

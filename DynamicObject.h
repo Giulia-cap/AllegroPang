@@ -11,10 +11,9 @@ class DynamicObject:public Object
 		float bouncer_dy;
 		DynamicObject(int,Type);
 		virtual~DynamicObject();
-		virtual void tick()=0;
 		virtual void render()=0;
 		virtual void die()=0;
-		virtual void move(int,int)=0;
+		virtual void move(int)=0;
 		int getTtl();
   		void decreaseTtl();
 };
