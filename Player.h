@@ -17,6 +17,7 @@ class Player:public DynamicObject
 		void move(int);
 		void render();
 		void die();
+		void RemoveOneLife();
 
 		void reset();
 };

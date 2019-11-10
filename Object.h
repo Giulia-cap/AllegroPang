@@ -33,7 +33,7 @@ class Object
 		void setBouncer_y(float);
 		float getBouncer_y();
 
-		bool collision(float, float, int);
+		virtual bool collision(float, float, int);
 
 		virtual void render()=0;
 		virtual void die()=0;

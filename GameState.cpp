@@ -14,10 +14,9 @@ Bonus * newBonus;
 
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio;
+bool arpione;
 
-ALLEGRO_BITMAP * sfondo=NULL; //--> poi facciamo una lista di sfondi per ogni livello
-
-
+ALLEGRO_BITMAP * sfondi[3];
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h)
@@ -25,7 +24,6 @@ GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIME
 
 GameState::~GameState()
 {
-  al_destroy_bitmap(sfondo);
   delete b,b2,b3,b4,b5;
   delete player;
   delete bullet;
@@ -35,7 +33,9 @@ GameState::~GameState()
 
 
 //++++++++++++++++++++++++++++++++++BLOCCO FUNZIONI 2++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void GameState::init()
 {
+  arpione=false;
   finish=false;
   redraw = true;
   doexit = false;
@@ -55,34 +55,30 @@ GameState::~GameState()
      }
      al_init_font_addon(); al_init_ttf_addon();
      
-   pangFont=al_load_ttf_font("pangFont.ttf",8,0 );
-  if(!pangFont)
-    cout<<"NO FONT";
+    pangFont=al_load_ttf_font("pangFont.ttf",30,0 ); //il secondo paramentro è la size, il terzo il flag
+    if(!pangFont)
+      cout<<"NO FONT";
    
      player=new Player(3,PLAYER);
-     player->setBouncer_x(gameAreaW / 2.0 - player->BOUNCER_SIZE / 2.0);
-     player->setBouncer_y(gameAreaH - player->BOUNCER_SIZE );
-
      generateBalls();
 
-     sfondo=al_load_bitmap("./resources/sfondo1.bmp"); 
+
+     sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
+     sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
+     sfondi[2]=al_load_bitmap("./resources/sfondo1.png");
  }
  else
  {
     reset();
  }
 
-   al_set_target_bitmap(al_get_backbuffer(display));
+  al_set_target_bitmap(al_get_backbuffer(display));
 
-     //al_register_event_source(event_queue, al_get_timer_event_source(timer));
+  al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-     al_register_event_source(event_queue, al_get_keyboard_event_source());
+  al_clear_to_color(al_map_rgb(0,0,0));
 
-     al_clear_to_color(al_map_rgb(0,0,0));
-   
-     al_flip_display();
-   
-     //al_start_timer(timer); 
+  al_flip_display();
 }
 
 void GameState::generateBalls()
@@ -145,7 +141,7 @@ void GameState::tick()
            /*------------------COLLISIONI OBJECT-----------------------*/
             if((*it)->getType()==BALL)
             { 
-              objectCollision(it);
+              BallCollision(it);
             }
             else it++; 
             /*----------------------------------------------------*/
@@ -210,6 +206,8 @@ void GameState::render()
 
          al_clear_to_color(al_map_rgb(0,0,0));
 
+         al_draw_scaled_bitmap(sfondi[level-1], 0, 0, al_get_bitmap_width(sfondi[level-1]), al_get_bitmap_height(sfondi[level-1]), 0, 0, gameAreaW, gameAreaH+20, 1);
+
          player->render();
       
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();it++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
@@ -220,16 +218,24 @@ void GameState::render()
             (*it2)->render(); 
          }
 
-         drawLife();
+      //al_draw_scaled_bitmap(sfondi[level-1], 0, 0, al_get_bitmap_width(sfondi[level-1]), al_get_bitmap_height(sfondi[level-1]), 0, 0, gameAreaW, gameAreaH, 1);
+       // al_draw_bitmap(sfondi[level-1], 0, 0, 0);
+     // blit(sfondi[level-1], display, 0, 0, 0, 0, gameAreaW, gameAreaH);
+      drawBar();
 
-         al_flip_display();
+      al_flip_display();
 
       }
 }
 
-void GameState:: drawLife()
+void GameState:: drawBar()
 {
-  al_draw_text(pangFont, al_map_rgb(0,0,0), 82, 2,ALLEGRO_ALIGN_LEFT, "prova");
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), 400, 600,ALLEGRO_ALIGN_LEFT, "Time: "); //w h
+  int lw=50;
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw, 550,ALLEGRO_ALIGN_LEFT, "Life: ");
+  for (int i=1;i<=player->getLife();i++)
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw*i, 600,ALLEGRO_ALIGN_LEFT, "* ");
+  
 }
 
 void GameState::setKey(ALLEGRO_EVENT ev)
@@ -281,13 +287,16 @@ void GameState::setKey(ALLEGRO_EVENT ev)
 
 //----------------------------BLOCCO FUNZIONI 3--------------------------------------------------------
 
-void GameState::objectCollision(list<DynamicObject*>::iterator &it)
+void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
 
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
     {
+
+      //METTERE TIMER PURE QUI, SENNÒ PERDE TUTTE LE VITE INSIEME
+      player->RemoveOneLife();
        gameOver();
        it++;
        return; 
@@ -350,9 +359,9 @@ void GameState::createBonus(int posX, int posY)
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
       ran=rand()%2;
-     if(ran!=0 && bonus.size()<=4)
+     if( bonus.size()<=4)
       {
-        newBonus=new Bonus(1,BONUS,OROLOGIO,posX,posY);
+        newBonus=new Bonus(1,BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
         //cout<<"CREATO BUNUS"<<endl;
       }
@@ -360,8 +369,11 @@ void GameState::createBonus(int posX, int posY)
 
 void GameState::findPower(int t)
 {
-  if(t==OROLOGIO){ cout<<"preso potere"<<endl;
+  if(t==OROLOGIO){ 
     orologio=true;
+  }
+  else if(t==ARPIONE){ 
+    arpione=true;
   }
 }
 
@@ -386,7 +398,14 @@ void GameState::TtlManager()
 
 void GameState::gameOver()
 {
+
+  if(player->getLife()==0)
   cout<<"YOU LOOOOOOOOOOSE!"<<endl;
+
+  /*al_clear_to_color(al_map_rgb(0,0,0));
+  al_draw_bitmap(gameover1,  0,0, 0);
+  al_flip_display();
+  al_rest(0.5);*/
    return;
 }
 
@@ -403,17 +422,7 @@ bool GameState::checkLevelOver()
 
 void GameState::reset()
 {
- /* al_destroy_timer(timer);
-  timer = al_create_timer(1.0 / FPS);*/
-
-     if(!timer) {
-        fprintf(stderr, "failed to create timer!\n");
-        return;
-     }
-
   player->reset();
-  player->setBouncer_x(gameAreaW / 2.0 - player->BOUNCER_SIZE / 2.0);
-  player->setBouncer_y(gameAreaH - player->BOUNCER_SIZE );
 
   object.clear();
   bonus.clear();

@@ -1,11 +1,15 @@
 #include "Bonus.h"
 
-Bonus::Bonus(int l, Type t, BonusType bt,int posX, int posY):DynamicObject(l,t)
+Bonus::Bonus(int l, Type t, int bt,int posX, int posY):DynamicObject(l,t)
 {
-	bonusType=bt;
+	bonusType=(BonusType)bt;
 	bouncer_x=posX;
 	bouncer_y=posY;
-	image=al_load_bitmap("./resources/orologio.png");
+
+	if(bonusType==OROLOGIO)
+		image=al_load_bitmap("./resources/orologio.png");
+	else if(bonusType==ARPIONE)
+		image=al_load_bitmap("./resources/arpione.png");
 
 	if(!image)
 		cout<<"ERROR TO LOAD IMMAGE";

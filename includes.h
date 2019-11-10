@@ -11,7 +11,7 @@
 #include<iostream>
 using namespace std;
 
-#define gameAreaW 1100
+#define gameAreaW 1300
 #define gameAreaH 500
 
 

@@ -36,11 +36,11 @@ class GameState:public State
 		//CHIAMATO NEL TICK RENDERIZZA IL GIOCO A SCHERMO
 		void render();
 		//CHIAMATA NEL RENDER SERVE A VISUALIZZARE LE BARRE SOTTO E A LATO DELLA FINESTRA DI GIOCO
-		void drawLife();
+		void drawBar();
 		void setKey(ALLEGRO_EVENT ); //GESTISCE IL MOUSE 
 
-		//GESTISCE LE COLLISIONI DEGLI OGGETTI
-		void objectCollision(list<DynamicObject*>::iterator &);
+		//GESTISCE LE COLLISIONI DELLE PALLE
+		void BallCollision(list<DynamicObject*>::iterator &);
 		//CHIAMATA IN OBJECTCOLLISION VERIFICA SE C'È STATA EFFETTIVAMENTE UNA COLLISIONE
 		bool checkCollision(list<DynamicObject*>::iterator );
 		//CHIAMATA IN objectCollision DECIDE SE CREARE UN BONUS QUANDO UNA PALLA VIENE COLPITA

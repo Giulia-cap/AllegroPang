@@ -15,6 +15,9 @@ Player::Player(int l,Type t):DynamicObject(l,t)
 	imagesx.push_back(image); 
 	image=al_load_bitmap("./resources/player/player.png");
 
+  bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
+  bouncer_y=(gameAreaH - BOUNCER_SIZE );
+
 	if(!image)
 		cout<<"ERROR TO LOAD IMMAGE";
 }
@@ -62,4 +65,15 @@ void Player::render()
 
 void Player::die(){}
 
-void Player::reset(){ this->setLife(3);}
+void Player::RemoveOneLife()
+{
+  if(life>0)
+    life--;
+}
+
+void Player::reset()
+{ 
+  life=3;
+  bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
+  bouncer_y=(gameAreaH - BOUNCER_SIZE );
+}
