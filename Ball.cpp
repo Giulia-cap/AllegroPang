@@ -5,7 +5,7 @@
 #include <time.h>
 using namespace std;
 
-Ball::Ball(int l,Type t,int s,float initialPosX, float initialPosY, float dx,float dy ):DynamicObject(l,t)
+Ball::Ball(Type t,int s,float initialPosX, float initialPosY, float dx,float dy ):DynamicObject(t)
 {
 	BOUNCER_SIZE=s;
    
@@ -54,4 +54,3 @@ void Ball::render()
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
 }   
 
-void Ball::die(){}

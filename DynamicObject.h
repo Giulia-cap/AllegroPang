@@ -9,10 +9,9 @@ class DynamicObject:public Object
 	public:
 		float bouncer_dx;
 		float bouncer_dy;
-		DynamicObject(int,Type);
+		DynamicObject(Type);
 		virtual~DynamicObject();
 		virtual void render()=0;
-		virtual void die()=0;
 		virtual void move(int)=0;
 		int getTtl();
   		void decreaseTtl();

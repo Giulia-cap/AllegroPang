@@ -2,7 +2,8 @@
 #include <allegro5/allegro.h>
 #include "Player.h"
 #include "Ball.h"
-#include "Bullet.h"
+#include "Weapons.h"
+#include "MachineGun.h"
 #include "Object.h"
 #include <iostream>
 #include <list>

@@ -3,12 +3,11 @@
 #ifndef Object_H
 #define Object_H
 
-enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS,BULLET };
+enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS, WEAPONS };
 
 class Object
 {
 	protected:
-		int life;
 		Type type;
 		float bouncer_x;   //posizione oggetto
 		float bouncer_y; 
@@ -16,12 +15,10 @@ class Object
 	public:
 		int BOUNCER_SIZE; //dimensione quadrato
 		ALLEGRO_BITMAP *image=NULL;
+		bool dead;
 
-		Object(int,Type);
+		Object(Type);
 		virtual ~Object();
-
-	 	int getLife();
-		void setLife(int);
 
 		Type getType();
 		void setType(Type);
@@ -34,9 +31,7 @@ class Object
 		float getBouncer_y();
 
 		virtual bool collision(float, float, int);
-
 		virtual void render()=0;
-		virtual void die()=0;
 };
 
 #endif

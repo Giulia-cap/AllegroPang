@@ -11,14 +11,16 @@ class Player:public DynamicObject
 		int movDx=0; //indice dell'immagine del vector da renderizzare
 		int movSx=0;
 		bool dx=false,sx=true; // booleana che indica se ci stiamo muovendo a dx o a sx
+		int life;
 	public:
-		Player(int,Type);
+		Player(Type);
 		~Player();
 		void move(int);
 		void render();
-		void die();
 		void RemoveOneLife();
 
 		void reset();
+		int getLife();
+		void setLife(int);
 };
 #endif

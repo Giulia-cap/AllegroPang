@@ -9,12 +9,11 @@ bool doexit;
 int ran;
 
 Ball *b,*b2,*b3,*b4,*b5;
-Bullet *bullet;
+Weapons *bullet;
 Bonus * newBonus;
 
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
-bool orologio;
-bool arpione;
+bool orologio,arpione,machineGun;
 
 ALLEGRO_BITMAP * sfondi[3];
 
@@ -35,13 +34,14 @@ GameState::~GameState()
 //++++++++++++++++++++++++++++++++++BLOCCO FUNZIONI 2++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void GameState::init()
 {
+  orologio=false;
   arpione=false;
+  machineGun=false;
   finish=false;
   redraw = true;
   doexit = false;
   bulletDelay=10.0f;
   firerate=10.0f;
-  orologio=false;
 
   if(level==1)
   {
@@ -59,7 +59,7 @@ void GameState::init()
     if(!pangFont)
       cout<<"NO FONT";
    
-     player=new Player(3,PLAYER);
+     player=new Player(PLAYER);
      generateBalls();
 
 
@@ -85,13 +85,13 @@ void GameState::generateBalls()
 {
   if(level==1)
   {
-     b=new Ball(1,BALL,32,320,120,2,3);
+     b=new Ball(BALL,32,320,120,2,3);
      object.push_back(b);
      return;
   }
    else if(level==2)
   {
-      b=new Ball(1,BALL,32,320,120,2,3),b2=new Ball(1,BALL,32,420,160,-2,4),b3=new Ball(1,BALL,32,120,220,2,-4);
+      b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
@@ -119,10 +119,18 @@ void GameState::tick()
          {
             if (bulletDelay >= firerate)
             {
-               bullet=new Bullet(1,BULLET,player->getBouncer_x(),player->getBouncer_y());
-               object.push_back(bullet);
-               al_set_target_bitmap(al_get_backbuffer(display));
-               bulletDelay=0;
+              if(!machineGun)
+              {
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+              }
+              else 
+              {
+                bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+              }
+
+              object.push_back(bullet);
+              al_set_target_bitmap(al_get_backbuffer(display));
+              bulletDelay=0;
             }
 
             bulletDelay++;
@@ -131,8 +139,12 @@ void GameState::tick()
          /*-------------------------MOVIMENTO Object-------------------------*/
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
+            if((*it)->getType()==WEAPONS && !arpione && (*it)->dead)
+            {
+              object.erase(it); break;
+            }
              //AGGIUNGERE UN TIMER CHE DOPO TOT SECONDI SBLOCCA LE PALLE
-            if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
+            else if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
               (*it)->move(SCREEN_W);
             else if(orologio==false)
               (*it)->move(SCREEN_W);
@@ -166,26 +178,12 @@ void GameState::tick()
       }
     
 
-      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-         break;
+      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { //esci=true;
+         break;}
       
     setKey(ev);
-
     TtlManager(); 
-    /*  for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
-      {
-  
-         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-           it2=object.erase(it2); 
-          else 
-          {
-            (*it2)->decreaseTtl();
-            it2++;
-          }
-      }*/
-    // cout<<"SIZE: "<<object.size()<<endl;
-
-     render();
+    render();
       /*--------------------------------------------------------------*/
      if(object.size()!=0&&checkLevelOver())
      { 
@@ -211,16 +209,13 @@ void GameState::render()
          player->render();
       
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();it++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
-            (*it)->render();
+              (*it)->render();
          }
 
         for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
             (*it2)->render(); 
          }
 
-      //al_draw_scaled_bitmap(sfondi[level-1], 0, 0, al_get_bitmap_width(sfondi[level-1]), al_get_bitmap_height(sfondi[level-1]), 0, 0, gameAreaW, gameAreaH, 1);
-       // al_draw_bitmap(sfondi[level-1], 0, 0, 0);
-     // blit(sfondi[level-1], display, 0, 0, 0, 0, gameAreaW, gameAreaH);
       drawBar();
 
       al_flip_display();
@@ -294,7 +289,6 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
     {
-
       //METTERE TIMER PURE QUI, SENNÒ PERDE TUTTE LE VITE INSIEME
       player->RemoveOneLife();
        gameOver();
@@ -305,8 +299,8 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     {
        if((*it)->BOUNCER_SIZE/2>=6) //CREA LE PALLE PICCOLE 
        {
-          b4=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
-          b5=new Ball(1,BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b4=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b5=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
                                    // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
 
           it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
@@ -333,7 +327,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
   {
      {      
-           if((*it2)->getType()==BULLET) 
+           if((*it2)->getType()==WEAPONS) 
            {
               Object *o=(*it2);
               if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
@@ -343,7 +337,6 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
               }
               if((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y())
               {
-                //cout<<(*it)->getBouncer_x()<<" = "<<o->getBouncer_x()<<" e "<<(*it)->getBouncer_y()<<" > "<<o->getBouncer_y()<<endl;
                  it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
@@ -358,12 +351,11 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%2;
-     if( bonus.size()<=4)
+      ran=rand()%4;
+     if( ran<=2 && bonus.size()<=4)
       {
-        newBonus=new Bonus(1,BONUS,ran,posX,posY);
+        newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
-        //cout<<"CREATO BUNUS"<<endl;
       }
 }
 
@@ -374,6 +366,11 @@ void GameState::findPower(int t)
   }
   else if(t==ARPIONE){ 
     arpione=true;
+    machineGun=false;
+  }
+  else if(t==MACHINEGUN){ 
+    machineGun=true;
+    arpione=false;
   }
 }
 
@@ -382,7 +379,7 @@ void GameState::TtlManager()
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
-         if((*it2)->getType()==BULLET && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
            it2=object.erase(it2); 
           else 
           {

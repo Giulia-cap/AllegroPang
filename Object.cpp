@@ -1,14 +1,11 @@
 #include "Object.h"
 using namespace std;
 
-Object::Object( int l, Type t):life(l),type(t){}
+Object::Object( Type t):type(t){ dead=false;}
 Object::~Object()
 {
     al_destroy_bitmap(image);
 }
-
-int Object::getLife(){return life;}
-void Object::setLife(int l){life=l;}
 
 Type Object::getType(){return type;}
 void Object::setType(Type t){type=t;}

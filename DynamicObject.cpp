@@ -1,7 +1,7 @@
 #include "DynamicObject.h"
 using namespace std;
 
-DynamicObject::DynamicObject(int l,Type t):Object(l,t){
+DynamicObject::DynamicObject(Type t):Object(t){
 	ttl=1000;
 }
 DynamicObject::~DynamicObject(){}

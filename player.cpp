@@ -1,9 +1,10 @@
 
 #include "Player.h"
 
-Player::Player(int l,Type t):DynamicObject(l,t)
+Player::Player(Type t):DynamicObject(t)
 {
 	BOUNCER_SIZE=32;
+  life=3;
 
 	image=al_load_bitmap("./resources/player/rightA.png");
 	imagedx.push_back(image);
@@ -63,8 +64,6 @@ void Player::render()
   		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
 }
 
-void Player::die(){}
-
 void Player::RemoveOneLife()
 {
   if(life>0)
@@ -77,3 +76,6 @@ void Player::reset()
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
 }
+
+int Player::getLife(){return life;}
+void Player::setLife(int l){life=l;}

@@ -56,12 +56,6 @@ void MenuState::tick()
 	    	break;
 	      }
 
-	  /*  if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-	    {
-	    	press=true;
-	    	dexit=true;
-	    }*/
-	    /* MOUSE */
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_AXES)
 		{
 			mouse_x = ev.mouse.x;
