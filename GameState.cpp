@@ -45,10 +45,10 @@ void GameState::init()
 
   if(level==1)
   {
-     if(!al_install_keyboard()) {
+     /*if(!al_install_keyboard()) {
         fprintf(stderr, "failed to initialize the keyboard!\n");
         return;
-     }
+     }*/
      if(!al_init_image_addon()) {
          fprintf(stderr, "failed to create image!\n");
         return ;
@@ -74,7 +74,7 @@ void GameState::init()
 
   al_set_target_bitmap(al_get_backbuffer(display));
 
-  al_register_event_source(event_queue, al_get_keyboard_event_source());
+  //al_register_event_source(event_queue, al_get_keyboard_event_source());
 
   al_clear_to_color(al_map_rgb(0,0,0));
 

@@ -7,8 +7,6 @@ using namespace std;
 
 class State
 {
-	/*private:
-		State *currentState;*/
 	protected:
 		int SCREEN_W; 
 		int SCREEN_H;
