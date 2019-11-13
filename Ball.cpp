@@ -31,7 +31,12 @@ Ball::~Ball()
 
 void Ball::move(int SCREEN_W)  //togliere
 {
-	 if(bouncer_x < 0 || bouncer_x > gameAreaW - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
+   float multiplier=0;
+   if(BOUNCER_SIZE>=32)multiplier=2.0;
+   else if(BOUNCER_SIZE<=16 && BOUNCER_SIZE>8) multiplier =1.5;
+   else multiplier =1;
+	 
+    if(bouncer_x < 0 || bouncer_x > gameAreaW - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
             bouncer_dx = -bouncer_dx;                                //si sposti alla stessa velocità su qualsiasi computer.
          }
 
@@ -42,7 +47,7 @@ void Ball::move(int SCREEN_W)  //togliere
          bouncer_x += bouncer_dx;
          bouncer_y += bouncer_dy;   
          if(bouncer_dy!=24)
-         if(bouncer_dy>14.0) bouncer_dy-=0.3; // se aumenti il 24 aumenta anche la grandezza del salto
+         if(bouncer_dy>6.0*multiplier) bouncer_dy-=0.3; // se aumenti il 24 aumenta anche la grandezza del salto
          else
          bouncer_dy+=0.3;
          

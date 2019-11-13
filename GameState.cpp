@@ -132,7 +132,7 @@ void GameState::tick()
               }
               else if(machineGun)
               {
-              bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+              bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
               object.push_back(bullet);
               al_set_target_bitmap(al_get_backbuffer(display));
               bulletDelay=0;
@@ -296,7 +296,6 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
-  cout<<"HITDELAY "<<hitDelay<<" HitRate "<<hitRate<<endl;
   
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
       if (hitDelay >= hitRate){

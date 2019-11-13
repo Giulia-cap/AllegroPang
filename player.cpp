@@ -26,34 +26,46 @@ Player::Player(Type t):DynamicObject(t)
 Player::~Player()
 {
 }
-
+   int moveAnimDelay=1.0f;
+   int moveAnimRate=3.5f;
 void Player::move(int k)
 {
-   if(k==0 && bouncer_x >= 4.0) //MOVIMENTO A SINISTRA
+   if(k==0 && bouncer_x >= 4.0 ) //MOVIMENTO A SINISTRA
    {
-   	  if(movSx<imagesx.size()-1) 
-   	  	movSx++;
-   	  else movSx=0;
+   	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
+        movSx++;
+   	  	moveAnimDelay=0;
+      }
+   	  else {
+        moveAnimDelay++;
 
+        movSx=0;
+      }
    	  dx=false;
    	  sx=true;
    	  movDx=0;
 
       bouncer_x -= 4.0;
    }
-   
+
    if(k==1 && bouncer_x <= gameAreaW - BOUNCER_SIZE - 4.0) //MOVIMENTO A DESTRA
    {
-   	  if(movDx<imagedx.size()-1)
+   	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
    	  	movDx++;
-   	  else movDx=0;
-
+        moveAnimDelay=0;
+      }
+   	  else{
+      moveAnimDelay++;
+       movDx=0;
+      }
    	  dx=true;
    	  sx=false;
    	  movSx=0;
    	  
       bouncer_x += 4.0;
    }
+     cout<<"MOVEANIMDELAY "<<moveAnimDelay<<" MOVERATE "<<moveAnimRate<<endl;
+
 }
 
 void Player::render()
