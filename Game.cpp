@@ -28,7 +28,6 @@ Game::~Game()
   delete menuState;
   delete gamestate;
 }
-
 void Game::init()
 {
 
@@ -96,7 +95,7 @@ void Game::init()
 
 void Game::tick()
 {
-  bool esci=false;
+  //bool esci=false;
    while(!esci)
    {
       switch(state)

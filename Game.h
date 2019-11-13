@@ -16,5 +16,7 @@ class Game
 		~Game();
 		void init();
 		void tick();
+		bool esci=false;
+		void setEsc(bool e){esci=e;}
 };
 #endif

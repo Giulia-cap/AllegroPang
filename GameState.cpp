@@ -18,8 +18,8 @@ bool orologio,arpione,machineGun;
 ALLEGRO_BITMAP * sfondi[3];
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
-GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h)
-{}
+GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
+
 
 GameState::~GameState()
 {
@@ -296,7 +296,7 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
-  cout<<"HITDELAY "<<hitDelay<<" HitRate "<<hitRate<<endl;
+  //cout<<"HITDELAY "<<hitDelay<<" HitRate "<<hitRate<<endl;
   
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
       if (hitDelay >= hitRate){

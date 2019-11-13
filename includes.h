@@ -12,8 +12,7 @@
 using namespace std;
 
 #define gameAreaW 1300
-#define gameAreaH 500
-//const bool esci=false;
+#define gameAreaH 500 
 
 
 #endif
