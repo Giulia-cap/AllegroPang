@@ -42,6 +42,8 @@ void GameState::init()
   doexit = false;
   bulletDelay=10.0f;
   firerate=10.0f;
+  hitRate=10.0f;
+  hitDelay=10.0f;
 
   if(level==1)
   {
@@ -91,6 +93,7 @@ void GameState::generateBalls()
   }
    else if(level==2)
   {
+    resetBulletsNumber();
       b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
@@ -105,7 +108,7 @@ void GameState::tick()
    {
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
- 
+      
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
@@ -119,18 +122,22 @@ void GameState::tick()
          {
             if (bulletDelay >= firerate)
             {
-              if(!machineGun)
+              if(!machineGun && getBulletsNumber() ==0)
               {
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
-              }
-              else 
-              {
-                bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
-              }
-
+              increaseBulletsNumber();
+              bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
               object.push_back(bullet);
               al_set_target_bitmap(al_get_backbuffer(display));
               bulletDelay=0;
+              }
+              else if(machineGun)
+              {
+              bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+              object.push_back(bullet);
+              al_set_target_bitmap(al_get_backbuffer(display));
+              bulletDelay=0;
+              } ////// QUA CI VA L'ALTRO ELSE IF PER GESTIRE I 2 ARPIONI : SE ARPIONEDOPPIO && GETBULLETSNUMBER <=1 ALLORA SPARA
+
             }
 
             bulletDelay++;
@@ -141,6 +148,7 @@ void GameState::tick()
          {
             if((*it)->getType()==WEAPONS && !arpione && (*it)->dead)
             {
+              decreaseBulletsNumber();
               object.erase(it); break;
             }
              //AGGIUNGERE UN TIMER CHE DOPO TOT SECONDI SBLOCCA LE PALLE
@@ -153,6 +161,7 @@ void GameState::tick()
            /*------------------COLLISIONI OBJECT-----------------------*/
             if((*it)->getType()==BALL)
             { 
+
               BallCollision(it);
             }
             else it++; 
@@ -180,10 +189,11 @@ void GameState::tick()
 
       else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { //esci=true;
          break;}
-      
     setKey(ev);
     TtlManager(); 
     render();
+    hitDelay++;
+
       /*--------------------------------------------------------------*/
      if(object.size()!=0&&checkLevelOver())
      { 
@@ -286,14 +296,16 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
-
-    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
-    {
+  cout<<"HITDELAY "<<hitDelay<<" HitRate "<<hitRate<<endl;
+  
+    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
+      if (hitDelay >= hitRate){
       //METTERE TIMER PURE QUI, SENNÒ PERDE TUTTE LE VITE INSIEME
       player->RemoveOneLife();
-       gameOver();
+      hitDelay=0;
+      gameOver();
        it++;
-       return; 
+         }
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
@@ -332,11 +344,14 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
               Object *o=(*it2);
               if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
               {
-                 it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+                 decreaseBulletsNumber();
+                 it2=object.erase(it2);
+                  //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
               if((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y())
               {
+                decreaseBulletsNumber();
                  it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
@@ -379,9 +394,10 @@ void GameState::TtlManager()
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
-         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 )  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+           decreaseBulletsNumber();
            it2=object.erase(it2); 
-          else 
+          }else 
           {
             (*it2)->decreaseTtl();
             it2++;

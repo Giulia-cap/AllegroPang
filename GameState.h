@@ -25,7 +25,10 @@ class GameState:public State
 		list<Bonus*> bonus;
 		int bulletDelay;
 		int firerate;
+		int hitDelay;
+		int hitRate;		
 		int level=1;
+		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
@@ -59,5 +62,10 @@ class GameState:public State
 
 		int getLevel(){return level;}
 		void setLevel(int l){level=l;}
+		int getBulletsNumber(){return bulletsNumber;}
+		void increaseBulletsNumber(){bulletsNumber+=1;}
+		void decreaseBulletsNumber(){bulletsNumber-=1;}
+		void resetBulletsNumber(){bulletsNumber=0;}
+
 };
 #endif
