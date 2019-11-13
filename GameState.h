@@ -26,8 +26,12 @@ class GameState:public State
 		int bulletDelay;
 		int firerate;
 		int hitDelay;
-		int hitRate;		
+		int hitRate;	
+		int timeDelay;
+ 		int timeRate;	
 		int level=1;
+		int score=0;
+		int gameTime =120;
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 	public:
@@ -66,6 +70,9 @@ class GameState:public State
 		void increaseBulletsNumber(){bulletsNumber+=1;}
 		void decreaseBulletsNumber(){bulletsNumber-=1;}
 		void resetBulletsNumber(){bulletsNumber=0;}
-
+		void decreaseTime(){gameTime-=1;}
+		void resetTime(){gameTime=120;}
+		void resetScore(){score=0;}
+		void increaseScore(int s){score+=s;}
 };
 #endif

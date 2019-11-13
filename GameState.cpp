@@ -13,7 +13,7 @@ Weapons *bullet;
 Bonus * newBonus;
 
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
-bool orologio,arpione,machineGun;
+bool orologio,arpione,machineGun,arpionex2;
 
 ALLEGRO_BITMAP * sfondi[3];
 
@@ -37,6 +37,7 @@ void GameState::init()
   orologio=false;
   arpione=false;
   machineGun=false;
+  arpionex2=false;
   finish=false;
   redraw = true;
   doexit = false;
@@ -44,6 +45,8 @@ void GameState::init()
   firerate=10.0f;
   hitRate=10.0f;
   hitDelay=10.0f;
+  timeRate=60.0f;
+  timeDelay=0.0f;
 
   if(level==1)
   {
@@ -93,7 +96,7 @@ void GameState::generateBalls()
   }
    else if(level==2)
   {
-    resetBulletsNumber();
+
       b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
@@ -106,9 +109,13 @@ void GameState::tick()
 {
    while(!doexit)
    {
+
+      //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
-      
+        
+
+
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
@@ -124,20 +131,27 @@ void GameState::tick()
             {
               if(!machineGun && getBulletsNumber() ==0)
               {
-              increaseBulletsNumber();
-              bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
-              object.push_back(bullet);
-              al_set_target_bitmap(al_get_backbuffer(display));
-              bulletDelay=0;
+                increaseBulletsNumber();
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+                object.push_back(bullet);
+                al_set_target_bitmap(al_get_backbuffer(display));
+                bulletDelay=0;
               }
               else if(machineGun)
               {
-              bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
-              object.push_back(bullet);
-              al_set_target_bitmap(al_get_backbuffer(display));
-              bulletDelay=0;
+                bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
+                object.push_back(bullet);
+                al_set_target_bitmap(al_get_backbuffer(display));
+                bulletDelay=0;
               } ////// QUA CI VA L'ALTRO ELSE IF PER GESTIRE I 2 ARPIONI : SE ARPIONEDOPPIO && GETBULLETSNUMBER <=1 ALLORA SPARA
-
+              else if(arpionex2 && getBulletsNumber()<=1)
+              {
+                increaseBulletsNumber();
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
+                object.push_back(bullet);
+                al_set_target_bitmap(al_get_backbuffer(display));
+                bulletDelay=0;
+              }
             }
 
             bulletDelay++;
@@ -200,6 +214,13 @@ void GameState::tick()
        cout<<"LEVEL OVER";
         doexit=true;
      }
+           if(timeDelay>=timeRate){
+        decreaseTime();
+       // cout<<getMyTime()<<endl;
+        timeDelay=0;
+      }else{
+        timeDelay++;
+      }
   }
 
    finish=true;
@@ -365,8 +386,8 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%4;
-     if( ran<=2 && bonus.size()<=4)
+      ran=rand()%8;
+     if( ran<=5 && bonus.size()<=4)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
@@ -381,10 +402,25 @@ void GameState::findPower(int t)
   else if(t==ARPIONE){ 
     arpione=true;
     machineGun=false;
+    resetBulletsNumber();
   }
   else if(t==MACHINEGUN){ 
     machineGun=true;
     arpione=false;
+  }
+  else if(t==ARPIONEX2)
+  {
+    machineGun=false;
+    arpione=false;
+    arpionex2=true;
+  }
+  else if(t==CLESSIDRA)
+  {
+    gameTime+=15;
+  }
+  else if(t==GIRANDOLA)
+  {
+    player->setLife(player->getLife()+1);
   }
 }
 
@@ -439,6 +475,9 @@ void GameState::reset()
   object.clear();
   bonus.clear();
   generateBalls();
+
+  resetTime();
+  resetBulletsNumber();
 }
 
 

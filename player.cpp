@@ -15,6 +15,7 @@ Player::Player(Type t):DynamicObject(t)
 	image=al_load_bitmap("./resources/player/leftB.png");
 	imagesx.push_back(image); 
 	image=al_load_bitmap("./resources/player/player.png");
+  barriera=al_load_bitmap("./resources/player/barriera.png");
 
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
@@ -64,7 +65,7 @@ void Player::move(int k)
    	  
       bouncer_x += 4.0;
    }
-     cout<<"MOVEANIMDELAY "<<moveAnimDelay<<" MOVERATE "<<moveAnimRate<<endl;
+    // cout<<"MOVEANIMDELAY "<<moveAnimDelay<<" MOVERATE "<<moveAnimRate<<endl;
 
 }
 
@@ -72,8 +73,10 @@ void Player::render()
 {
 	if(sx)
   		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
-  	else if(dx)
+  	else if(dx){
   		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
+        al_draw_bitmap(barriera,bouncer_x, bouncer_y, 0);
+    }
 }
 
 void Player::RemoveOneLife()
