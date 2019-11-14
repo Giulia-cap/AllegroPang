@@ -26,12 +26,15 @@ class GameState:public State
 		int hitRate;	
 		int timeDelay;
  		int timeRate;	
+ 		int bonusDelay;
+ 		int bonusRate;
 		int level=1;
 		int score=0;
 		int gameTime =120;
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
+
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~GameState();
