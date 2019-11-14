@@ -29,6 +29,8 @@ class GameState:public State
 		int hitRate;	
 		int timeDelay;
  		int timeRate;	
+ 		int bonusDelay;
+ 		int bonusRate;
 		int level=1;
 		int score=0;
 		int gameTime =120;

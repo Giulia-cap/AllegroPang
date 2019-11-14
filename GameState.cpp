@@ -41,12 +41,15 @@ void GameState::init()
   finish=false;
   redraw = true;
   doexit = false;
-  bulletDelay=10.0f;
-  firerate=10.0f;
-  hitRate=10.0f;
-  hitDelay=10.0f;
-  timeRate=60.0f;
+  firerate=10.0f; // quanto velocemente si puo sparare
+  bulletDelay=10.0f; 
+  hitRate=10.0f; //timer reverse, dopo essere stati colpiti 1 volta devono passare 10tick per poter essere ricolpiti
+  hitDelay=10.0f; 
+  timeRate=60.0f; //ogni 60tick scende 1 secondo
   timeDelay=0.0f;
+  bonusRate=500.0f; //durata bonus orologio
+  bonusDelay=0.0f;
+  
 
   if(level==1)
   {
@@ -97,7 +100,7 @@ void GameState::generateBalls()
    else if(level==2)
   {
 
-      b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
+     b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
@@ -165,7 +168,6 @@ void GameState::tick()
               decreaseBulletsNumber();
               object.erase(it); break;
             }
-             //AGGIUNGERE UN TIMER CHE DOPO TOT SECONDI SBLOCCA LE PALLE
             else if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
               (*it)->move(SCREEN_W);
             else if(orologio==false)
@@ -214,13 +216,21 @@ void GameState::tick()
        cout<<"LEVEL OVER";
         doexit=true;
      }
-           if(timeDelay>=timeRate){
-        decreaseTime();
+     //CONTROLLI TIMER GENERICI
+   if(timeDelay>=timeRate){ //GETSTISCE IL TEMPO IN GAME
+   		decreaseTime();
        // cout<<getMyTime()<<endl;
         timeDelay=0;
-      }else{
+   }else{
         timeDelay++;
-      }
+   }
+  if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
+  {
+  	orologio=false;
+  	bonusDelay=0;
+  }else{
+  	bonusDelay++;
+  }
   }
 
    finish=true;
@@ -396,7 +406,7 @@ void GameState::createBonus(int posX, int posY)
 
 void GameState::findPower(int t)
 {
-  if(t==OROLOGIO){ 
+  if(t==OROLOGIO){
     orologio=true;
   }
   else if(t==ARPIONE){ 
@@ -410,6 +420,7 @@ void GameState::findPower(int t)
   }
   else if(t==ARPIONEX2)
   {
+  	resetBulletsNumber();
     machineGun=false;
     arpione=false;
     arpionex2=true;
