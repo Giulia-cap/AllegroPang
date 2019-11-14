@@ -1,6 +1,7 @@
 #include <list>
 #include "GameState.h"
 #include <ctime>
+#include <sstream>
 
 //ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 
@@ -50,10 +51,6 @@ void GameState::init()
 
   if(level==1)
   {
-     /*if(!al_install_keyboard()) {
-        fprintf(stderr, "failed to initialize the keyboard!\n");
-        return;
-     }*/
      if(!al_init_image_addon()) {
          fprintf(stderr, "failed to create image!\n");
         return ;
@@ -61,6 +58,7 @@ void GameState::init()
      al_init_font_addon(); al_init_ttf_addon();
      
     pangFont=al_load_ttf_font("pangFont.ttf",30,0 ); //il secondo paramentro è la size, il terzo il flag
+    pangFontBig=al_load_ttf_font("pangFont.ttf",50,0 );
     if(!pangFont)
       cout<<"NO FONT";
    
@@ -78,8 +76,6 @@ void GameState::init()
  }
 
   al_set_target_bitmap(al_get_backbuffer(display));
-
-  //al_register_event_source(event_queue, al_get_keyboard_event_source());
 
   al_clear_to_color(al_map_rgb(0,0,0));
 
@@ -201,7 +197,7 @@ void GameState::tick()
       }
     
 
-      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { //esci=true;
+      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { esc=true; 
          break;}
     setKey(ev);
     TtlManager(); 
@@ -256,12 +252,28 @@ void GameState::render()
 
 void GameState:: drawBar()
 {
-  al_draw_text(pangFont, al_map_rgb(30, 80, 255), 400, 600,ALLEGRO_ALIGN_LEFT, "Time: "); //w h
+  al_draw_text(pangFontBig, al_map_rgb(30, 80, 255), 500, 550,ALLEGRO_ALIGN_LEFT, "Time: "); //w h
   int lw=50;
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw, 550,ALLEGRO_ALIGN_LEFT, "Life: ");
   for (int i=1;i<=player->getLife();i++)
     al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw*i, 600,ALLEGRO_ALIGN_LEFT, "* ");
+
+  string t=convert(gameTime);
+  al_draw_text(pangFontBig, al_map_rgb(30, 80, 255), 560, 600,ALLEGRO_ALIGN_LEFT, t.c_str());
+
+  string s=convert(score);
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1100, 550,ALLEGRO_ALIGN_LEFT,"Score: ");
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1100, 600,ALLEGRO_ALIGN_LEFT,s.c_str());
   
+}
+
+string GameState::convert(int i)
+{
+  string s;
+  stringstream ss;
+  ss<<i;
+  s=ss.str();
+  return s;
 }
 
 void GameState::setKey(ALLEGRO_EVENT ev)
@@ -386,8 +398,8 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%8;
-     if( ran<=5 && bonus.size()<=4)
+      ran=rand()%9;
+     if( ran<=6 && bonus.size()<=4)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
@@ -421,6 +433,10 @@ void GameState::findPower(int t)
   else if(t==GIRANDOLA)
   {
     player->setLife(player->getLife()+1);
+  }
+   else if(t==PROTEZIONE)
+  {
+    player->setProtezione(true);
   }
 }
 

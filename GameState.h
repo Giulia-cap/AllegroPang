@@ -1,15 +1,12 @@
-#include <stdio.h>
-#include <allegro5/allegro.h>
 #include "Player.h"
 #include "Ball.h"
 #include "Weapons.h"
 #include "MachineGun.h"
 #include "Object.h"
-#include <iostream>
 #include <list>
 #include "State.h"
 #include "Bonus.h"
-#include "includes.h"
+
 #ifndef GameState_H
 #define GameState_H
 
@@ -34,18 +31,25 @@ class GameState:public State
 		int gameTime =120;
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
+		ALLEGRO_FONT *pangFontBig;
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~GameState();
 
-		void init(); //INIZIALIZZA IL LIVELLO
-		void generateBalls(); //CHIAMATA IN INIT E RESET, CREA LE PALLE AD INIZIO LIVELLO
-		void tick(); //CONTROLLORE DEL LIVELLO, FA IL REFRESH DEL GIOCO	
+		//INIZIALIZZA IL LIVELLO
+		void init(); 
+		//CHIAMATA IN INIT E RESET, CREA LE PALLE AD INIZIO LIVELLO
+		void generateBalls(); 
+		//CONTROLLORE DEL LIVELLO, FA IL REFRESH DEL GIOCO	
+		void tick(); 
 		//CHIAMATO NEL TICK RENDERIZZA IL GIOCO A SCHERMO
 		void render();
 		//CHIAMATA NEL RENDER SERVE A VISUALIZZARE LE BARRE SOTTO E A LATO DELLA FINESTRA DI GIOCO
 		void drawBar();
-		void setKey(ALLEGRO_EVENT ); //GESTISCE IL MOUSE 
+		// CONVERTE GLI INTERI IN MODO DA POTER ESSERE STAMPATI A VIDEO TRAMITE FUNZIONE  al_draw_text DI ALLEGRO
+		string convert(int);
+		//GESTISCE IL MOUSE  
+		void setKey(ALLEGRO_EVENT ); 
 
 		//GESTISCE LE COLLISIONI DELLE PALLE
 		void BallCollision(list<DynamicObject*>::iterator &);

@@ -1,10 +1,9 @@
-#include <stdio.h>
-#include <allegro5/allegro.h>
+#include "includes.h"
 #include "Game.h"
-#include <iostream>
+
 using namespace std;
 
-int livello=1;
+bool esc=false; 
 
 int main(int argc, char **argv)
 {

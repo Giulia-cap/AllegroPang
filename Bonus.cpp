@@ -18,6 +18,8 @@ Bonus::Bonus(Type t, int bt,int posX, int posY):DynamicObject(t)
 		image=al_load_bitmap("./resources/bonus/clessidra.png");
 	else if(bonusType==GIRANDOLA)
 		image=al_load_bitmap("./resources/bonus/girandola.png");
+	else if(bonusType==PROTEZIONE)
+		image=al_load_bitmap("./resources/bonus/protezione.png");
 
 	if(!image)
 		cout<<"ERROR TO LOAD IMMAGE";

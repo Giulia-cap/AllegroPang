@@ -13,6 +13,7 @@ class Player:public DynamicObject
 		int movSx=0;
 		bool dx=false,sx=true; // booleana che indica se ci stiamo muovendo a dx o a sx
 		int life;
+		bool protezioneAttiva;
 	public:
 		Player(Type);
 		~Player();
@@ -23,5 +24,6 @@ class Player:public DynamicObject
 		void reset();
 		int getLife();
 		void setLife(int);
+		void setProtezione(bool);
 };
 #endif

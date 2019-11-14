@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <allegro5/allegro.h>
-#include <iostream>
+#include"includes.h"
 #include <list>
 #ifndef Game_H
 #define Game_H
@@ -16,7 +14,6 @@ class Game
 		~Game();
 		void init();
 		void tick();
-		bool esci=false;
-		void setEsc(bool e){esci=e;}
+		//void setEsc(bool e){esci=e;}
 };
 #endif

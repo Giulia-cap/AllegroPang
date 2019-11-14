@@ -1,7 +1,6 @@
 #ifndef State_H
 #define State_H
-#include <iostream>
-#include <allegro5/allegro.h>
+#include "includes.h"
 
 using namespace std;
 

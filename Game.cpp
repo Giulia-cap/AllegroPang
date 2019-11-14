@@ -7,6 +7,8 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
+ALLEGRO_TRANSFORM t;
+
 enum _State{MENU, LEVEL1, LEVEL2, LEVEL3};
 _State state=MENU;
 
@@ -40,17 +42,32 @@ void Game::init()
    ALLEGRO_MONITOR_INFO disp_data;
    al_get_monitor_info(al_get_num_video_adapters()-1, & disp_data);
    
-   SCREEN_W= (disp_data.x2 - disp_data.x1)-62;
-   SCREEN_H= (disp_data.y2 - disp_data.y1)-60;
+   SCREEN_W= (disp_data.x2 - disp_data.x1);
+   SCREEN_H= (disp_data.y2 - disp_data.y1);
+
+
+         /*   int w=12 *21;
+            int h=11*21;
+            float resize_x = SCREEN_W / static_cast<float>(w);
+            float resize_y = SCREEN_H / static_cast<float>(h);*/
    //
-   display = al_create_display(SCREEN_W, SCREEN_H);
+   
    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+   display = al_create_display(SCREEN_W, SCREEN_H);
    //display = al_create_display(SCREEN_W, SCREEN_H);
    if(!display) 
    {
       fprintf(stderr, "failed to create display!\n");
       return;
    }
+
+              /* al_identity_transform(&t);
+
+                al_scale_transform(&t, resize_x, resize_y);
+
+                al_use_transform(&t);*/
+
+
 
   event_queue = al_create_event_queue();
 
@@ -95,8 +112,7 @@ void Game::init()
 
 void Game::tick()
 {
-  //bool esci=false;
-   while(!esci)
+   while(!esc)
    {
       switch(state)
       {
@@ -111,23 +127,28 @@ void Game::tick()
         }
         case LEVEL1:
         {
-          gamestate->tick();
-          if(gamestate->finish)
+          if(!esc)
           {
-            state=LEVEL2;
-            //esci=true;
+            gamestate->tick();
+            if(gamestate->finish)
+            {
+              state=LEVEL2;
+            }
+            gamestate->setLevel(2);
+            gamestate->init();
           }
-          gamestate->setLevel(2);
-          gamestate->init();
         }
          case LEVEL2:
         {
-          gamestate->tick();
-          if(gamestate->finish)
+          if(!esc)
           {
-            //state=LEVEL2;
-            esci=true;
+            gamestate->tick();
+            if(gamestate->finish)
+            {
+              //state=LEVEL2;
+              esc=true;
           }
+        }
           //gamestate->setLevel(2);
           //gamestate->init();
         }

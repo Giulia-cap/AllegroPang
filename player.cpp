@@ -31,7 +31,7 @@ Player::~Player()
    int moveAnimRate=3.5f;
 void Player::move(int k)
 {
-   if(k==0 && bouncer_x >= 4.0 ) //MOVIMENTO A SINISTRA
+   if(k==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
    {
    	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
         movSx++;
@@ -49,7 +49,7 @@ void Player::move(int k)
       bouncer_x -= 4.0;
    }
 
-   if(k==1 && bouncer_x <= gameAreaW - BOUNCER_SIZE - 4.0) //MOVIMENTO A DESTRA
+   if(k==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
    {
    	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
    	  	movDx++;
@@ -75,14 +75,20 @@ void Player::render()
   		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
   	else if(dx){
   		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
-        al_draw_bitmap(barriera,bouncer_x, bouncer_y, 0);
     }
+
+    if(protezioneAttiva)
+      al_draw_bitmap(barriera,bouncer_x, bouncer_y, 0);
 }
 
 void Player::RemoveOneLife()
 {
-  if(life>0)
-    life--;
+  if(life>0 ){
+    if(!protezioneAttiva)
+      life--;
+    if(protezioneAttiva)
+      protezioneAttiva=false;
+  }
 }
 
 void Player::reset()
@@ -90,7 +96,9 @@ void Player::reset()
   life=3;
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
+  protezioneAttiva=false;
 }
 
 int Player::getLife(){return life;}
 void Player::setLife(int l){life=l;}
+void Player::setProtezione(bool p){protezioneAttiva=p;}

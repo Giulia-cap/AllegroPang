@@ -61,7 +61,7 @@ void MenuState::tick()
             }
             
         }
-        else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { esc=true;
 	    	break;
 	      }
 

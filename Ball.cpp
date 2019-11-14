@@ -36,12 +36,12 @@ void Ball::move(int SCREEN_W)  //togliere
    else if(BOUNCER_SIZE<=16 && BOUNCER_SIZE>8) multiplier =1.5;
    else multiplier =1;
 	 
-    if(bouncer_x < 0 || bouncer_x > gameAreaW - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
-            bouncer_dx = -bouncer_dx;                                //si sposti alla stessa velocità su qualsiasi computer.
+    if(bouncer_x < BOUNCER_SIZE || bouncer_x > (gameAreaW-40) - BOUNCER_SIZE) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
+            bouncer_dx = -bouncer_dx;          //^il 40 è per non fargli oltrepassare il muro         si sposti alla stessa velocità su qualsiasi computer.
          }
 
-         if(bouncer_y < 0 || bouncer_y > gameAreaH - BOUNCER_SIZE) {
-            bouncer_dy = -bouncer_dy;
+         if(bouncer_y < 0 || bouncer_y > (gameAreaH-20) - BOUNCER_SIZE) {
+            bouncer_dy = -bouncer_dy;     //^il 20 è per non fargli oltrepassare il muro
          }
 
          bouncer_x += bouncer_dx;
