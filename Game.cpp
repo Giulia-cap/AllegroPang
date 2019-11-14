@@ -12,7 +12,6 @@ _State state=MENU;
 
 GameState *gamestate;
 MenuState *menuState;
-
 Game::Game(int w, int h)
 {
   int SCREEN_W=w;
@@ -133,5 +132,6 @@ void Game::tick()
         }
       }
   }
- 
+ scores.showScoreboard();
 }
+

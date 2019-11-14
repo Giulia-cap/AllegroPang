@@ -36,6 +36,7 @@ class GameState:public State
 		int gameTime =120;
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
+		
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~GameState();

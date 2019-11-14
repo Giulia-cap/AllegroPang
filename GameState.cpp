@@ -214,6 +214,7 @@ void GameState::tick()
      if(object.size()!=0&&checkLevelOver())
      { 
        cout<<"LEVEL OVER";
+
         doexit=true;
      }
      //CONTROLLI TIMER GENERICI
@@ -460,7 +461,6 @@ void GameState::gameOver()
 
   if(player->getLife()==0)
   cout<<"YOU LOOOOOOOOOOSE!"<<endl;
-
   /*al_clear_to_color(al_map_rgb(0,0,0));
   al_draw_bitmap(gameover1,  0,0, 0);
   al_flip_display();
