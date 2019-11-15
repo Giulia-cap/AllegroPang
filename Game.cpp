@@ -51,9 +51,10 @@ void Game::init()
             float resize_y = SCREEN_H / static_cast<float>(h);*/
    //
    
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
    display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
    //display = al_create_display(SCREEN_W, SCREEN_H);
+   
    if(!display) 
    {
       fprintf(stderr, "failed to create display!\n");
