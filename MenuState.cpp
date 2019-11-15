@@ -10,8 +10,8 @@ ALLEGRO_VIDEO *video;
 
  ALLEGRO_EVENT ev;
 
-ALLEGRO_BITMAP *schermata;
-
+ALLEGRO_BITMAP *schermata,*schermata2;
+int alternator=0;
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
 
 MenuState::~MenuState(){
@@ -72,6 +72,8 @@ if(!al_init_image_addon()) {
   }
   //al_destroy_sample(intro_music);
 schermata=al_load_bitmap("./resources/press.png");
+schermata2=al_load_bitmap("./resources/press2.png");
+
   if(!schermata)
     cout<<"no image";
    al_init_video_addon();
@@ -125,7 +127,10 @@ void MenuState::render()
    //al_draw_scaled_bitmap(frame, 0, 0,al_get_bitmap_width(frame),al_get_bitmap_height(frame), x, y, SCREEN_W, SCREEN_H, 0);
  // al_draw_bitmap(video,0,0);
 	al_clear_to_color(al_map_rgb(0,0,0));
-    al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W, SCREEN_H, 0);
+   if(alternator%60==0) al_draw_scaled_bitmap(schermata2, 0, 0, al_get_bitmap_width(schermata2), al_get_bitmap_height(schermata2), 0, 0, SCREEN_W, SCREEN_H, 0);
+ else al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W, SCREEN_H, 0);
+alternator++;
+if(alternator>1000)alternator=0;
     al_flip_display();
 }
 

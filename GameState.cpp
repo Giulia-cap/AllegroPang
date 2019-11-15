@@ -370,9 +370,10 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
           object.push_back(b4);   
           object.push_back(b5);
        }
-       else
+       else{
         it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-
+      score+=50; //aumento lo score se distruggo una pallina
+      }
       //---------------CREO I BONUS RANDOMICAMENTE-------------//
       srand(time(NULL));
       createBonus(posX,posY);
@@ -486,7 +487,9 @@ void GameState::gameOver()
 {
 
   if(player->getLife()==0)
-  cout<<"YOU LOOOOOOOOOOSE!"<<endl;
+  cout<<"YOU LOSE!"<<endl;
+  cout<<"YOUR SCORE: "<<score<<endl;
+
  /* al_clear_to_color(al_map_rgb(0,0,0));
   al_draw_bitmap(sfondi[3],  0,0, 0);
   al_flip_display();
@@ -505,6 +508,7 @@ bool GameState::checkLevelOver()
  al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
   al_flip_display();
   al_rest(5.0);
+  increaseScore(gameTime);
   return true;
    } 
    }
