@@ -45,10 +45,10 @@ void Game::init()
    SCREEN_H= (disp_data.y2 - disp_data.y1);
 
 
-         /*   int w=12 *21;
-            int h=11*21;
+           int w=1360 ;
+            int h=768;
             float resize_x = SCREEN_W / static_cast<float>(w);
-            float resize_y = SCREEN_H / static_cast<float>(h);*/
+            float resize_y = SCREEN_H / static_cast<float>(h);
    //
    
    //display = al_create_display(SCREEN_W, SCREEN_H);
@@ -61,11 +61,11 @@ void Game::init()
       return;
    }
 
-              /* al_identity_transform(&t);
+               al_identity_transform(&t);
 
                 al_scale_transform(&t, resize_x, resize_y);
 
-                al_use_transform(&t);*/
+                al_use_transform(&t);
 
 
 
