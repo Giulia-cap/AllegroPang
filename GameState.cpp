@@ -114,7 +114,13 @@ void GameState::tick()
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
-        
+       if(checkLevelOver())
+     { 
+       cout<<"LEVEL OVER";
+
+        doexit=true;
+        break;
+     }  
 
 
       if(ev.type == ALLEGRO_EVENT_TIMER) 
@@ -211,12 +217,7 @@ void GameState::tick()
     hitDelay++;
 
       /*--------------------------------------------------------------*/
-     if(object.size()!=0&&checkLevelOver())
-     { 
-       cout<<"LEVEL OVER";
-
-        doexit=true;
-     }
+    
      //CONTROLLI TIMER GENERICI
    if(timeDelay>=timeRate){ //GETSTISCE IL TEMPO IN GAME
    		decreaseTime();
@@ -502,17 +503,20 @@ void GameState::gameOver()
 bool GameState::checkLevelOver()
 {
    int numbBalls=0;
-   if(object.size()!=0){
-   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
-      if((*it2)->getType()==BALL) numbBalls++;
-   if(numbBalls==0){
-    al_clear_to_color(al_map_rgb(0,0,0));
- al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
-  al_flip_display();
-  al_rest(5.0);
-  increaseScore(gameTime);
-  return true;
-   } 
+   if(object.size()!=0)
+   {
+     for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+        if((*it2)->getType()==BALL) 
+          numbBalls++;
+       if(numbBalls==0)
+       {
+          al_clear_to_color(al_map_rgb(0,0,0));
+          al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
+          al_flip_display();
+          al_rest(5.0);
+          increaseScore(gameTime);
+          return true;
+     } 
    }
    return false;
 }
