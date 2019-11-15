@@ -66,6 +66,8 @@ void Game::init()
                 al_scale_transform(&t, resize_x, resize_y);
 
                 al_use_transform(&t);
+    // SCREEN_W=resize_x;
+   // SCREEN_H=resize_y;
 
 
 

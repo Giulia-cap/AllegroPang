@@ -11,7 +11,7 @@
 #include<iostream>
 using namespace std;
 
-#define gameAreaW 1300
+#define gameAreaW 1360
 #define gameAreaH 500 
 
 extern bool esc;
