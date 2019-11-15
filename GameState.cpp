@@ -503,6 +503,7 @@ void GameState::gameOver()
 bool GameState::checkLevelOver()
 {
    int numbBalls=0;
+
    if(object.size()!=0)
    {
      for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
@@ -515,8 +516,10 @@ bool GameState::checkLevelOver()
           al_flip_display();
           al_rest(5.0);
           increaseScore(gameTime);
+           increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
           return true;
      } 
+
    }
    return false;
 }

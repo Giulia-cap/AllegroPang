@@ -51,9 +51,9 @@ void Game::init()
             float resize_y = SCREEN_H / static_cast<float>(h);*/
    //
    
-   display = al_create_display(SCREEN_W, SCREEN_H);
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
    //display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+   display = al_create_display(SCREEN_W, SCREEN_H);
    
    if(!display) 
    {
@@ -152,6 +152,8 @@ void Game::tick()
         }
           //gamestate->setLevel(2);
           //gamestate->init();
+        //QUESTO VA AGGIUNTO SOLO QUANDO IL GAME È TERMINATO
+        scores.addScore(gamestate->getScore());
         }
       }
   }
