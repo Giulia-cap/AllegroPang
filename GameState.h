@@ -80,6 +80,6 @@ class GameState:public State
 		void decreaseTime(){gameTime-=1;}
 		void resetTime(){gameTime=120;}
 		void resetScore(){score=0;}
-		void increaseScore(int s){score+=s;}
+		void increaseScore(int s){score+=(s*10);}
 };
 #endif
