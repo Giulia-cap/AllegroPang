@@ -137,6 +137,7 @@ void GameState::tick()
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
+                //cout<<"sparo arpione"<<endl;
               }
               else if(machineGun)
               {
@@ -144,7 +145,8 @@ void GameState::tick()
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
-              } ////// QUA CI VA L'ALTRO ELSE IF PER GESTIRE I 2 ARPIONI : SE ARPIONEDOPPIO && GETBULLETSNUMBER <=1 ALLORA SPARA
+                //cout<<"sparo machineGun"<<endl;
+              } 
               else if(arpionex2 && getBulletsNumber()<=1)
               {
                 increaseBulletsNumber();
@@ -400,7 +402,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
                   //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
-              if((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y())
+              if(!machineGun &&((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y()))
               {
                 decreaseBulletsNumber();
                  it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
@@ -423,7 +425,7 @@ void GameState::createBonus(int posX, int posY)
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
 
-       // cout<<"HO CREATO UN BONUS "<<end;
+        cout<<"HO CREATO UN BONUS "<<endl;
       }
 }
 

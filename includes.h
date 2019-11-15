@@ -14,8 +14,6 @@ using namespace std;
 #define gameAreaW 1300
 #define gameAreaH 500 
 
-//#define schermata=al_load_bitmap("./resources/press.png");
-
 extern bool esc;
 
 
