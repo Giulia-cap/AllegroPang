@@ -45,11 +45,15 @@ void Game::init()
    SCREEN_H= (disp_data.y2 - disp_data.y1);
 
 
-           int w=1360 ;
-            int h=768;
-            float resize_x = SCREEN_W / static_cast<float>(w);
-            float resize_y = SCREEN_H / static_cast<float>(h);
+  int w=1360 ;
+  int h=768;
+  resizeX = SCREEN_W / static_cast<float>(w);
+  resizeY = SCREEN_H / static_cast<float>(h);
    //
+
+
+  cout<<"resizeX: "<<resizeX<<"   resizeY: "<<resizeY<<endl;
+  cout<<"SCREEN_W: "<<SCREEN_W<<"    SCREEN_H"<<SCREEN_H<<endl;
    
    //display = al_create_display(SCREEN_W, SCREEN_H);
    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
@@ -61,15 +65,11 @@ void Game::init()
       return;
    }
 
-               al_identity_transform(&t);
+  al_identity_transform(&t);
 
-                al_scale_transform(&t, resize_x, resize_y);
+  al_scale_transform(&t, resizeX, resizeY);
 
-                al_use_transform(&t);
-    // SCREEN_W=resize_x;
-   // SCREEN_H=resize_y;
-
-
+  al_use_transform(&t);
 
   event_queue = al_create_event_queue();
 

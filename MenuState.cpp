@@ -56,7 +56,7 @@ if(!al_init_image_addon()) {
     //  cout<<all_name<<endl;
       image = al_load_bitmap(all_name.c_str());
      // al_draw_bitmap(image, 0, 0, 0);
-      al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), 0, 0, SCREEN_W, SCREEN_H, 0);
+      al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
 
       al_flip_display();
       al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -127,8 +127,8 @@ void MenuState::render()
    //al_draw_scaled_bitmap(frame, 0, 0,al_get_bitmap_width(frame),al_get_bitmap_height(frame), x, y, SCREEN_W, SCREEN_H, 0);
  // al_draw_bitmap(video,0,0);
 	al_clear_to_color(al_map_rgb(0,0,0));
-   if(alternator%60==0) al_draw_scaled_bitmap(schermata2, 0, 0, al_get_bitmap_width(schermata2), al_get_bitmap_height(schermata2), 0, 0, SCREEN_W, SCREEN_H, 0);
- else al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W, SCREEN_H, 0);
+   if(alternator%60==0) al_draw_scaled_bitmap(schermata2, 0, 0, al_get_bitmap_width(schermata2), al_get_bitmap_height(schermata2), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+ else al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
 alternator++;
 if(alternator>1000)alternator=0;
     al_flip_display();

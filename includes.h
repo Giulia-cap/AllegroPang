@@ -15,6 +15,8 @@ using namespace std;
 #define gameAreaH 500 
 
 extern bool esc;
+extern float resizeX;
+extern float resizeY;
 
 
 #endif

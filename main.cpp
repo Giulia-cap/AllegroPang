@@ -4,6 +4,8 @@
 using namespace std;
 
 bool esc=false; 
+float resizeX=1;
+float resizeY=1;
 
 int main(int argc, char **argv)
 {
