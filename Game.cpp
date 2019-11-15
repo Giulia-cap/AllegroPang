@@ -103,7 +103,7 @@ void Game::init()
   gamestate = new GameState(display,event_queue,timer,SCREEN_W,SCREEN_H);
   menuState= new MenuState(display,event_queue,timer,SCREEN_W,SCREEN_H);
 
-  menuState->init();
+ // menuState->init();
 
   tick();
 }
@@ -117,7 +117,8 @@ void Game::tick()
       {
         case MENU:
         {
-          menuState->tick();
+           menuState->init();
+          //menuState->tick();
           if(menuState->press) //non so perchè ma se tolgo questo si comporta in modo strano
           {
             state=LEVEL1;

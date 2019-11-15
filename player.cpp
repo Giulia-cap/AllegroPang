@@ -20,6 +20,8 @@ Player::Player(Type t):DynamicObject(t)
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
 
+  protezioneAttiva=false;
+
 	if(!image)
 		cout<<"ERROR TO LOAD IMMAGE";
 }

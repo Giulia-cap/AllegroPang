@@ -16,7 +16,7 @@ Bonus * newBonus;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
 
-ALLEGRO_BITMAP * sfondi[3];
+ALLEGRO_BITMAP * sfondi[5];
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -72,6 +72,8 @@ void GameState::init()
      sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
      sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
      sfondi[2]=al_load_bitmap("./resources/sfondo1.png");
+     sfondi[3]=al_load_bitmap("./resources/gameOver1.jpeg");
+     sfondi[4]=al_load_bitmap("./resources/youWin.png");
  }
  else
  {
@@ -304,6 +306,11 @@ void GameState::setKey(ALLEGRO_EVENT ev)
             case ALLEGRO_KEY_SPACE:
                key[SPACE_BAR]=true;
                break;
+
+            case ALLEGRO_KEY_ESCAPE:
+              esc=true;
+              break;
+
          }
       }
 
@@ -477,8 +484,8 @@ void GameState::gameOver()
 
   if(player->getLife()==0)
   cout<<"YOU LOOOOOOOOOOSE!"<<endl;
-  /*al_clear_to_color(al_map_rgb(0,0,0));
-  al_draw_bitmap(gameover1,  0,0, 0);
+ /* al_clear_to_color(al_map_rgb(0,0,0));
+  al_draw_bitmap(sfondi[3],  0,0, 0);
   al_flip_display();
   al_rest(0.5);*/
    return;
@@ -490,7 +497,13 @@ bool GameState::checkLevelOver()
    if(object.size()!=0){
    for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
       if((*it2)->getType()==BALL) numbBalls++;
-   if(numbBalls==0) return true;
+   if(numbBalls==0){
+    al_clear_to_color(al_map_rgb(0,0,0));
+ al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
+  al_flip_display();
+  al_rest(5.0);
+  return true;
+   } 
    }
    return false;
 }

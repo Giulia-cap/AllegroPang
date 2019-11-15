@@ -8,6 +8,8 @@ ALLEGRO_VIDEO *video;
  ALLEGRO_MIXER *mixer;
  ALLEGRO_BITMAP *frame;
 
+ ALLEGRO_EVENT ev;
+
 ALLEGRO_BITMAP *schermata;
 
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -20,6 +22,7 @@ void MenuState::init()
 {
 	dexit=false;
 
+	
 
 if(!al_init_image_addon()) {
          fprintf(stderr, "failed to create image!\n");
@@ -44,7 +47,7 @@ if(!al_init_image_addon()) {
 
   while (!done)
   {
-    ALLEGRO_EVENT ev;
+    
     al_wait_for_event(event_queue, &ev);
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
     {
@@ -54,9 +57,11 @@ if(!al_init_image_addon()) {
     else if (ev.type == ALLEGRO_EVENT_TIMER)
     {
       all_name = name + count + png;
-      cout<<all_name<<endl;
+    //  cout<<all_name<<endl;
       image = al_load_bitmap(all_name.c_str());
-      al_draw_bitmap(image, 0, 0, 0);
+     // al_draw_bitmap(image, 0, 0, 0);
+      al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), 0, 0, SCREEN_W, SCREEN_H, 0);
+
       al_flip_display();
       al_clear_to_color(al_map_rgb(0, 0, 0));
       al_destroy_bitmap(image);
@@ -79,13 +84,15 @@ schermata=al_load_bitmap("./resources/press.png");
      al_start_timer(timer); 
  
    al_flip_display();
+
+   tick();
 }
 
 void MenuState::tick()
 {
 	while(!dexit)
     {
-      	ALLEGRO_EVENT ev;
+      	//ALLEGRO_EVENT ev;
       	al_wait_for_event(event_queue, &ev);
       	//  frame = al_get_video_frame(video);
 
