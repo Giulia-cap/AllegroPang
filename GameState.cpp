@@ -421,6 +421,8 @@ void GameState::createBonus(int posX, int posY)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
+
+       // cout<<"HO CREATO UN BONUS "<<end;
       }
 }
 
@@ -457,6 +459,7 @@ void GameState::findPower(int t)
   {
     player->setProtezione(true);
   }
+
 }
 
 void GameState::TtlManager()

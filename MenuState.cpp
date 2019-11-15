@@ -38,10 +38,6 @@ if(!al_init_image_addon()) {
   bool done = false;
   int c = 0, i = 0;
 
-  ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
-  al_register_event_source(event_queue, al_get_timer_event_source(timer));
-  al_register_event_source(event_queue, al_get_keyboard_event_source());
-
  // al_reserve_samples(1);
   //al_play_sample(intro_music, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 
