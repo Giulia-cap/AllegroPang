@@ -508,7 +508,8 @@ bool GameState::checkLevelOver()
  al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
   al_flip_display();
   al_rest(5.0);
-  increaseScore(gameTime);
+  increaseScore(gameTime); //PIU TEMPO E' RIMASTO PIU IL PUNTEGGIO SALE
+  increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
   return true;
    } 
    }

@@ -151,6 +151,8 @@ void Game::tick()
         }
           //gamestate->setLevel(2);
           //gamestate->init();
+        //QUESTO VA AGGIUNTO SOLO QUANDO IL GAME È TERMINATO
+        scores.addScore(gamestate->getScore());
         }
       }
   }
