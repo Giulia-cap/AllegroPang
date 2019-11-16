@@ -159,6 +159,6 @@ void Game::tick()
         }
       }
   }
- scores.showScoreboard();
+ //scores.showScoreboard();
 }
 

@@ -1,5 +1,6 @@
 #include "MenuState.h"
 #include "includes.h"
+#include "Scoreboard.h"
 #include <allegro5/allegro_video.h>
 #include <allegro5/allegro_audio.h>
 
@@ -12,6 +13,8 @@ ALLEGRO_VIDEO *video;
 
 ALLEGRO_BITMAP *schermata,*schermata2;
 int alternator=0;
+bool enableScoreState=false;
+Scoreboard s;
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
 
 MenuState::~MenuState(){
@@ -23,7 +26,12 @@ void MenuState::init()
 	dexit=false;
 
 	
-
+     al_init_font_addon(); al_init_ttf_addon();
+     
+    pangFont=al_load_ttf_font("pangFont.ttf",30,0 ); //il secondo paramentro è la size, il terzo il flag
+    pangFontBig=al_load_ttf_font("pangFont.ttf",50,0 );
+    if(!pangFont)
+      cout<<"NO FONT";
 if(!al_init_image_addon()) {
          fprintf(stderr, "failed to create image!\n");
         return ;
@@ -103,6 +111,10 @@ void MenuState::tick()
             	case ALLEGRO_KEY_ENTER:
           		dexit=true;
                 break;
+              case ALLEGRO_KEY_S:
+              if(enableScoreState)
+              enableScoreState=false;
+              else enableScoreState=true;
             }
             
         }
@@ -116,16 +128,28 @@ void MenuState::tick()
 
 void MenuState::render()
 {
-	//al_start_video(video,0);
-	/* float scaled_w = al_get_video_scaled_width(video);
-   float scaled_h = al_get_video_scaled_height(video);
-   ALLEGRO_BITMAP *frame = al_get_video_frame(video);
+if(enableScoreState){
+  vector<string> score=s.readFromFile();
+  al_clear_to_color(al_map_rgb(0,0,0));
+   for(unsigned i=0;i<10;i++){
+  //cout<<i+1<<": "<<score[i]<<endl;
 
-   float x = (al_get_display_width(display) - SCREEN_W) / 2;
-  float y = (al_get_display_height(display) - SCREEN_H) / 2;*/
+  al_draw_text(pangFont, al_map_rgb(255, 0, 0), (SCREEN_W/2)-SCREEN_W/10, SCREEN_H-40,ALLEGRO_ALIGN_LEFT,"Press S to return ");
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), (SCREEN_W/2)-SCREEN_W/10, 0,ALLEGRO_ALIGN_LEFT,"Best Scores: ");
+  if(i==0)
+  al_draw_text(pangFont, al_map_rgb(255, 0, 0), (SCREEN_W/2)-SCREEN_W/10, 50+i*50,ALLEGRO_ALIGN_LEFT,score[i].c_str());
+  else if(i==1)  
+  al_draw_text(pangFont, al_map_rgb(255, 69, 0), (SCREEN_W/2)-SCREEN_W/10, 50+i*50,ALLEGRO_ALIGN_LEFT,score[i].c_str());
+  else if(i==2)
+  al_draw_text(pangFont, al_map_rgb(255, 255, 0), (SCREEN_W/2)-SCREEN_W/10, 50+i*50,ALLEGRO_ALIGN_LEFT,score[i].c_str());
+  else 
+  al_draw_text(pangFont, al_map_rgb(30, 80, 255), (SCREEN_W/2)-SCREEN_W/10, 50+i*50,ALLEGRO_ALIGN_LEFT,score[i].c_str());
 
-   //al_draw_scaled_bitmap(frame, 0, 0,al_get_bitmap_width(frame),al_get_bitmap_height(frame), x, y, SCREEN_W, SCREEN_H, 0);
- // al_draw_bitmap(video,0,0);
+   }
+    al_flip_display();
+
+
+}else{
 	al_clear_to_color(al_map_rgb(0,0,0));
    if(alternator%60==0) al_draw_scaled_bitmap(schermata2, 0, 0, al_get_bitmap_width(schermata2), al_get_bitmap_height(schermata2), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
  else al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
@@ -133,4 +157,4 @@ alternator++;
 if(alternator>1000)alternator=0;
     al_flip_display();
 }
-
+}
