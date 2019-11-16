@@ -104,3 +104,7 @@ void Player::reset()
 int Player::getLife(){return life;}
 void Player::setLife(int l){life=l;}
 void Player::setProtezione(bool p){protezioneAttiva=p;}
+void Player::respawn(){
+   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
+  bouncer_y=(gameAreaH - BOUNCER_SIZE ); 
+}

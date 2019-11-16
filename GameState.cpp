@@ -353,8 +353,8 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
   
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
       if (hitDelay >= hitRate){
-      //METTERE TIMER PURE QUI, SENNÒ PERDE TUTTE LE VITE INSIEME
       player->RemoveOneLife();
+      player->respawn();
       hitDelay=0;
       gameOver();
        it++;
