@@ -27,9 +27,6 @@ class State
 		virtual void init()=0;
 		virtual void tick()=0;
 		virtual void render()=0;
-
-		/*State* getCurrentState(){return currentState;}
-		void setCurrentState(State* s){currentState=s;}*/
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "includes.h"
-#include "Game.h"
 #include "GameState.h"
 #include "MenuState.h"
+//#include "ScoreState.h"
 #include "Scoreboard.h"
 
 using namespace std;
@@ -33,16 +33,15 @@ void setState(int);
 
 int main(int argc, char **argv)
 {
-	/*Game game (640,480);
-   	game.init();*/
    	init();
 
    al_destroy_display(display);
   al_destroy_event_queue(event_queue);
+ // al_destroy_timer(timer);
 
   delete menuState;
   delete gamestate;
-   
+
    return 0;
 }
 
@@ -132,28 +131,10 @@ void tick()
         gamestate->setLevel(1);
         menuState->init();
       }
-      else if(state==1)
+      else 
       {
         gamestate->init();
         gamestate->tick();
-      }
-      else
-      {
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
-
-        if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
-        {
-          switch (ev.keyboard.keycode)
-          {
-            case ALLEGRO_KEY_ENTER:
-            state=0;
-            break;
-            case ALLEGRO_KEY_ESCAPE:
-            esc=true;
-            break;
-          }   
-        }
       }
       
   }
