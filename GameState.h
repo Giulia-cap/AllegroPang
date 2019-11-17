@@ -51,7 +51,7 @@ class GameState:public State
 		void drawBar();
 		// CONVERTE GLI INTERI IN MODO DA POTER ESSERE STAMPATI A VIDEO TRAMITE FUNZIONE  al_draw_text DI ALLEGRO
 		string convert(int);
-		//GESTISCE IL MOUSE  
+		//GESTISCE LA TASTIERA  
 		void setKey(ALLEGRO_EVENT ); 
 
 		//GESTISCE LE COLLISIONI DELLE PALLE
@@ -65,7 +65,7 @@ class GameState:public State
 		//CHIAMATA NEL TICK GESTISCE I TTL DEGLI OGGETTI
 		void TtlManager();
 
-		void gameOver(); 
+		bool gameOver(); 
 		bool checkLevelOver();
 		void reset(); //RESETTA IL LIVELLO
 

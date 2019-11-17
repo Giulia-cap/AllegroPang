@@ -4,14 +4,14 @@
 #include <allegro5/allegro_audio.h>
 
 bool dexit;
-ALLEGRO_VIDEO *video;
- ALLEGRO_MIXER *mixer;
- ALLEGRO_BITMAP *frame;
-
- ALLEGRO_EVENT ev;
-
-ALLEGRO_BITMAP *schermata,*schermata2;
 int alternator=0;
+
+ALLEGRO_VIDEO *video;
+ALLEGRO_MIXER *mixer;
+ALLEGRO_BITMAP *frame;
+ALLEGRO_EVENT ev;
+ALLEGRO_BITMAP *schermata,*schermata2;
+
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
 
 MenuState::~MenuState(){
@@ -76,25 +76,23 @@ schermata2=al_load_bitmap("./resources/press2.png");
 
   if(!schermata)
     cout<<"no image";
-   al_init_video_addon();
-    al_clear_to_color(al_map_rgb(0,0,0));
 
-     al_start_timer(timer); 
+  al_init_video_addon();
+
+  al_clear_to_color(al_map_rgb(0,0,0));
+
+  al_start_timer(timer); 
  
-   al_flip_display();
+  al_flip_display();
 
-   tick();
+  tick();
 }
 
 void MenuState::tick()
 {
 	while(!dexit)
     {
-      	//ALLEGRO_EVENT ev;
       	al_wait_for_event(event_queue, &ev);
-      	//  frame = al_get_video_frame(video);
-
-      //	al_start_video(video, al_get_default_mixer());
 
       	if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
@@ -102,7 +100,12 @@ void MenuState::tick()
             {
             	case ALLEGRO_KEY_ENTER:
           		dexit=true;
-                break;
+              state=1;
+              break;
+              case ALLEGRO_KEY_ESCAPE:
+              esc=true;
+              dexit=true;
+              break;
             }
             
         }
@@ -116,16 +119,6 @@ void MenuState::tick()
 
 void MenuState::render()
 {
-	//al_start_video(video,0);
-	/* float scaled_w = al_get_video_scaled_width(video);
-   float scaled_h = al_get_video_scaled_height(video);
-   ALLEGRO_BITMAP *frame = al_get_video_frame(video);
-
-   float x = (al_get_display_width(display) - SCREEN_W) / 2;
-  float y = (al_get_display_height(display) - SCREEN_H) / 2;*/
-
-   //al_draw_scaled_bitmap(frame, 0, 0,al_get_bitmap_width(frame),al_get_bitmap_height(frame), x, y, SCREEN_W, SCREEN_H, 0);
- // al_draw_bitmap(video,0,0);
 	al_clear_to_color(al_map_rgb(0,0,0));
    if(alternator%60==0) al_draw_scaled_bitmap(schermata2, 0, 0, al_get_bitmap_width(schermata2), al_get_bitmap_height(schermata2), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
  else al_draw_scaled_bitmap(schermata, 0, 0, al_get_bitmap_width(schermata), al_get_bitmap_height(schermata), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);

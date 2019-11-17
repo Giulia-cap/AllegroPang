@@ -3,8 +3,6 @@
 #include <ctime>
 #include <sstream>
 
-//ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-
 bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
 bool doexit;
 int ran;
@@ -72,19 +70,19 @@ void GameState::init()
      sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
      sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
      sfondi[2]=al_load_bitmap("./resources/sfondo1.png");
-     sfondi[3]=al_load_bitmap("./resources/gameOver1.jpeg");
+     sfondi[3]=al_load_bitmap("./resources/gameOver.png");
      sfondi[4]=al_load_bitmap("./resources/youWin.png");
  }
- else
- {
-    reset();
- }
+  // else
+  // {
+      reset();
+  // }
 
-  al_set_target_bitmap(al_get_backbuffer(display));
+    al_set_target_bitmap(al_get_backbuffer(display));
 
-  al_clear_to_color(al_map_rgb(0,0,0));
+    al_clear_to_color(al_map_rgb(0,0,0));
 
-  al_flip_display();
+    al_flip_display();
 }
 
 void GameState::generateBalls()
@@ -116,8 +114,10 @@ void GameState::tick()
       al_wait_for_event(event_queue, &ev);
        if(checkLevelOver())
      { 
-       cout<<"LEVEL OVER";
-
+        if(level<3)
+          level=level+1;
+        else 
+          state=2;     
         doexit=true;
         break;
      }  
@@ -356,7 +356,7 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
       //METTERE TIMER PURE QUI, SENNÒ PERDE TUTTE LE VITE INSIEME
       player->RemoveOneLife();
       hitDelay=0;
-      gameOver();
+      if (gameOver())return;
        it++;
          }
     }
@@ -426,7 +426,7 @@ void GameState::createBonus(int posX, int posY)
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
 
-        cout<<"HO CREATO UN BONUS "<<endl;
+       // cout<<"HO CREATO UN BONUS "<<endl;
       }
 }
 
@@ -486,18 +486,56 @@ void GameState::TtlManager()
 
 //++++++++++++++++++++++++++++BLOCCO FUNZIONI 4++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void GameState::gameOver()
+bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
 {
 
   if(player->getLife()==0)
-  cout<<"YOU LOSE!"<<endl;
-  cout<<"YOUR SCORE: "<<score<<endl;
+    {
+      //cout<<"YOUR SCORE: "<<score<<endl;
+      bool gameOver=true;
+      al_clear_to_color(al_map_rgb(0,0,0));
 
- /* al_clear_to_color(al_map_rgb(0,0,0));
-  al_draw_bitmap(sfondi[3],  0,0, 0);
-  al_flip_display();
-  al_rest(0.5);*/
-   return;
+      while(gameOver)
+      {
+        al_draw_scaled_bitmap(sfondi[3], 0, 0, al_get_bitmap_width(sfondi[3]), al_get_bitmap_height(sfondi[3]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 500,ALLEGRO_ALIGN_LEFT, "PRESS ENTER TO" );
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "TRY AGAIN");
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO EXIT ");
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 500,ALLEGRO_ALIGN_LEFT, "PRESS M TO");
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 550,ALLEGRO_ALIGN_LEFT,"RETURN TO MENU");
+
+        al_flip_display();
+
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(event_queue, &ev);
+        if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+          switch (ev.keyboard.keycode)
+            {
+              case ALLEGRO_KEY_ENTER:
+                doexit=true;
+                gameOver=false;
+                state=1;
+                break;
+              case ALLEGRO_KEY_M:
+                doexit=true;
+                gameOver=false;
+                state=0;
+                break;
+              case ALLEGRO_KEY_ESCAPE:
+                esc=true;
+                doexit=true;
+                gameOver=false;
+                break;
+            }
+      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+        { esc=true; 
+         break;
+       }
+
+    }
+   return true;
+  }
+  return false;
 }
 
 bool GameState::checkLevelOver()
@@ -514,9 +552,9 @@ bool GameState::checkLevelOver()
           al_clear_to_color(al_map_rgb(0,0,0));
           al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
           al_flip_display();
-          al_rest(5.0);
+          al_rest(4.0);
           increaseScore(gameTime);
-           increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
+          increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
           return true;
      } 
 
@@ -526,6 +564,11 @@ bool GameState::checkLevelOver()
 
 void GameState::reset()
 {
+  key[0]=false;
+  key[1]=false;
+  key[2]=false;
+ 
+
   player->reset();
 
   object.clear();

@@ -2,8 +2,7 @@
 #include "GameState.h"
 #include "MenuState.h"
 
-float FPS = 60;
-ALLEGRO_DISPLAY *display = NULL;
+/*ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
@@ -49,15 +48,10 @@ void Game::init()
   int h=768;
   resizeX = SCREEN_W / static_cast<float>(w);
   resizeY = SCREEN_H / static_cast<float>(h);
-   //
-
-
-  cout<<"resizeX: "<<resizeX<<"   resizeY: "<<resizeY<<endl;
-  cout<<"SCREEN_W: "<<SCREEN_W<<"    SCREEN_H"<<SCREEN_H<<endl;
    
-   //display = al_create_display(SCREEN_W, SCREEN_H);
-   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
    display = al_create_display(SCREEN_W, SCREEN_H);
+   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+   //display = al_create_display(SCREEN_W, SCREEN_H);
    
    if(!display) 
    {
@@ -161,4 +155,78 @@ void Game::tick()
   }
  scores.showScoreboard();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+switch(state)
+      {
+        case MENU:
+        gamestate->setLevel(1);
+        menuState->init();
+        break;
+        /*{
+           menuState->init();
+          //menuState->tick();
+          if(menuState->press) //non so perchè ma se tolgo questo si comporta in modo strano
+          {
+            state=LEVEL1;
+          }
+          gamestate->init();
+        }*/
+     /*   case GAME:
+        gamestate->init();
+        gamestate->tick();
+        break;
+       /* {
+          if(!esc)
+          {
+            gamestate->tick();
+            if(gamestate->finish)
+            {
+              state=LEVEL2;
+            }
+            gamestate->setLevel(2);
+            gamestate->init();
+          }
+        }*/
+       /*  case LEVEL2:
+         gamestate->init();
+         gamestate->tick();
+         break;
+       /* {
+          if(!esc)
+          {
+            gamestate->tick();
+            if(gamestate->finish)
+            {
+              //state=LEVEL2;
+              esc=true;
+            }
+          }
+            //gamestate->setLevel(2);
+            //gamestate->init();
+          //QUESTO VA AGGIUNTO SOLO QUANDO IL GAME È TERMINATO
+          scores.addScore(gamestate->getScore());
+          }*/
+    //  }
 
