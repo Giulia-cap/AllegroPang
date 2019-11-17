@@ -35,12 +35,6 @@ int main(int argc, char **argv)
 {
    	init();
 
-   al_destroy_display(display);
-  al_destroy_event_queue(event_queue);
- // al_destroy_timer(timer);
-
-  delete menuState;
-  delete gamestate;
 
    return 0;
 }
@@ -118,14 +112,21 @@ void init()
   menuState= new MenuState(display,event_queue,timer,SCREEN_W,SCREEN_H);
 
  // menuState->init();
-
   tick();
+
+    al_destroy_display(display);
+  al_destroy_event_queue(event_queue);
+  al_destroy_timer(timer);
+ 
+  delete menuState;
+  delete gamestate;
 }
 
 void tick()
 {
    while(!esc)
    {
+     gamestate->init();
       if(state==0)
       {
         gamestate->setLevel(1);
@@ -138,7 +139,7 @@ void tick()
       }
       
   }
- scores.showScoreboard();
+ //scores.showScoreboard();
 }
 
 void setState(int s)

@@ -11,7 +11,7 @@ ALLEGRO_MIXER *mixer;
 ALLEGRO_BITMAP *frame;
 ALLEGRO_EVENT ev;
 ALLEGRO_BITMAP *schermata,*schermata2;
-ALLEGRO_BITMAP *image = NULL;
+ALLEGRO_BITMAP *image;
 
 int alternator=0;
 bool enableScoreState=false;
@@ -22,11 +22,9 @@ MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIME
 MenuState::~MenuState()
 {
   //al_destroy_video(video);
-  al_destroy_mixer(mixer);
-  al_destroy_bitmap(frame);
+  cout<<"distruttore";
   al_destroy_bitmap(schermata);
   al_destroy_bitmap(schermata2);
-  al_destroy_bitmap(image);
 
 }
 
@@ -98,7 +96,7 @@ schermata2=al_load_bitmap("./resources/press2.png");
 
   al_clear_to_color(al_map_rgb(0,0,0));
 
-  al_start_timer(timer); 
+  //al_start_timer(timer); 
  
   al_flip_display();
 
@@ -122,6 +120,7 @@ void MenuState::tick()
               case ALLEGRO_KEY_ESCAPE:
               esc=true;
               dexit=true;
+              cout<<"esc";
               break;
               case ALLEGRO_KEY_S:
               if(enableScoreState)
@@ -134,7 +133,8 @@ void MenuState::tick()
 	    	break;
 	      }
 
-	    render();
+      if(!dexit)
+	     render();
     }
 }
 

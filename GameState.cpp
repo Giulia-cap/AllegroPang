@@ -311,6 +311,7 @@ void GameState::setKey(ALLEGRO_EVENT ev)
                break;
 
             case ALLEGRO_KEY_ESCAPE:
+              doexit=true;
               esc=true;
               break;
 
