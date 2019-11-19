@@ -6,6 +6,7 @@
 #include <list>
 #include "State.h"
 #include "Bonus.h"
+#include "obstacle.h"
 
 #ifndef GameState_H
 #define GameState_H
@@ -19,6 +20,7 @@ class GameState:public State
 	private:
 		Player *player;
 		list<DynamicObject*> object;
+		list<Obstacle*> obstacle;
 		list<Bonus*> bonus;
 		int bulletDelay;
 		int firerate;

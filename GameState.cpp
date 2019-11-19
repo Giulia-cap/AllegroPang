@@ -8,6 +8,7 @@ bool doexit;
 int ran;
 
 Ball *b,*b2,*b3,*b4,*b5;
+Obstacle *o1,*o2,*o3;
 Weapons *bullet;
 Bonus * newBonus;
 
@@ -93,15 +94,21 @@ void GameState::generateBalls()
      object.push_back(b);
      return;
   }
-   else if(level==2)
+   else 
   {
 
      b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
+     if(level==3)
+     {
+        o1=new Obstacle(OBSTACLE,50,50);
+       obstacle.push_back(o1);
+     }
      return;
   } 
+  
 }
 
 void GameState::tick()
@@ -258,6 +265,9 @@ void GameState::render()
         for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
             (*it2)->render(); 
          }
+
+         for(list<Obstacle*>::iterator it3=obstacle.begin();it3!=obstacle.end();it3++)
+            (*it3)->render();
 
       drawBar();
 
