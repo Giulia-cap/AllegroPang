@@ -7,7 +7,7 @@ bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato del
 bool doexit;
 int ran;
 
-Ball *b,*b2,*b3,*b4,*b5;
+Ball *b,*b2,*b3,*b4,*b5,*b6;
 Obstacle *o1,*o2,*o3;
 Weapons *bullet;
 Bonus * newBonus;
@@ -70,7 +70,7 @@ void GameState::init()
 
      sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
      sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
-     sfondi[2]=al_load_bitmap("./resources/sfondo1.png");
+     sfondi[2]=al_load_bitmap("./resources/sfondo3.png");
      sfondi[3]=al_load_bitmap("./resources/gameOver.png");
      sfondi[4]=al_load_bitmap("./resources/youWin.png");
  }
@@ -103,8 +103,12 @@ void GameState::generateBalls()
      object.push_back(b3);
      if(level==3)
      {
-        o1=new Obstacle(OBSTACLE,50,50);
-       obstacle.push_back(o1);
+        b6=new Ball(BALL,32,320,350,2,-3);
+        object.push_back(b6);
+        o1=new Obstacle(OBSTACLE,450,220);
+       //obstacle.push_back(o1);
+        o2=new Obstacle(OBSTACLE,750,300);
+       //obstacle.push_back(o2);
      }
      return;
   } 
@@ -190,7 +194,6 @@ void GameState::tick()
            /*------------------COLLISIONI OBJECT-----------------------*/
             if((*it)->getType()==BALL)
             { 
-
               BallCollision(it);
             }
             else it++; 
@@ -266,8 +269,13 @@ void GameState::render()
             (*it2)->render(); 
          }
 
-         for(list<Obstacle*>::iterator it3=obstacle.begin();it3!=obstacle.end();it3++)
-            (*it3)->render();
+        if(level==3)
+        {
+          o1->render();
+          o2->render();
+         /*for(list<Obstacle*>::iterator it3=obstacle.begin();it3!=obstacle.end();it3++)
+            (*it3)->render();*/
+        }
 
       drawBar();
 
@@ -361,13 +369,32 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
-  
+
+  if(level==3)
+  {
+    if((o1)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE)){
+    if(o1->collisionX)
+      (*it)->bouncer_dx=-((*it)->bouncer_dx);
+    else 
+      (*it)->bouncer_dy=-((*it)->bouncer_dy);
+    o1->collisionX=false;
+    o1->collisionY=false;}
+
+    else if((o2)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE)){
+     if(o2->collisionX)
+      (*it)->bouncer_dx=-((*it)->bouncer_dx);
+    else 
+      (*it)->bouncer_dy=-((*it)->bouncer_dy);
+    o2->collisionX=false;
+    o2->collisionY=false;}
+  }
+
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
       if (hitDelay >= hitRate){
       player->RemoveOneLife();
       player->respawn();
       hitDelay=0;
-      if (gameOver())return;
+      if (gameOver())return; 
        it++;
          }
     }
@@ -500,7 +527,7 @@ void GameState::TtlManager()
 bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
 {
 
-  if(player->getLife()==0)
+  if(player->getLife()==0 || gameTime==0)
     {
       //cout<<"YOUR SCORE: "<<score<<endl;
       bool gameOver=true;
@@ -584,6 +611,7 @@ void GameState::reset()
 
   object.clear();
   bonus.clear();
+  obstacle.clear();
   generateBalls();
 
   resetTime();
