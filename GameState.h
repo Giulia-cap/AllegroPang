@@ -68,6 +68,8 @@ class GameState:public State
 		void TtlManager();
 
 		bool gameOver(); 
+		bool gameWon();
+		void popupMenu(int);
 		bool checkLevelOver();
 		void reset(); //RESETTA IL LIVELLO
 

@@ -98,9 +98,9 @@ void GameState::generateBalls()
   {
 
      b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
-     object.push_back(b);
+     /*object.push_back(b);
      object.push_back(b2);
-     object.push_back(b3);
+     object.push_back(b3);*/
      if(level==3)
      {
         b6=new Ball(BALL,32,320,350,2,-3);
@@ -123,15 +123,10 @@ void GameState::tick()
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
-       if(checkLevelOver())
-     { 
-        if(level<3)
-          level=level+1;
-        else 
-          state=2;     
-        doexit=true;
-        break;
-     }  
+      if(checkLevelOver() && level==3)
+      popupMenu(1);
+      else if(checkLevelOver())
+      level+=1;
 
 
       if(ev.type == ALLEGRO_EVENT_TIMER) 
@@ -523,22 +518,18 @@ void GameState::TtlManager()
 
 
 //++++++++++++++++++++++++++++BLOCCO FUNZIONI 4++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
-{
-
-  if(player->getLife()==0 || gameTime==0)
-    {
-      //cout<<"YOUR SCORE: "<<score<<endl;
+void GameState::popupMenu(int k){
+   //cout<<"YOUR SCORE: "<<score<<endl;
       bool gameOver=true;
       al_clear_to_color(al_map_rgb(0,0,0));
-
+      cout<<level<<endl;
       while(gameOver)
       {
-        al_draw_scaled_bitmap(sfondi[3], 0, 0, al_get_bitmap_width(sfondi[3]), al_get_bitmap_height(sfondi[3]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+        if(k==0)al_draw_scaled_bitmap(sfondi[3], 0, 0, al_get_bitmap_width(sfondi[3]), al_get_bitmap_height(sfondi[3]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+        if(k==1)al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
         al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 500,ALLEGRO_ALIGN_LEFT, "PRESS ENTER TO" );
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "TRY AGAIN");
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO EXIT ");
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "PLAY AGAIN");
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO CLOSE");
         al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 500,ALLEGRO_ALIGN_LEFT, "PRESS M TO");
         al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 550,ALLEGRO_ALIGN_LEFT,"RETURN TO MENU");
 
@@ -571,6 +562,13 @@ bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
        }
 
     }
+}
+
+bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
+{
+  if(player->getLife()==0 || gameTime==0)
+    {
+     popupMenu(0);
    return true;
   }
   return false;
@@ -579,24 +577,21 @@ bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
 bool GameState::checkLevelOver()
 {
    int numbBalls=0;
-
-   if(object.size()!=0)
-   {
      for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
         if((*it2)->getType()==BALL) 
           numbBalls++;
        if(numbBalls==0)
        {
           al_clear_to_color(al_map_rgb(0,0,0));
+          if(level!=3){
           al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
           al_flip_display();
           al_rest(4.0);
           increaseScore(gameTime);
           increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
+        }
           return true;
      } 
-
-   }
    return false;
 }
 
