@@ -14,7 +14,7 @@ ALLEGRO_BITMAP *schermata,*schermata2;
 ALLEGRO_BITMAP *image;
 
 int alternator=0;
-bool enableScoreState=false;
+bool enableScoreState=false,enableTutorial=false;
 Scoreboard s;
 
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -126,6 +126,12 @@ void MenuState::tick()
               if(enableScoreState)
               enableScoreState=false;
               else enableScoreState=true;
+              break;
+              case ALLEGRO_KEY_T:
+              if(enableTutorial)
+              enableTutorial=false;
+              else enableTutorial=true;
+              break;
             }
             
         }
@@ -140,7 +146,57 @@ void MenuState::tick()
 
 void MenuState::render()
 {
+if(enableTutorial){
 
+  std::string count = "1";
+  std::string name = "resources/tutorial/tutorial";
+  std::string png = ".jpg";
+  std::string all_name;
+  std::string buffer;
+  bool done = false;
+  int c = 0, i = 0;
+
+ // al_reserve_samples(1);
+  //al_play_sample(intro_music, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+
+  while (!done)
+  {
+    
+    al_wait_for_event(event_queue, &ev);
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+    {
+      if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
+        done = true;
+      enableTutorial=false;
+      break;
+    }
+    else if (ev.type == ALLEGRO_EVENT_TIMER)
+    {
+      all_name = name + count + png;
+    //  cout<<all_name<<endl;
+      image = al_load_bitmap(all_name.c_str());
+     // al_draw_bitmap(image, 0, 0, 0);
+      al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+
+      al_flip_display();
+      al_clear_to_color(al_map_rgb(0, 0, 0));
+      al_destroy_bitmap(image);
+      c++;
+      count.clear();
+      count = std::to_string(c);
+      count = buffer + count;
+      ++i;
+    }
+    if (i == 933){
+      done = true;
+      enableTutorial=false;
+
+    }
+          //al_rest(1.0/60);
+
+  }
+
+}
 if(enableScoreState){
   vector<string> score=s.readFromFile();
   al_clear_to_color(al_map_rgb(0,0,0));
