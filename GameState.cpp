@@ -150,6 +150,7 @@ void GameState::tick()
          {
             if (bulletDelay >= firerate)
             {
+              cout<<"shoot"<<endl;
               if(!machineGun && getBulletsNumber() ==0)
               {
                 increaseBulletsNumber();
@@ -470,13 +471,13 @@ void GameState::createBonus(int posX, int posY)
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
       ran=rand()%10;
-     // cout<<bonus.size()<<endl;
-     if( ran<=6 && bonus.size()<=4)
+     //cout<<bonus.size()<<endl;
+     if( ran<=6 && bonus.size()<=3)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
 
-       // cout<<"HO CREATO UN BONUS "<<endl;
+       //cout<<endl<<"HO CREATO UN BONUS "<<endl;
       }
 }
 
@@ -495,8 +496,9 @@ void GameState::findPower(int t)
     machineGun=true;
     arpione=false;
     arpionex2=false;
+    resetBulletsNumber();
   }
-  else if(t==ARPIONEX2)
+  else if(t==ARPIONEX2)   //arpioneX2+machine 
   {
   	resetBulletsNumber();
     machineGun=false;
@@ -515,6 +517,10 @@ void GameState::findPower(int t)
   {
     player->setProtezione(true);
   }
+
+  cout<<"MACHINE GUN "<<machineGun<<endl;
+  cout<<"ARPIONEX2 "<<arpionex2<<endl;
+  cout<<"ARPIONE ATTACCATO "<<arpione<<endl;
 
 }
 

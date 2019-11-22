@@ -2,6 +2,7 @@
 
 MachineGun::MachineGun(Type t,float posx ,float posy):Weapons(t,posx, posy)
 {
+	BOUNCER_SIZE=32;
     image=al_load_bitmap("./resources/machineGun.png");
 }
 MachineGun::~MachineGun()
