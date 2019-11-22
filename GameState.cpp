@@ -309,11 +309,11 @@ void GameState:: drawBar()
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1100, 600,ALLEGRO_ALIGN_LEFT,s.c_str());
 
   if(arpionex2)
-    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"ARPIONE DOPPIO");
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"DOUBLE HARPOON");
   if(machineGun)
-    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"MITRAGLIATRICE");
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"MACHINEGUN");
   if(arpione)
-    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"ARPIONE ATTACCATO");
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"HOOKED HARPOON");
 }
 
 string GameState::convert(int i)
