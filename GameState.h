@@ -67,11 +67,14 @@ class GameState:public State
 		//CHIAMATA NEL TICK GESTISCE I TTL DEGLI OGGETTI
 		void TtlManager();
 
+		//CONTROLLA SE IL PLAYER HA PERSO IL LIVELLO
 		bool gameOver(); 
-		bool gameWon();
-		void popupMenu(int);
+		//APRE IL MENU DI OPZIONI (QUANDO IL GIOCATORE HA PERSO O QUANDO METTE IN PAUSA O QUANDO FINISCE IL GIOCO)
+		void OptionMenu(ALLEGRO_BITMAP *);
+		//CONTROLLA SE IL GIOCATORE HA VINTO IL LIVELLO
 		bool checkLevelOver();
-		void reset(); //RESETTA IL LIVELLO
+		//RESETTA IL LIVELLO
+		void reset(); 
 
 		bool finish;
 

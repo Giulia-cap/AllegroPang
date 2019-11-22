@@ -15,7 +15,7 @@ Bonus * newBonus;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
 
-ALLEGRO_BITMAP * sfondi[5];
+ALLEGRO_BITMAP * sfondi[6];
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -73,6 +73,7 @@ void GameState::init()
      sfondi[2]=al_load_bitmap("./resources/sfondo3.png");
      sfondi[3]=al_load_bitmap("./resources/gameOver.png");
      sfondi[4]=al_load_bitmap("./resources/youWin.png");
+     sfondi[5]=al_load_bitmap("./resources/GameComplete.png");
  }
   // else
   // {
@@ -90,20 +91,20 @@ void GameState::generateBalls()
 {
   if(level==1)
   {
-     b=new Ball(BALL,48,320,120,2,3);
+     b=new Ball(BALL,32,320,120,2,3);
      object.push_back(b);
      return;
   }
    else 
   {
 
-     b=new Ball(BALL,48,320,120,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,220,2,-4);
-     /*object.push_back(b);
+     b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
+     object.push_back(b);
      object.push_back(b2);
-     object.push_back(b3);*/
+     object.push_back(b3);
      if(level==3)
      {
-        b6=new Ball(BALL,48,320,350,2,-3);
+        b6=new Ball(BALL,32,320,350,2,-3);
         object.push_back(b6);
         o1=new Obstacle(OBSTACLE,450,220);
        //obstacle.push_back(o1);
@@ -123,10 +124,15 @@ void GameState::tick()
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
-      if(checkLevelOver() && level==3)
-      popupMenu(1);
-      else if(checkLevelOver())
-      level+=1;
+       if(checkLevelOver())
+     { 
+        if(level<3)
+          level=level+1;
+        else 
+          state=2;     
+        doexit=true;
+        break;
+     }  
 
 
       if(ev.type == ALLEGRO_EVENT_TIMER) 
@@ -395,10 +401,10 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
-       if((*it)->BOUNCER_SIZE-16>=16) //CREA LE PALLE PICCOLE 
+       if((*it)->BOUNCER_SIZE/2>=6) //CREA LE PALLE PICCOLE 
        {
-          b4=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
-          b5=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b4=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b5=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
                                    // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
 
           it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
@@ -429,7 +435,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
            if((*it2)->getType()==WEAPONS) 
            {
               Object *o=(*it2);
-              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),(*it)->BOUNCER_SIZE+ o->BOUNCER_SIZE)) //modificato qua il sistema di collissione tra palla e proiettile da rivedere
+              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
               {
                  decreaseBulletsNumber();
                  it2=object.erase(it2);
@@ -518,80 +524,86 @@ void GameState::TtlManager()
 
 
 //++++++++++++++++++++++++++++BLOCCO FUNZIONI 4++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void GameState::popupMenu(int k){
-   //cout<<"YOUR SCORE: "<<score<<endl;
-      bool gameOver=true;
-      al_clear_to_color(al_map_rgb(0,0,0));
-      cout<<level<<endl;
-      while(gameOver)
-      {
-        if(k==0)al_draw_scaled_bitmap(sfondi[3], 0, 0, al_get_bitmap_width(sfondi[3]), al_get_bitmap_height(sfondi[3]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
-        if(k==1)al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 500,ALLEGRO_ALIGN_LEFT, "PRESS ENTER TO" );
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "PLAY AGAIN");
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO CLOSE");
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 500,ALLEGRO_ALIGN_LEFT, "PRESS M TO");
-        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 550,ALLEGRO_ALIGN_LEFT,"RETURN TO MENU");
 
-        al_flip_display();
-
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
-        if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
-          switch (ev.keyboard.keycode)
-            {
-              case ALLEGRO_KEY_ENTER:
-                doexit=true;
-                gameOver=false;
-                state=1;
-                break;
-              case ALLEGRO_KEY_M:
-                doexit=true;
-                gameOver=false;
-                state=0;
-                break;
-              case ALLEGRO_KEY_ESCAPE:
-                esc=true;
-                doexit=true;
-                gameOver=false;
-                break;
-            }
-      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-        { esc=true; 
-         break;
-       }
-
-    }
-}
-
-bool GameState::gameOver(/*ALLEGRO_EVENT ev*/)
+bool GameState::gameOver()
 {
+
   if(player->getLife()==0 || gameTime==0)
-    {
-     popupMenu(0);
-   return true;
+  {
+    OptionMenu(sfondi[3]);
+    return true;
   }
   return false;
+}
+
+void GameState::OptionMenu(ALLEGRO_BITMAP * sfondoMenuOption)
+{
+
+  bool condition=true;
+  al_clear_to_color(al_map_rgb(0,0,0));
+  while(condition)
+    {
+      al_draw_scaled_bitmap(sfondoMenuOption, 0, 0, al_get_bitmap_width(sfondoMenuOption), al_get_bitmap_height(sfondoMenuOption), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+      al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 500,ALLEGRO_ALIGN_LEFT, "PRESS ENTER TO" );
+      al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "TRY AGAIN");
+      al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO EXIT ");
+      al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 500,ALLEGRO_ALIGN_LEFT, "PRESS M TO");
+      al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 550,ALLEGRO_ALIGN_LEFT,"RETURN TO MENU");
+
+      al_flip_display();
+
+      ALLEGRO_EVENT ev;
+      al_wait_for_event(event_queue, &ev);
+      if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+        switch (ev.keyboard.keycode)
+          {
+            case ALLEGRO_KEY_ENTER:
+              doexit=true;
+              condition=false;
+              state=1;
+              break;
+            case ALLEGRO_KEY_M:
+              doexit=true;
+              condition=false;
+              state=0;
+              break;
+            case ALLEGRO_KEY_ESCAPE:
+              esc=true;
+              doexit=true;
+              condition=false;
+              break;
+          }
+    else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+      { esc=true; 
+       break;
+     }
+
+  }
 }
 
 bool GameState::checkLevelOver()
 {
    int numbBalls=0;
-     for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
-        if((*it2)->getType()==BALL) 
-          numbBalls++;
-       if(numbBalls==0)
-       {
-          al_clear_to_color(al_map_rgb(0,0,0));
-          if(level!=3){
-          al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
-          al_flip_display();
-          al_rest(4.0);
-          increaseScore(gameTime);
-          increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
-        }
-          return true;
-     } 
+
+   
+   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
+      if((*it2)->getType()==BALL) 
+        numbBalls++;
+     if(numbBalls==0 && level<3)
+     {
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 350, 500,ALLEGRO_ALIGN_LEFT, "Get ready for the next level" );
+        al_flip_display();
+        al_rest(4.0);
+        increaseScore(gameTime);
+        increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
+        return true;
+      }
+      else if(numbBalls==0 && level==3)
+      {
+        OptionMenu(sfondi[5]);
+      }
    return false;
 }
 
