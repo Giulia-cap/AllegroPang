@@ -93,20 +93,20 @@ void GameState::generateBalls()
 {
   if(level==1)
   {
-     b=new Ball(BALL,32,320,120,2,3);
+     b=new Ball(BALL,48,320,120,2,3);
      object.push_back(b);
      return;
   }
    else 
   {
 
-     b=new Ball(BALL,32,320,120,2,3),b2=new Ball(BALL,32,420,160,-2,4),b3=new Ball(BALL,32,120,220,2,-4);
+     b=new Ball(BALL,48,320,120,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
      if(level==3)
      {
-        b6=new Ball(BALL,32,320,350,2,-3);
+        b6=new Ball(BALL,48,320,350,2,-3);
         object.push_back(b6);
         o1=new Obstacle(OBSTACLE,450,220);
        //obstacle.push_back(o1);
@@ -404,10 +404,10 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
-       if((*it)->BOUNCER_SIZE/2>=6) //CREA LE PALLE PICCOLE 
+       if((*it)->BOUNCER_SIZE/2>=16) //CREA LE PALLE PICCOLE 
        {
-          b4=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
-          b5=new Ball(BALL,(*it)->BOUNCER_SIZE/2,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b4=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
+          b5=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
                                    // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
 
           it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
