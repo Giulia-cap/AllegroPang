@@ -16,6 +16,7 @@ Bonus * newBonus;
 bool orologio,arpione,machineGun,arpionex2;
 
 ALLEGRO_BITMAP * sfondi[6];
+ALLEGRO_BITMAP * Vite;
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -74,6 +75,7 @@ void GameState::init()
      sfondi[3]=al_load_bitmap("./resources/gameOver.png");
      sfondi[4]=al_load_bitmap("./resources/youWin.png");
      sfondi[5]=al_load_bitmap("./resources/GameComplete.png");
+     Vite=al_load_bitmap("./resources/bonus/protezione.png");
  }
   // else
   // {
@@ -291,7 +293,8 @@ void GameState:: drawBar()
   int lw=50;
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw, 550,ALLEGRO_ALIGN_LEFT, "Life: ");
   for (int i=1;i<=player->getLife();i++)
-    al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw*i, 600,ALLEGRO_ALIGN_LEFT, "* ");
+    al_draw_bitmap(Vite,  lw*i, 600, 0);
+   // al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw*i, 600,ALLEGRO_ALIGN_LEFT, "* ");
 
   string t=convert(gameTime);
   al_draw_text(pangFontBig, al_map_rgb(30, 80, 255), 560, 600,ALLEGRO_ALIGN_LEFT, t.c_str());
@@ -459,7 +462,8 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%9;
+      ran=rand()%10;
+     // cout<<bonus.size()<<endl;
      if( ran<=6 && bonus.size()<=4)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
@@ -477,11 +481,13 @@ void GameState::findPower(int t)
   else if(t==ARPIONE){ 
     arpione=true;
     machineGun=false;
+    arpionex2=false;
     resetBulletsNumber();
   }
   else if(t==MACHINEGUN){ 
     machineGun=true;
     arpione=false;
+    arpionex2=false;
   }
   else if(t==ARPIONEX2)
   {
