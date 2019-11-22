@@ -14,7 +14,7 @@ Ball::Ball(Type t,int s,float initialPosX, float initialPosY, float dx,float dy 
 	bouncer_x=initialPosX;
    bouncer_y=initialPosY;
 
-   if(s>=48)
+   if(s==48)
    image=al_load_bitmap("./resources/ballGrande.png"); 
    else if(s==32)
       image=al_load_bitmap("./resources/ballMedia.png"); 

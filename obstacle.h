@@ -29,18 +29,24 @@ class Obstacle:public Object
 		        (x > bouncer_x + BOUNCER_SIZEX ) || // is b2 on the right side of b1?
 		        (y > bouncer_y + BOUNCER_SIZE ))   // is b2 under b1?
 		        return false;
-			if(bouncer_y+BOUNCER_SIZE<y+size) collisionY=true;
-			else if(bouncer_y>y+size){ collisionY=true;}
-			if(bouncer_x+BOUNCER_SIZEX<x+size) collisionX=true; 
-			else if( bouncer_x>x+size){ collisionX=true;}
+
+		    if(bouncer_y == y+size && bouncer_x == x+size){ collisionY=true;}
+		    if( bouncer_x == x+size){ collisionX=true;}
+
+			if(bouncer_y+BOUNCER_SIZE == y+size) collisionY=true;
+			if(bouncer_x+BOUNCER_SIZEX == x+size) collisionX=true; 
+
+			if(bouncer_y+BOUNCER_SIZE == y) collisionY=true;
+			if(bouncer_x+BOUNCER_SIZEX == x) collisionX=true; 
+
+		    /*
+		    if( (bouncer_y == y+size && bouncer_x == x+size)//V
+		    	||(bouncer_x == x+size && bouncer_x+BOUNCER_SIZEX == x)
+		    	||(bouncer_x+BOUNCER_SIZEX == x+size && bouncer_y+BOUNCER_SIZE == y+size)
+		    	||(bouncer_x+BOUNCER_SIZEX == x && bouncer_y+BOUNCER_SIZE == y) )
+		    { collisionY=true; collisionX=true;}*/ //------>ANGOLI
+
 			return true;
 		}
-	/*	int collision2(float x, float y, int size) //ritorna 0 se la collisione avviene con la x false se avviene con la y,3 altrimenti
-		{
-			if(bouncer_y+BOUNCER_SIZE<=y+size || bouncer_y>=y+size) return 1;
-			if(bouncer_x+BOUNCER_SIZEX<=x+size || bouncer_x>=x+size) return 0;
-			return 2;
-		}*/
-
 };
 #endif 

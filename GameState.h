@@ -20,7 +20,7 @@ class GameState:public State
 	private:
 		Player *player;
 		list<DynamicObject*> object;
-		list<Obstacle*> obstacle;
+		//list<Obstacle*> obstacle;
 		list<Bonus*> bonus;
 		int bulletDelay;
 		int firerate;

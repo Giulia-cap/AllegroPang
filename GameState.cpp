@@ -120,21 +120,21 @@ void GameState::generateBalls()
 
 void GameState::tick()
 {
-   while(!doexit)
-   {
+  while(!doexit)
+  {
 
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
-       if(checkLevelOver())
-     { 
+      if(checkLevelOver())
+      { 
         if(level<3)
           level=level+1;
         else 
           state=2;     
         doexit=true;
         break;
-     }  
+      }  
 
 
       if(ev.type == ALLEGRO_EVENT_TIMER) 
@@ -232,24 +232,25 @@ void GameState::tick()
       /*--------------------------------------------------------------*/
     
      //CONTROLLI TIMER GENERICI
-   if(timeDelay>=timeRate){ //GETSTISCE IL TEMPO IN GAME
+    if(timeDelay>=timeRate)
+    { //GETSTISCE IL TEMPO IN GAME
    		decreaseTime();
        // cout<<getMyTime()<<endl;
-        timeDelay=0;
-   }else{
-        timeDelay++;
-   }
-  if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
-  {
-  	orologio=false;
-  	bonusDelay=0;
-  }else{
-  	bonusDelay++;
-  }
+      timeDelay=0;
+    }else timeDelay++;
+  
+    if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
+    {
+    	orologio=false;
+    	bonusDelay=0;
+    }
+    else
+    {
+    	bonusDelay++;
+    }
   }
 
-   finish=true;
-  
+   finish=true; 
 }
 
 void GameState::render()
@@ -376,24 +377,30 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 
   if(level==3)
   {
-    if((o1)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE)){
-    if(o1->collisionX)
-      (*it)->bouncer_dx=-((*it)->bouncer_dx);
-    else 
-      (*it)->bouncer_dy=-((*it)->bouncer_dy);
-    o1->collisionX=false;
-    o1->collisionY=false;}
+    if((o1)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE))
+    {
+      if(o1->collisionX)
+        (*it)->bouncer_dx=-((*it)->bouncer_dx);
+      else 
+        (*it)->bouncer_dy=-((*it)->bouncer_dy);
+      o1->collisionX=false;
+      o1->collisionY=false;
+    }
 
-    else if((o2)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE)){
-     if(o2->collisionX)
-      (*it)->bouncer_dx=-((*it)->bouncer_dx);
-    else 
-      (*it)->bouncer_dy=-((*it)->bouncer_dy);
-    o2->collisionX=false;
-    o2->collisionY=false;}
+    else if((o2)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE))
+    {
+      if(o2->collisionX)
+        (*it)->bouncer_dx=-((*it)->bouncer_dx);
+      else 
+       (*it)->bouncer_dy=-((*it)->bouncer_dy);
+
+      o2->collisionX=false;
+      o2->collisionY=false;
+    }
   }
 
-    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE)){
+    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
+    {
       if (hitDelay >= hitRate){
       player->RemoveOneLife();
       player->respawn();
@@ -534,7 +541,7 @@ void GameState::TtlManager()
 bool GameState::gameOver()
 {
 
-  if(player->getLife()==0 || gameTime==0)
+  if(/*player->getLife()==0 || */gameTime<=2)
   {
     OptionMenu(sfondi[3]);
     return true;
@@ -624,7 +631,7 @@ void GameState::reset()
 
   object.clear();
   bonus.clear();
-  obstacle.clear();
+  //obstacle.clear();
   generateBalls();
 
   resetTime();
