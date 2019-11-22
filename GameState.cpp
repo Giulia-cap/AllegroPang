@@ -150,7 +150,7 @@ void GameState::tick()
          {
             if (bulletDelay >= firerate)
             {
-              cout<<"shoot"<<endl;
+              cout<<getBulletsNumber()<<endl;
               if(!machineGun && getBulletsNumber() ==0)
               {
                 increaseBulletsNumber();
@@ -304,7 +304,13 @@ void GameState:: drawBar()
   string s=convert(score);
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1100, 550,ALLEGRO_ALIGN_LEFT,"Score: ");
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1100, 600,ALLEGRO_ALIGN_LEFT,s.c_str());
-  
+
+  if(arpionex2)
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"ARPIONE DOPPIO");
+  if(machineGun)
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"MITRAGLIATRICE");
+  if(arpione)
+    al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 650,ALLEGRO_ALIGN_LEFT,"ARPIONE ATTACCATO");
 }
 
 string GameState::convert(int i)
@@ -490,13 +496,13 @@ void GameState::findPower(int t)
     arpione=true;
     machineGun=false;
     arpionex2=false;
-    resetBulletsNumber();
+    //resetBulletsNumber();
   }
   else if(t==MACHINEGUN){ 
     machineGun=true;
     arpione=false;
     arpionex2=false;
-    resetBulletsNumber();
+   // resetBulletsNumber();
   }
   else if(t==ARPIONEX2)   //arpioneX2+machine 
   {
@@ -518,9 +524,9 @@ void GameState::findPower(int t)
     player->setProtezione(true);
   }
 
-  cout<<"MACHINE GUN "<<machineGun<<endl;
+ /* cout<<"MACHINE GUN "<<machineGun<<endl;
   cout<<"ARPIONEX2 "<<arpionex2<<endl;
-  cout<<"ARPIONE ATTACCATO "<<arpione<<endl;
+  cout<<"ARPIONE ATTACCATO "<<arpione<<endl;*/
 
 }
 
