@@ -72,9 +72,9 @@ void GameState::init()
      sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
      sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
      sfondi[2]=al_load_bitmap("./resources/sfondo3.png");
-     sfondi[3]=al_load_bitmap("./resources/gameOver.png");
-     sfondi[4]=al_load_bitmap("./resources/youWin.png");
-     sfondi[5]=al_load_bitmap("./resources/GameComplete.png");
+     sfondi[3]=al_load_bitmap("./resources/GameOver.jpg");
+     sfondi[4]=al_load_bitmap("./resources/LevelCompleted.jpg");
+     sfondi[5]=al_load_bitmap("./resources/GameCompleted.jpg");
      Vite=al_load_bitmap("./resources/bonus/protezione.png");
  }
   // else
@@ -153,6 +153,7 @@ void GameState::tick()
               cout<<getBulletsNumber()<<endl;
               if(!machineGun && getBulletsNumber() ==0)
               {
+                bulletsNumber=0;
                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
                 object.push_back(bullet);
@@ -162,6 +163,7 @@ void GameState::tick()
               }
               else if(machineGun)
               {
+               bulletsNumber=0;
                 bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
@@ -170,6 +172,7 @@ void GameState::tick()
               } 
               else if(arpionex2 && getBulletsNumber()<=1)
               {
+                bulletsNumber=0;
                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
                 object.push_back(bullet);
