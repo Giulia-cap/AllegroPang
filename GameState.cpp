@@ -462,7 +462,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
                   //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
-              if(!machineGun &&((*it)->getBouncer_x()<o->getBouncer_x()+5 && (*it)->getBouncer_x()>o->getBouncer_x()-5  && (*it)->getBouncer_y()>o->getBouncer_y()))
+              if(!machineGun &&((*it)->getBouncer_x()< o->getBouncer_x()+((*it)->BOUNCER_SIZE/2) && (*it)->getBouncer_x()+((*it)->BOUNCER_SIZE/2)>o->getBouncer_x()  && (*it)->getBouncer_y()>o->getBouncer_y()))
               {
                 decreaseBulletsNumber();
                  it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
