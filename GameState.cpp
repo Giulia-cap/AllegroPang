@@ -122,7 +122,7 @@ void GameState::tick()
 {
   while(!doexit)
   {
-
+    cout<<bulletsNumber<<endl;
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
@@ -462,7 +462,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
                   //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
                  return true;
               }
-              if(!machineGun &&((*it)->getBouncer_x()< o->getBouncer_x()+((*it)->BOUNCER_SIZE/2) && (*it)->getBouncer_x()+((*it)->BOUNCER_SIZE/2)>o->getBouncer_x()  && (*it)->getBouncer_y()>o->getBouncer_y()))
+              if(!machineGun &&((*it)->getBouncer_x()< o->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3 && (*it)->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3>o->getBouncer_x()  && (*it)->getBouncer_y()>o->getBouncer_y()))
               {
                 decreaseBulletsNumber();
                  it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
@@ -538,7 +538,7 @@ void GameState::TtlManager()
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
-         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 || (*it2)->getType()==machineGun && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
            decreaseBulletsNumber();
            it2=object.erase(it2); 
           }else 
