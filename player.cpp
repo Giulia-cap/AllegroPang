@@ -5,7 +5,6 @@ Player::Player(Type t):DynamicObject(t)
 {
 	BOUNCER_SIZE=32;
   life=3;
-
 	image=al_load_bitmap("./resources/player/rightA.png");
 	imagedx.push_back(image);
 	image=al_load_bitmap("./resources/player/rightB.png");
@@ -16,6 +15,7 @@ Player::Player(Type t):DynamicObject(t)
 	imagesx.push_back(image); 
 	image=al_load_bitmap("./resources/player/player.png");
   barriera=al_load_bitmap("./resources/player/barriera.png");
+  dieImage=al_load_bitmap("./resources/player/die.png");
 
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
@@ -33,6 +33,7 @@ Player::~Player()
    int moveAnimRate=3.5f;
 void Player::move(int k)
 {
+  if(!lifeRemoved){
    if(k==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
    {
    	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
@@ -68,29 +69,43 @@ void Player::move(int k)
       bouncer_x += 4.0;
    }
     // cout<<"MOVEANIMDELAY "<<moveAnimDelay<<" MOVERATE "<<moveAnimRate<<endl;
-
+}
 }
 
 void Player::render()
 {
-	if(sx)
+	
+  if(sx&&!lifeRemoved)
   		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
-  	else if(dx){
+  	else if(dx&&!lifeRemoved){
   		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
     }
 
-    if(protezioneAttiva)
+    if(protezioneAttiva&&!lifeRemoved)
       al_draw_bitmap(barriera,bouncer_x, bouncer_y, 0);
+    if(lifeRemoved){
+         
+      al_draw_bitmap(dieImage,bouncer_x,bouncer_y+dieDelay,0);
+      dieDelay++;
+    }
+    if(dieDelay>dieRate){
+    dieDelay=0;
+    lifeRemoved=false;
+    respawn();
+    }
 }
 
 void Player::RemoveOneLife()
 {
   if(life>0 ){
-    if(!protezioneAttiva)
+    if(!protezioneAttiva){
       life--;
+      lifeRemoved=true;
+    }
     if(protezioneAttiva)
       protezioneAttiva=false;
   }
+
 }
 
 void Player::reset()

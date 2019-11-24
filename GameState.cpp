@@ -1,5 +1,6 @@
 #include <list>
 #include "GameState.h"
+#include "Scoreboard.h"
 #include <ctime>
 #include <sstream>
 
@@ -11,7 +12,7 @@ Ball *b,*b2,*b3,*b4,*b5,*b6;
 Obstacle *o1,*o2,*o3;
 Weapons *bullet;
 Bonus * newBonus;
-
+Scoreboard scoreboard;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
 
@@ -99,7 +100,6 @@ void GameState::generateBalls()
   }
    else 
   {
-
      b=new Ball(BALL,48,320,120,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,220,2,-4);
      object.push_back(b);
      object.push_back(b2);
@@ -419,7 +419,6 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
       {
         player->RemoveOneLife();
        // cout<<"rimuovo vita"<<endl;
-        player->respawn();
         hitDelay=0;
         if (gameOver())return; 
          it++;
@@ -573,7 +572,6 @@ bool GameState::gameOver()
 
 void GameState::OptionMenu(ALLEGRO_BITMAP * sfondoMenuOption)
 {
-
   bool condition=true;
   al_clear_to_color(al_map_rgb(0,0,0));
   while(condition)
@@ -637,6 +635,7 @@ bool GameState::checkLevelOver()
       }
       else if(numbBalls==0 && level==3)
       {
+        scoreboard.addScore(score);
         OptionMenu(sfondi[5]);
       }
    return false;
