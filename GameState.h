@@ -33,7 +33,7 @@ class GameState:public State
 		int level=1;
 		int score=0;
 		int gameTime =120;
-		int bulletsNumber=0;
+		int bulletsNumber=1;
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
 
@@ -78,10 +78,10 @@ class GameState:public State
 
 		bool finish;
 
-		int getLevel(){return level;}
+		//int getLevel(){return level;}
 		void setLevel(int l){level=l;}
 		int getBulletsNumber(){return bulletsNumber;}
-		void increaseBulletsNumber(){bulletsNumber+=1;}
+		void increaseBulletsNumber(){bulletsNumber+=1; cout<<"incremento"<<endl;}
 		void decreaseBulletsNumber(){bulletsNumber-=1;}
 		void resetBulletsNumber(){bulletsNumber=0;}
 		void decreaseTime(){gameTime-=1;}

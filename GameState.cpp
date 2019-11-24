@@ -153,7 +153,7 @@ void GameState::tick()
               //cout<<getBulletsNumber()<<endl;
               if(!machineGun && getBulletsNumber() ==0)
               {
-                bulletsNumber=0;
+                //bulletsNumber=0;
                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
                 object.push_back(bullet);
@@ -163,16 +163,17 @@ void GameState::tick()
               }
               else if(machineGun)
               {
-               bulletsNumber=0;
+               //bulletsNumber=0;
                 bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
+                increaseBulletsNumber();
                 //cout<<"sparo machineGun"<<endl;
               } 
               else if(arpionex2 && getBulletsNumber()<=1)
               {
-                bulletsNumber=0;
+                //bulletsNumber=0;
                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
                 object.push_back(bullet);
@@ -484,7 +485,7 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%10;
+      ran=rand()%10; //10
      //cout<<bonus.size()<<endl;
      if( ran<=6 && bonus.size()<=3)
       {

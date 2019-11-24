@@ -5,10 +5,9 @@
 class Weapons:public DynamicObject
 {
 	public:
-	Weapons(Type,float,float);
-	~Weapons();
-  	void move(int);
-  	virtual void render();
-
+		Weapons(Type,float,float);
+		~Weapons();
+	  	void move(int);
+	  	virtual void render();
 };
 #endif
