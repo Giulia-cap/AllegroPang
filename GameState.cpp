@@ -477,9 +477,6 @@ void GameState::createBonus(int posX, int posY)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
-
-       /*cout<<endl<<"HO CREATO UN BONUS "<<endl;
-       cout<<bonus.size()<<endl;*/
       }
 }
 
@@ -531,7 +528,7 @@ void GameState::TtlManager()
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
       {
   
-         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 || (*it2)->getType()==machineGun && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
+         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
            decreaseBulletsNumber();
            it2=object.erase(it2); 
           }else 
@@ -585,6 +582,7 @@ void GameState::OptionMenu(ALLEGRO_BITMAP * sfondoMenuOption)
                 state=1;
                  doexit=true;
               }
+              else paused=false;
               condition=false;
               break;
             case ALLEGRO_KEY_M:
