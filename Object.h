@@ -13,7 +13,8 @@ class Object
 		float bouncer_y; 
 
 	public:
-		int BOUNCER_SIZE; //dimensione quadrato
+		int BOUNCER_SIZE; //altezza
+		int BOUNCER_SIZEX;//larghezza
 		ALLEGRO_BITMAP *image=NULL;
 		bool dead;
 
@@ -30,7 +31,7 @@ class Object
 		void setBouncer_y(float);
 		float getBouncer_y();
 
-		virtual bool collision(float, float, int);
+		virtual bool collision(float, float, int, int);
 		virtual void render()=0; // vistp che molti disegnano solo la bitmap 
 								// implementiamola qui 
 };

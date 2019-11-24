@@ -13,6 +13,7 @@ using namespace std;
 
 #define gameAreaW 1360
 #define gameAreaH 500
+
 #define FPS 60
 
 extern bool esc;

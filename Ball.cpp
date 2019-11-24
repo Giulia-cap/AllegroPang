@@ -8,6 +8,7 @@ using namespace std;
 Ball::Ball(Type t,int s,float initialPosX, float initialPosY, float dx,float dy ):DynamicObject(t)
 {
 	BOUNCER_SIZE=s;
+   BOUNCER_SIZEX=s;
    
    bouncer_dx=dx;
    bouncer_dy=dy;

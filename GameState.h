@@ -33,7 +33,7 @@ class GameState:public State
 		int level=1;
 		int score=0;
 		int gameTime =120;
-		int bulletsNumber=1;
+		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
 
@@ -66,6 +66,7 @@ class GameState:public State
 		void findPower(int);
 		//CHIAMATA NEL TICK GESTISCE I TTL DEGLI OGGETTI
 		void TtlManager();
+		
 
 		//CONTROLLA SE IL PLAYER HA PERSO IL LIVELLO
 		bool gameOver(); 

@@ -184,6 +184,11 @@ void GameState::tick()
          /*------------------------------------------------------------*/
             
            /*------------------COLLISIONI OBJECT-----------------------*/
+            if(level==3) //collisone con gli obstacle
+            {
+              if(!(*it)->collisionWithObstacle(o1->getBouncer_x(), o1->getBouncer_y(), o1->BOUNCER_SIZEX, o1->BOUNCER_SIZE ))
+                (*it)->collisionWithObstacle(o2->getBouncer_x(), o2->getBouncer_y(), o2->BOUNCER_SIZEX, o2->BOUNCER_SIZE );
+            }
             if((*it)->getType()==BALL)
             { 
               BallCollision(it);
@@ -198,7 +203,7 @@ void GameState::tick()
               // cout<<"bonus move"<<endl;
               (*it4)->move(0);
               //SE IL PLAYER PRENDE IL BONUS
-               if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
+               if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
               {
                 //cout<<"bonus preso "<<(*it4)->bonusType<<endl;
                 findPower((*it4)->bonusType);
@@ -375,31 +380,19 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
 
-  if(level==3)
+ /* if(level==3)
   {
-    if((o1)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE))
-    {
-      if(o1->collisionX)
-        (*it)->bouncer_dx=-((*it)->bouncer_dx);
-      else 
-        (*it)->bouncer_dy=-((*it)->bouncer_dy);
-      o1->collisionX=false;
-      o1->collisionY=false;
+    if((*it)->collisionWithObstacle( o1->getBouncer_x(), o1->getBouncer_y(), o1->BOUNCER_SIZEX, o1->BOUNCER_SIZE ))
+    {  
+      (*it)->changeMovement();
     }
-
-    else if((o2)->collision((*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->BOUNCER_SIZE))
-    {
-      if(o2->collisionX)
-        (*it)->bouncer_dx=-((*it)->bouncer_dx);
-      else 
-       (*it)->bouncer_dy=-((*it)->bouncer_dy);
-
-      o2->collisionX=false;
-      o2->collisionY=false;
+    else if((*it)->collisionWithObstacle( o2->getBouncer_x(), o2->getBouncer_y(), o2->BOUNCER_SIZEX, o2->BOUNCER_SIZE ))
+    {  
+      (*it)->changeMovement();
     }
-  }
+  }*/
 
-    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
+    if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
     {
      // cout<<"sto collidendo con la palla"<<endl;
       if (hitDelay >= hitRate)
@@ -447,7 +440,7 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
            if((*it2)->getType()==WEAPONS) 
            {
               Object *o=(*it2);
-              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZE))
+              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZEX,o->BOUNCER_SIZE))
               {
                  decreaseBulletsNumber();
                  it2=object.erase(it2);
@@ -485,7 +478,8 @@ void GameState::findPower(int t)
   if(t==OROLOGIO){
     orologio=true;
   }
-  else if(t==ARPIONE){ 
+  else if(t==ARPIONE)
+  { 
     arpione=true;
     machineGun=false;
     arpionex2=false;
@@ -545,8 +539,7 @@ void GameState::TtlManager()
 
 bool GameState::gameOver()
 {
-
-  if(player->getLife()==0 || gameTime==0)
+  if(/*player->getLife()==0 ||*/ gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
@@ -612,7 +605,7 @@ bool GameState::checkLevelOver()
    for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
       if((*it2)->getType()==BALL) 
         numbBalls++;
-      cout<<numbBalls<<endl;
+      //cout<<numbBalls<<endl;
      if(numbBalls==0 && level<3)
      {
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -654,7 +647,7 @@ void GameState::reset()
   timeDelay=0.0f;
   bonusRate=500.0f; //durata bonus orologio
   bonusDelay=0.0f;
-  bulletsNumber=1;
+  bulletsNumber=0;
  
 
   player->reset();

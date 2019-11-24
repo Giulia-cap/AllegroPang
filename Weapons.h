@@ -5,9 +5,11 @@
 class Weapons:public DynamicObject
 {
 	public:
+		bool stop=false;
 		Weapons(Type,float,float);
 		~Weapons();
 	  	void move(int);
 	  	virtual void render();
+	  	virtual void changeMovement();
 };
 #endif

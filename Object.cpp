@@ -1,7 +1,12 @@
 #include "Object.h"
 using namespace std;
 
-Object::Object( Type t):type(t){ dead=false;}
+Object::Object( Type t):type(t)
+{ 
+    dead=false;
+    BOUNCER_SIZE=32;
+    BOUNCER_SIZEX=32;
+}
 Object::~Object()
 {
     al_destroy_bitmap(image);
@@ -17,11 +22,11 @@ float Object::getBouncer_x(){return bouncer_x;}
 float Object::getBouncer_y(){return bouncer_y;}
 
 
-bool Object::collision(float xp, float yp, int sizep) //posizione e dimensione dell'oggetto con cui dobbiamo verificare se c'è stata la collisione
+bool Object::collision(float xp, float yp, int sizex, int sizey) //posizione e dimensione dell'oggetto con cui dobbiamo verificare se c'è stata la collisione
 {
-   if ((bouncer_x > xp + sizep ) || // is b1 on the right side of b2?
-        (bouncer_y > yp + sizep ) || // is b1 under b2?
-        (xp > bouncer_x + BOUNCER_SIZE ) || // is b2 on the right side of b1?
+   if ((bouncer_x > xp + sizex ) || // is b1 on the right side of b2?
+        (bouncer_y > yp + sizey ) || // is b1 under b2?
+        (xp > bouncer_x + BOUNCER_SIZEX ) || // is b2 on the right side of b1?
         (yp > bouncer_y + BOUNCER_SIZE ))   // is b2 under b1?
     {
         // no collision

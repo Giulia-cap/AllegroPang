@@ -3,7 +3,6 @@
 
 Player::Player(Type t):DynamicObject(t)
 {
-	BOUNCER_SIZE=32;
   life=3;
 	image=al_load_bitmap("./resources/player/rightA.png");
 	imagedx.push_back(image);
