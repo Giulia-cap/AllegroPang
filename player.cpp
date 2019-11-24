@@ -91,7 +91,7 @@ void Player::render()
     if(dieDelay>dieRate){
     dieDelay=0;
     lifeRemoved=false;
-    respawn();
+    respawn();  
     }
 }
 
@@ -110,6 +110,7 @@ void Player::RemoveOneLife()
 
 void Player::reset()
 { 
+  lifeRemoved=false;
   life=3;
   bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE );
