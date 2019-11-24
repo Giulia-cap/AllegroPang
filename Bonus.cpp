@@ -5,6 +5,7 @@ Bonus::Bonus(Type t, int bt,int posX, int posY):DynamicObject(t)
 	bonusType=(BonusType)bt;
 	bouncer_x=posX;
 	bouncer_y=posY;
+	BOUNCER_SIZE=20;
 
 	if(bonusType==OROLOGIO)
 		image=al_load_bitmap("./resources/bonus/orologio.png");
@@ -37,5 +38,6 @@ void Bonus::move(int a)
 void Bonus::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
+	// al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZE,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
 	
 }

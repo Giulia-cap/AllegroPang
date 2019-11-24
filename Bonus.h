@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <allegro5/allegro.h>
+
+#include "includes.h"
 #include "DynamicObject.h"
 using namespace std;
 

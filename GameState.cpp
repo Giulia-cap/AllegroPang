@@ -150,7 +150,7 @@ void GameState::tick()
          {
             if (bulletDelay >= firerate)
             {
-              cout<<getBulletsNumber()<<endl;
+              //cout<<getBulletsNumber()<<endl;
               if(!machineGun && getBulletsNumber() ==0)
               {
                 bulletsNumber=0;
@@ -210,10 +210,12 @@ void GameState::tick()
           //----------------COLLISIONI E MOVIMENTO BONUS---------------------
            for(list<Bonus*>::iterator it4=bonus.begin();it4!=bonus.end();)
             {
+              // cout<<"bonus move"<<endl;
               (*it4)->move(0);
               //SE IL PLAYER PRENDE IL BONUS
                if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
               {
+                //cout<<"bonus preso "<<(*it4)->bonusType<<endl;
                 findPower((*it4)->bonusType);
                 it4=bonus.erase(it4);
               }
@@ -275,6 +277,7 @@ void GameState::render()
 
         for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
             (*it2)->render(); 
+            //cout<<"bonus render"<<endl;
          }
 
         if(level==3)
@@ -411,13 +414,16 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZE))
     {
-      if (hitDelay >= hitRate){
-      player->RemoveOneLife();
-      player->respawn();
-      hitDelay=0;
-      if (gameOver())return; 
-       it++;
-         }
+     // cout<<"sto collidendo con la palla"<<endl;
+      if (hitDelay >= hitRate)
+      {
+        player->RemoveOneLife();
+       // cout<<"rimuovo vita"<<endl;
+        player->respawn();
+        hitDelay=0;
+        if (gameOver())return; 
+         it++;
+      }
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
@@ -486,7 +492,8 @@ void GameState::createBonus(int posX, int posY)
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
 
-       //cout<<endl<<"HO CREATO UN BONUS "<<endl;
+       /*cout<<endl<<"HO CREATO UN BONUS "<<endl;
+       cout<<bonus.size()<<endl;*/
       }
 }
 
@@ -499,13 +506,13 @@ void GameState::findPower(int t)
     arpione=true;
     machineGun=false;
     arpionex2=false;
-    //resetBulletsNumber();
+    resetBulletsNumber();
   }
   else if(t==MACHINEGUN){ 
     machineGun=true;
     arpione=false;
     arpionex2=false;
-   // resetBulletsNumber();
+    resetBulletsNumber();
   }
   else if(t==ARPIONEX2)   //arpioneX2+machine 
   {
@@ -556,7 +563,7 @@ void GameState::TtlManager()
 bool GameState::gameOver()
 {
 
-  if(/*player->getLife()==0 || */gameTime<=2)
+  if(player->getLife()==0 || gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
