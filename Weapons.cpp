@@ -26,7 +26,6 @@ void Weapons::render()
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
 	for(int i=bouncer_y;i<500-32;i++)
 		if(i%32==0)
-			al_draw_bitmap(chain, bouncer_x+5,i+10, 0);
-	
+			al_draw_bitmap(chain, bouncer_x+5,i+10, 0);	
 }
 

@@ -31,7 +31,8 @@ class Object
 		float getBouncer_y();
 
 		virtual bool collision(float, float, int);
-		virtual void render()=0;
+		virtual void render()=0; // vistp che molti disegnano solo la bitmap 
+								// implementiamola qui 
 };
 
 #endif

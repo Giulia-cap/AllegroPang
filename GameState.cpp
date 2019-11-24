@@ -5,7 +5,7 @@
 #include <sstream>
 
 bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato delle chiavi a cui siamo interessati.
-bool doexit;
+bool doexit,paused;
 int ran;
 
 Ball *b,*b2,*b3,*b4,*b5,*b6;
@@ -16,7 +16,7 @@ Scoreboard scoreboard;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
 
-ALLEGRO_BITMAP * sfondi[6];
+ALLEGRO_BITMAP * sfondi[7];
 ALLEGRO_BITMAP * Vite;
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
@@ -36,23 +36,6 @@ GameState::~GameState()
 //++++++++++++++++++++++++++++++++++BLOCCO FUNZIONI 2++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void GameState::init()
 {
-  orologio=false;
-  arpione=false;
-  machineGun=false;
-  arpionex2=false;
-  finish=false;
-  redraw = true;
-  doexit = false;
-  firerate=10.0f; // quanto velocemente si puo sparare
-  bulletDelay=10.0f; 
-  hitRate=10.0f; //timer reverse, dopo essere stati colpiti 1 volta devono passare 10tick per poter essere ricolpiti
-  hitDelay=10.0f; 
-  timeRate=60.0f; //ogni 60tick scende 1 secondo
-  timeDelay=0.0f;
-  bonusRate=500.0f; //durata bonus orologio
-  bonusDelay=0.0f;
-  
-
   if(level==1)
   {
      if(!al_init_image_addon()) {
@@ -76,6 +59,7 @@ void GameState::init()
      sfondi[3]=al_load_bitmap("./resources/GameOver.jpg");
      sfondi[4]=al_load_bitmap("./resources/LevelCompleted.jpg");
      sfondi[5]=al_load_bitmap("./resources/GameCompleted.jpg");
+     sfondi[6]=al_load_bitmap("./resources/paused.jpg");
      Vite=al_load_bitmap("./resources/bonus/protezione.png");
  }
   // else
@@ -348,8 +332,10 @@ void GameState::setKey(ALLEGRO_EVENT ev)
                break;
 
             case ALLEGRO_KEY_ESCAPE:
-              doexit=true;
-              esc=true;
+              /*doexit=true;
+              esc=true;*/
+            paused=true;
+            OptionMenu(sfondi[6]);
               break;
 
          }
@@ -579,6 +565,9 @@ void GameState::OptionMenu(ALLEGRO_BITMAP * sfondoMenuOption)
     {
       al_draw_scaled_bitmap(sfondoMenuOption, 0, 0, al_get_bitmap_width(sfondoMenuOption), al_get_bitmap_height(sfondoMenuOption), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
       al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 500,ALLEGRO_ALIGN_LEFT, "PRESS ENTER TO" );
+      if(paused)
+        al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "CONTINUE");
+      else
       al_draw_text(pangFont, al_map_rgb(30, 80, 255), 50, 550,ALLEGRO_ALIGN_LEFT, "TRY AGAIN");
       al_draw_text(pangFont, al_map_rgb(30, 80, 255), 450, 500,ALLEGRO_ALIGN_LEFT, "PRESS ESC TO EXIT ");
       al_draw_text(pangFont, al_map_rgb(30, 80, 255), 1000, 500,ALLEGRO_ALIGN_LEFT, "PRESS M TO");
@@ -592,9 +581,11 @@ void GameState::OptionMenu(ALLEGRO_BITMAP * sfondoMenuOption)
         switch (ev.keyboard.keycode)
           {
             case ALLEGRO_KEY_ENTER:
-              doexit=true;
+              if(!paused){
+                state=1;
+                 doexit=true;
+              }
               condition=false;
-              state=1;
               break;
             case ALLEGRO_KEY_M:
               doexit=true;
@@ -623,13 +614,14 @@ bool GameState::checkLevelOver()
    for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();it2++)
       if((*it2)->getType()==BALL) 
         numbBalls++;
+      cout<<numbBalls<<endl;
      if(numbBalls==0 && level<3)
      {
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
         al_draw_text(pangFont, al_map_rgb(30, 80, 255), 350, 500,ALLEGRO_ALIGN_LEFT, "Get ready for the next level" );
         al_flip_display();
-        al_rest(4.0);
+        al_rest(3.0);
         increaseScore(gameTime);
         increaseScore((player->getLife())*100); // PIU VITE SONO RIMASTE PIU IL PUNTEGGIO SALE
         return true;
@@ -647,6 +639,24 @@ void GameState::reset()
   key[0]=false;
   key[1]=false;
   key[2]=false;
+
+
+  orologio=false;  
+  arpione=false;
+  machineGun=false;
+  arpionex2=false;
+  finish=false;
+  redraw = true;
+  doexit = false;
+  firerate=10.0f; // quanto velocemente si puo sparare
+  bulletDelay=10.0f; 
+  hitRate=10.0f; //timer reverse, dopo essere stati colpiti 1 volta devono passare 10tick per poter essere ricolpiti
+  hitDelay=10.0f; 
+  timeRate=60.0f; //ogni 60tick scende 1 secondo
+  timeDelay=0.0f;
+  bonusRate=500.0f; //durata bonus orologio
+  bonusDelay=0.0f;
+  bulletsNumber=1;
  
 
   player->reset();

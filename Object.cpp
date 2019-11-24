@@ -31,3 +31,5 @@ bool Object::collision(float xp, float yp, int sizep) //posizione e dimensione d
     // collision
     return true;
 }
+
+
