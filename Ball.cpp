@@ -58,5 +58,5 @@ void Ball::render()
 {   
    //cout<<"POSIZIONE PALLA X:"<<bouncer_x<<" Y:"<<bouncer_y<<endl;
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
-  // al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZE,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
+   al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
 }   
