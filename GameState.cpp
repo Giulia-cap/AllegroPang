@@ -62,10 +62,8 @@ void GameState::init()
      sfondi[6]=al_load_bitmap("./resources/paused.jpg");
      Vite=al_load_bitmap("./resources/bonus/protezione.png");
  }
-  // else
-  // {
+  
       reset();
-  // }
 
     al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -90,12 +88,8 @@ void GameState::generateBalls()
      object.push_back(b3);
      if(level==3)
      {
-       // b6=new Ball(BALL,48,320,350,2,-3);
-        //object.push_back(b6);
-        o1=new Obstacle(OBSTACLE,450,400);    //540 220
-       //obstacle.push_back(o1);
-        o2=new Obstacle(OBSTACLE,750,350);
-       //obstacle.push_back(o2);
+        o1=new Obstacle(OBSTACLE,540,220);    //540 220
+        o2=new Obstacle(OBSTACLE,650,350);
      }
      return;
   } 

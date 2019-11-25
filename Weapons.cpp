@@ -36,15 +36,13 @@ void Weapons::move(int SCREEN_W)
 void Weapons::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
-cout<<"renderizzo machineGun"<<endl;
-	if(typeWeapons=="hook"){
-		cout<<"renderizzo hook"<<endl;
+
+	if(typeWeapons=="hook")
+	{
 		for(int i=bouncer_y;i<500-32;i++)
 			if(i%32==0)
 				al_draw_bitmap(chain, bouncer_x+5,i+10, 0);	
 	}
-	//al_draw_rectangle( bouncer_x,  bouncer_y, bouncer_x+BOUNCER_SIZE, bouncer_y+BOUNCER_SIZE,
-   //al_map_rgb(255, 0, 0), 1);
 }
 
 void Weapons::changeMovement()
