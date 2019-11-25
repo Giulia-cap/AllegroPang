@@ -86,7 +86,6 @@ class GameState:public State
 		void decreaseBulletsNumber(){bulletsNumber-=1;}
 		void resetBulletsNumber(){bulletsNumber=0;}
 		void decreaseTime(){gameTime-=1;}
-		void resetTime(){gameTime=120;}
 		void resetScore(){score=0;}
 		void increaseScore(int s){score+=(s*10);}
 		int getScore(){return score;}

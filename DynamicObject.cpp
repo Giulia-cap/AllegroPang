@@ -2,7 +2,7 @@
 using namespace std;
 
 DynamicObject::DynamicObject(Type t):Object(t){
-	ttl=1000;
+	ttl=250;
 }
 DynamicObject::~DynamicObject(){}
 

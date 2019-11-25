@@ -60,9 +60,9 @@ void init()
   resizeX = SCREEN_W / static_cast<float>(w);
   resizeY = SCREEN_H / static_cast<float>(h);
    
-   display = al_create_display(SCREEN_W, SCREEN_H);
+  // display = al_create_display(SCREEN_W, SCREEN_H);
    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-   //display = al_create_display(SCREEN_W, SCREEN_H);
+   display = al_create_display(SCREEN_W, SCREEN_H);
    
    if(!display) 
    {
@@ -129,7 +129,7 @@ void tick()
      gamestate->init();
       if(state==0)
       {
-        gamestate->setLevel(3);
+        gamestate->setLevel(1);
         menuState->init();
       }
       else 

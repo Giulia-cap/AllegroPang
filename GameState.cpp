@@ -106,10 +106,11 @@ void GameState::tick()
 {
   while(!doexit)
   {
-    cout<<bulletsNumber<<endl;
+    //cout<<bulletsNumber<<endl;
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
+      if (gameOver())return; 
       if(checkLevelOver())
       { 
         if(level<3)
@@ -135,10 +136,10 @@ void GameState::tick()
             if (bulletDelay >= firerate && !player->getLifeRemoved())
             {
               //cout<<getBulletsNumber()<<endl;
-              if(!machineGun && getBulletsNumber() ==0)
+              if(!machineGun && getBulletsNumber()==0)
               {
                 //bulletsNumber=0;
-                increaseBulletsNumber();
+                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
@@ -152,13 +153,13 @@ void GameState::tick()
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
-                increaseBulletsNumber();
+                 increaseBulletsNumber();
                 //cout<<"sparo machineGun"<<endl;
               } 
               else if(arpionex2 && getBulletsNumber()<=1)
               {
                 //bulletsNumber=0;
-                increaseBulletsNumber();
+                 increaseBulletsNumber();
                 bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
@@ -174,7 +175,8 @@ void GameState::tick()
          {
             if((*it)->getType()==WEAPONS && !arpione && (*it)->dead)
             {
-              decreaseBulletsNumber();
+            decreaseBulletsNumber();
+
               object.erase(it); break;
             }
             else if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
@@ -381,15 +383,14 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
     {
-      cout<<"sto collidendo con la palla "<<hitDelay<<endl;
+     // cout<<"sto collidendo con la palla "<<hitDelay<<endl;
      
       if (hitDelay >= hitRate)
       {
       	if(orologio) orologio = false;
         player->RemoveOneLife();
-        cout<<"rimuovo vita"<<endl;
+        //cout<<"rimuovo vita"<<endl;
         hitDelay=0;
-        if (gameOver())return; 
          it++;
       }
     }
@@ -453,7 +454,7 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-      ran=rand()%10; //10
+      ran=rand()%15; //10
      //cout<<bonus.size()<<endl;
      if( ran<=6 && bonus.size()<=3)
       {
@@ -472,17 +473,17 @@ void GameState::findPower(int t)
     arpione=true;
     machineGun=false;
     arpionex2=false;
-    resetBulletsNumber();
+   
   }
   else if(t==MACHINEGUN){ 
     machineGun=true;
     arpione=false;
     arpionex2=false;
-    resetBulletsNumber();
+   
   }
   else if(t==ARPIONEX2)   //arpioneX2+machine 
   {
-  	resetBulletsNumber();
+  	
     machineGun=false;
     arpione=false;
     arpionex2=true;
@@ -512,7 +513,7 @@ void GameState::TtlManager()
       {
   
          if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-           decreaseBulletsNumber();
+         decreaseBulletsNumber();
            it2=object.erase(it2); 
           }else 
           {
@@ -528,7 +529,7 @@ void GameState::TtlManager()
 
 bool GameState::gameOver()
 {
-  if(/*player->getLife()==0 ||*/ gameTime==0)
+  if(player->getLife()==0 || gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
@@ -637,7 +638,7 @@ void GameState::reset()
   bonusRate=500.0f; //durata bonus orologio
   bonusDelay=0.0f;
   bulletsNumber=0;
- 
+  gameTime =120;
 
   player->reset();
 
@@ -646,8 +647,6 @@ void GameState::reset()
   //obstacle.clear();
   generateBalls();
 
-  resetTime();
-  resetBulletsNumber();
 }
 
 

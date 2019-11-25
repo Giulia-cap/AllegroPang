@@ -4,7 +4,7 @@
 
 class DynamicObject:public Object
 {
-	private:
+	protected:
 		int ttl;
 	public:
 		bool collisionX=false;
