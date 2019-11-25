@@ -132,7 +132,7 @@ void GameState::tick()
 
          if(key[SPACE_BAR])
          {
-            if (bulletDelay >= firerate)
+            if (bulletDelay >= firerate && !player->getLifeRemoved())
             {
               //cout<<getBulletsNumber()<<endl;
               if(!machineGun && getBulletsNumber() ==0)
@@ -374,31 +374,20 @@ void GameState::setKey(ALLEGRO_EVENT ev)
 
 
 //----------------------------BLOCCO FUNZIONI 3--------------------------------------------------------
-
 void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 {
   int posX=(*it)->getBouncer_x();
   int posY=(*it)->getBouncer_y();
 
- /* if(level==3)
-  {
-    if((*it)->collisionWithObstacle( o1->getBouncer_x(), o1->getBouncer_y(), o1->BOUNCER_SIZEX, o1->BOUNCER_SIZE ))
-    {  
-      (*it)->changeMovement();
-    }
-    else if((*it)->collisionWithObstacle( o2->getBouncer_x(), o2->getBouncer_y(), o2->BOUNCER_SIZEX, o2->BOUNCER_SIZE ))
-    {  
-      (*it)->changeMovement();
-    }
-  }*/
-
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
     {
-     // cout<<"sto collidendo con la palla"<<endl;
+      cout<<"sto collidendo con la palla "<<hitDelay<<endl;
+     
       if (hitDelay >= hitRate)
       {
+      	if(orologio) orologio = false;
         player->RemoveOneLife();
-       // cout<<"rimuovo vita"<<endl;
+        cout<<"rimuovo vita"<<endl;
         hitDelay=0;
         if (gameOver())return; 
          it++;
@@ -641,7 +630,7 @@ void GameState::reset()
   doexit = false;
   firerate=10.0f; // quanto velocemente si puo sparare
   bulletDelay=10.0f; 
-  hitRate=10.0f; //timer reverse, dopo essere stati colpiti 1 volta devono passare 10tick per poter essere ricolpiti
+  hitRate=100.0f; //timer reverse, dopo essere stati colpiti 1 volta devono passare 10tick per poter essere ricolpiti
   hitDelay=10.0f; 
   timeRate=60.0f; //ogni 60tick scende 1 secondo
   timeDelay=0.0f;
