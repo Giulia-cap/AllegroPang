@@ -8,6 +8,5 @@ class Ball:public DynamicObject
 		Ball(Type,int,float,float,float,float);
 		~Ball();
 		void move(int);
-		void render();
 };
 #endif

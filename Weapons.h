@@ -4,9 +4,11 @@
 #define WEAPONS_H
 class Weapons:public DynamicObject
 {
+	private:
+		string typeWeapons;
 	public:
 		bool stop=false;
-		Weapons(Type,float,float);
+		Weapons(Type,float,float,string);
 		~Weapons();
 	  	void move(int);
 	  	virtual void render();

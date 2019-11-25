@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Weapons.h"
-#include "MachineGun.h"
 #include "Object.h"
 #include <list>
 #include "State.h"

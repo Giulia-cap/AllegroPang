@@ -140,7 +140,7 @@ void GameState::tick()
               {
                 //bulletsNumber=0;
                  increaseBulletsNumber();
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y());
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y(),"hook");
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
@@ -149,7 +149,7 @@ void GameState::tick()
               else if(machineGun)
               {
                //bulletsNumber=0;
-                bullet=new MachineGun(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"machineGun");
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
@@ -160,7 +160,7 @@ void GameState::tick()
               {
                 //bulletsNumber=0;
                  increaseBulletsNumber();
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32);
+                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"hook");
                 object.push_back(bullet);
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
@@ -403,7 +403,6 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
                                    // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
 
           it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-
           object.push_back(b4);   
           object.push_back(b5);
        }
