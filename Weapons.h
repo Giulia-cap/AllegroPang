@@ -10,7 +10,7 @@ class Weapons:public DynamicObject
 		bool stop=false;
 		Weapons(Type,float,float,string);
 		~Weapons();
-	  	void move(int);
+	  	void move();
 	  	virtual void render();
 	  	virtual void changeMovement();
 };

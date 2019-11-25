@@ -30,7 +30,7 @@ Ball::~Ball()
 }
 
 
-void Ball::move(int SCREEN_W)  //togliere
+void Ball::move()  //togliere
 {
    float multiplier=0;
    if(BOUNCER_SIZE>=48)multiplier=2.0;

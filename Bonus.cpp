@@ -30,7 +30,7 @@ Bonus::Bonus(Type t, int bt,int posX, int posY):DynamicObject(t)
 
 Bonus::~Bonus(){}
 
-void Bonus::move(int a)
+void Bonus::move()
 {
 	if(bouncer_y<=(gameAreaH-32)) ///mettere variabile
 		bouncer_y += 4.0;

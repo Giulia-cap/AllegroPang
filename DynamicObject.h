@@ -15,7 +15,7 @@ class DynamicObject:public Object
 		DynamicObject(Type);
 		virtual~DynamicObject();
 		virtual void render();
-		virtual void move(int)=0;
+		virtual void move()=0;
 		virtual void changeMovement();
 		bool collisionWithObstacle(float,float,int,int);
 		int getTtl();

@@ -7,6 +7,6 @@ class Ball:public DynamicObject
 	public:
 		Ball(Type,int,float,float,float,float);
 		~Ball();
-		void move(int);
+		void move();
 };
 #endif

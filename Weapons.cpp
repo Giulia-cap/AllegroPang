@@ -25,7 +25,7 @@ Weapons::~Weapons()
 {
 }
 
-void Weapons::move(int SCREEN_W)
+void Weapons::move()
 {
 	if(bouncer_y>=5 && !stop)
 		bouncer_y -= 5.0;

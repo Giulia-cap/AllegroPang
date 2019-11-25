@@ -119,11 +119,13 @@ void GameState::tick()
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
-         if(key[KEY_LEFT] )  
-            player->move(0);
+         if(key[KEY_LEFT] )  { player->direction=0;
+            player->move();
+         }
 
-         if(key[KEY_RIGHT])
-             player->move(1);
+         if(key[KEY_RIGHT]){player->direction=1;
+             player->move();
+            }
 
          if(key[SPACE_BAR])
          {
@@ -174,9 +176,9 @@ void GameState::tick()
               object.erase(it); break;
             }
             else if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
-              (*it)->move(SCREEN_W);
+              (*it)->move();
             else if(orologio==false)
-              (*it)->move(SCREEN_W);
+              (*it)->move();
          /*------------------------------------------------------------*/
             
            /*------------------COLLISIONI OBJECT-----------------------*/
@@ -197,7 +199,7 @@ void GameState::tick()
            for(list<Bonus*>::iterator it4=bonus.begin();it4!=bonus.end();)
             {
               // cout<<"bonus move"<<endl;
-              (*it4)->move(0);
+              (*it4)->move();
               //SE IL PLAYER PRENDE IL BONUS
                if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
               {

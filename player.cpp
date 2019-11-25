@@ -30,10 +30,11 @@ Player::~Player()
 }
    int moveAnimDelay=1.0f;
    int moveAnimRate=3.5f;
-void Player::move(int k)
+void Player::move()
 {
-  if(!lifeRemoved){
-   if(k==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
+  if(!lifeRemoved)
+  {
+   if(direction==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
    {
    	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
         movSx++;
@@ -44,14 +45,14 @@ void Player::move(int k)
 
         movSx=0;
       }
-   	  dx=false;
-   	  sx=true;
+   	  //dx=false;
+   	  //sx=true;
    	  movDx=0;
 
       bouncer_x -= 4.0;
    }
 
-   if(k==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
+   if(direction==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
    {
    	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
    	  	movDx++;
@@ -61,8 +62,7 @@ void Player::move(int k)
       moveAnimDelay++;
        movDx=0;
       }
-   	  dx=true;
-   	  sx=false;
+   	
    	  movSx=0;
    	  
       bouncer_x += 4.0;
@@ -74,9 +74,9 @@ void Player::move(int k)
 void Player::render()
 {
 	
-  if(sx&&!lifeRemoved)
+  if(direction==0&&!lifeRemoved)
   		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
-  	else if(dx&&!lifeRemoved){
+  	else if(direction==1&&!lifeRemoved){
   		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
     }
 

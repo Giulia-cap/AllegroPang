@@ -21,6 +21,6 @@ class Bonus:public DynamicObject
 		Bonus(Type, int, int, int);
 		~Bonus();  
 		void render();
-		void move(int);
+		void move();
 };
 #endif
