@@ -14,33 +14,28 @@ void DynamicObject::decreaseTtl()
 	if(ttl>0)
 		ttl-=1;
 }
-
 bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey)
 {
-
 	if(!collision(x,y,sizex,sizey)) return false;
-	
-	if (bouncer_x+BOUNCER_SIZE<=x && bouncer_y <= y+sizey){ collisionX=true; /*collisionY=true;cout<<"angolo 1"<<endl;*/}
-	else if (bouncer_x>=x+sizex && bouncer_y<=y+sizey) { collisionX=true;/* collisionY=true;cout<<"angolo 2"<<endl;*/ }
-	else
-	{
-	    if(bouncer_y <= y){collisionY=true; /*cout<<"COllisione sopra"<<endl;*/}
-	    else if(bouncer_y >= y){collisionY=true; /*cout<<"Collisione forse sotto"<<endl;*/}
-	}
-	    
+
+		if(bouncer_y+BOUNCER_SIZE >= y || bouncer_y <= y+sizey )collisionY=true;
+	    if(bouncer_x +BOUNCER_SIZE>= x || bouncer_x <= x+sizex  )collisionX=true;
+
    	changeMovement();
 	return true;
 }
 
 void DynamicObject::changeMovement()
 {  
-	if(collisionX){ //cout<<"vero"<<endl;
-        bouncer_dx=-(bouncer_dx);
-        bouncer_dx+10;
+	if(collisionX){
+        bouncer_dx=bouncer_dx*-1;
+       if(bouncer_dx>0)bouncer_x+=1;
+       else bouncer_x-=1;
 	}
-    else if(collisionY){ //cout<<"vero"<<endl;
-       bouncer_dy=-(bouncer_dy);
-        bouncer_dy+10;
+    if(collisionY){
+       bouncer_dy=bouncer_dy*-1;
+       if(bouncer_dy>0)bouncer_y+=1;
+       else bouncer_y-=1;
     }
     collisionX=false;
     collisionY=false;

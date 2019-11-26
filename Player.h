@@ -19,7 +19,7 @@ class Player:public DynamicObject
 		int dieDelay=0;
 		int dieRate=50.0f;
 	public:
-		int direction;
+		int direction=0;
 
 
 		Player(Type);

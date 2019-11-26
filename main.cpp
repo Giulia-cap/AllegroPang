@@ -129,7 +129,7 @@ void tick()
      gamestate->init();
       if(state==0)
       {
-        gamestate->setLevel(1);
+        gamestate->setLevel(3);
         menuState->init();
       }
       else 

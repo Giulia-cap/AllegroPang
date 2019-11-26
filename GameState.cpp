@@ -82,14 +82,18 @@ void GameState::generateBalls()
   }
    else 
   {
-     b=new Ball(BALL,48,320,120,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,220,2,-4);
+     b=new Ball(BALL,48,320,420,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,420,2,-4);
      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
      if(level==3)
      {
-        o1=new Obstacle(OBSTACLE,540,220);    //540 220
-        o2=new Obstacle(OBSTACLE,650,350);
+        b6=new Ball(BALL,48,320,350,2,-3);
+        object.push_back(b6);
+        o1=new Obstacle(OBSTACLE,550,300);
+       //obstacle.push_back(o1);
+        o2=new Obstacle(OBSTACLE,750,300);
+       //obstacle.push_back(o2);
      }
      return;
   } 
@@ -524,7 +528,7 @@ void GameState::TtlManager()
 
 bool GameState::gameOver()
 {
-  if(/*player->getLife()==0 ||*/ gameTime==0)
+  if(player->getLife()==0 || gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
