@@ -63,8 +63,8 @@ class GameState:public State
 		void createBonus(int, int);
 		//CHIAMATA NEL TICK VERIFICA SE E QUALE POTERE HA IL GIOCATORE IN QUEL MOMENTO
 		void findPower(int);
-		//CHIAMATA NEL TICK GESTISCE I TTL DEGLI OGGETTI
-		void TtlManager();
+		//CHIAMATA NEL TICK GESTISCE I TIMER DEL GIOCO 
+		void timerManager();
 		
 
 		//CONTROLLA SE IL PLAYER HA PERSO IL LIVELLO

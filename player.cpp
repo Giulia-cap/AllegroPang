@@ -27,48 +27,47 @@ Player::Player(Type t):DynamicObject(t)
 
 Player::~Player()
 {
+	 al_destroy_bitmap(barriera);
+	 al_destroy_bitmap(dieImage);
 }
    int moveAnimDelay=1.0f;
    int moveAnimRate=3.5f;
 void Player::move()
 {
-  if(!lifeRemoved)
-  {
-   if(direction==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
-   {
-   	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
-        movSx++;
-   	  	moveAnimDelay=0;
-      }
-   	  else {
-        moveAnimDelay++;
+	if(!lifeRemoved)
+	{
+	   if(direction==0 && bouncer_x >= (BOUNCER_SIZE-10 )+4.0 ) //MOVIMENTO A SINISTRA
+	   {
+	   	  if(movSx<imagesx.size()-1&& moveAnimDelay>=moveAnimRate) {
+	        movSx++;
+	   	  	moveAnimDelay=0;
+	      }
+	   	  else {
+	        moveAnimDelay++;
 
-        movSx=0;
-      }
-   	  //dx=false;
-   	  //sx=true;
-   	  movDx=0;
+	        movSx=0;
+	      }
+	   	  movDx=0;
 
-      bouncer_x -= 4.0;
-   }
+	      bouncer_x -= 4.0;
+	   }
 
-   if(direction==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
-   {
-   	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
-   	  	movDx++;
-        moveAnimDelay=0;
-      }
-   	  else{
-      moveAnimDelay++;
-       movDx=0;
-      }
-   	
-   	  movSx=0;
-   	  
-      bouncer_x += 4.0;
-   }
-    // cout<<"MOVEANIMDELAY "<<moveAnimDelay<<" MOVERATE "<<moveAnimRate<<endl;
-}
+	   if(direction==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
+	   {
+	   	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
+	   	  	movDx++;
+	        moveAnimDelay=0;
+	      }
+	   	  else{
+	      moveAnimDelay++;
+	       movDx=0;
+	      }
+	   	
+	   	  movSx=0;
+	   	  
+	      bouncer_x += 4.0;
+	   }
+	}
 }
 
 void Player::render()

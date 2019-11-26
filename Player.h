@@ -12,7 +12,6 @@ class Player:public DynamicObject
 		ALLEGRO_BITMAP * barriera;
 		int movDx=0; //indice dell'immagine del vector da renderizzare
 		int movSx=0;
-		//bool dx=false,sx=true; // booleana che indica se ci stiamo muovendo a dx o a sx
 		int life;
 		bool protezioneAttiva;
 		bool lifeRemoved=false;

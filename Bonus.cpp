@@ -32,13 +32,13 @@ Bonus::~Bonus(){}
 
 void Bonus::move()
 {
-	if(bouncer_y<=(gameAreaH-32)) ///mettere variabile
+	if( (bouncer_y+(BOUNCER_SIZE-10))<=(gameAreaH-32)) 
 		bouncer_y += 4.0;
 }
 
 void Bonus::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
-	//al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
+	al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
 	
 }

@@ -14,7 +14,36 @@ void DynamicObject::decreaseTtl()
 	if(ttl>0)
 		ttl-=1;
 }
-bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey)
+bool DynamicObject::collisionWithObstacle(float rect2x, float rect2y, int rect2width, int rect2height)
+{
+	int rect1x=bouncer_x;
+	int rect1y=bouncer_y;
+	int rect1width=BOUNCER_SIZE;
+	int rect1height=BOUNCER_SIZE;
+	if(!collision(rect2x,rect2y,rect2width,rect2height)) return false;
+			
+			if(rect1x < rect2x + rect2width &&
+	   rect1x + rect1width > rect2x &&
+	   rect1y < rect2y + rect2height &&
+	   rect1y + rect1height > rect2y) 
+		{
+		if(rect1x < rect2x + rect2width ||
+	   rect1x + rect1width > rect2x) changeMovement(0,1);
+	  	else if( rect1y < rect2y + rect2height ||
+	   rect1y + rect1height > rect2y)changeMovement(1,0);
+
+		}
+
+	return true;
+}
+
+void DynamicObject::changeMovement(bool x, bool y)
+{  
+	if(x) bouncer_dx=-(bouncer_dx);
+       
+    if(y) bouncer_dy=-(bouncer_dy);
+}
+/*bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey)
 {
 	if(!collision(x,y,sizex,sizey)) return false;
 
@@ -39,9 +68,10 @@ void DynamicObject::changeMovement()
     }
     collisionX=false;
     collisionY=false;
-}
+}*/
 
 void DynamicObject::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
+	al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
 }

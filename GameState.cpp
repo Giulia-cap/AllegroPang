@@ -108,6 +108,8 @@ void GameState::tick()
       //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
+      setKey(ev);
+
       if (gameOver())return; 
       if(checkLevelOver())
       { 
@@ -123,11 +125,12 @@ void GameState::tick()
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
-         if(key[KEY_LEFT] )  { player->direction=0;
+         if(key[KEY_LEFT] )  
+        { player->direction=0;
             player->move();
          }
 
-         if(key[KEY_RIGHT]){player->direction=1;
+         else if(key[KEY_RIGHT]){player->direction=1;
              player->move();
             }
 
@@ -170,14 +173,28 @@ void GameState::tick()
             bulletDelay++;
          }
 
-         /*-------------------------MOVIMENTO Object-------------------------*/
+         
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
+
+          /*-----------------------------ttl manager--------------------------------------------*/
+            if((*it)->getType()==WEAPONS && (*it)->getTtl()==0 )
+            {  //((*it)->getType()==BULLET&&(*it)->getBouncer_x() > SCREEN_W || (*it)->getType()==BULLET&&(*it)->getBouncer_y() > SCREEN_H ) 
+//FANNO LA STESSA COSA, SI PUÒ UNIRE    
+              decreaseBulletsNumber();
+              it=object.erase(it); break;
+            }
+            else 
+            {
+                (*it)->decreaseTtl();
+                //it++;
+            }
+          /*-------------------------MOVIMENTO Object e gestione ttl-------------------------*/
             if((*it)->getType()==WEAPONS && !arpione && (*it)->dead)
             {
-            decreaseBulletsNumber();
-
-              object.erase(it); break;
+//CON QUESTA
+                decreaseBulletsNumber();
+                it=object.erase(it); break;
             }
             else if((*it)->getType()!=BALL)  //se abbiamo il potere dell'orologio le palle devono restare ferme
               (*it)->move();
@@ -222,30 +239,13 @@ void GameState::tick()
 
       else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { esc=true; 
          break;}
-    setKey(ev);
-    TtlManager(); 
+    
+    timerManager(); 
     render();
     hitDelay++;
 
       /*--------------------------------------------------------------*/
     
-     //CONTROLLI TIMER GENERICI
-    if(timeDelay>=timeRate)
-    { //GETSTISCE IL TEMPO IN GAME
-   		decreaseTime();
-       // cout<<getMyTime()<<endl;
-      timeDelay=0;
-    }else timeDelay++;
-  
-    if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
-    {
-    	orologio=false;
-    	bonusDelay=0;
-    }
-    else
-    {
-    	bonusDelay++;
-    }
   }
 
    finish=true; 
@@ -276,8 +276,6 @@ void GameState::render()
         {
           o1->render();
           o2->render();
-         /*for(list<Obstacle*>::iterator it3=obstacle.begin();it3!=obstacle.end();it3++)
-            (*it3)->render();*/
         }
 
       drawBar();
@@ -339,8 +337,6 @@ void GameState::setKey(ALLEGRO_EVENT ev)
                break;
 
             case ALLEGRO_KEY_ESCAPE:
-              /*doexit=true;
-              esc=true;*/
             paused=true;
             OptionMenu(sfondi[6]);
               break;
@@ -464,62 +460,62 @@ void GameState::createBonus(int posX, int posY)
 
 void GameState::findPower(int t)
 {
-  if(t==OROLOGIO){
-    orologio=true;
-  }
-  else if(t==ARPIONE)
-  { 
-    arpione=true;
-    machineGun=false;
-    arpionex2=false;
-   
-  }
-  else if(t==MACHINEGUN){ 
-    machineGun=true;
-    arpione=false;
-    arpionex2=false;
-   
-  }
-  else if(t==ARPIONEX2)   //arpioneX2+machine 
+  switch(t)
   {
-  	
-    machineGun=false;
-    arpione=false;
-    arpionex2=true;
-  }
-  else if(t==CLESSIDRA)
-  {
-    gameTime+=15;
-  }
-  else if(t==GIRANDOLA)
-  {
-    player->setLife(player->getLife()+1);
-  }
-   else if(t==PROTEZIONE)
-  {
-    player->setProtezione(true);
-  }
+    case OROLOGIO:
+      orologio=true;
+      break;
+    case ARPIONE:
+      arpione=true;
+      machineGun=false;
+      arpionex2=false;
+      break;
+    case ARPIONEX2:
+      machineGun=false;
+      arpione=false;
+      arpionex2=true;
+      break;
+    case MACHINEGUN:
+      machineGun=true;
+      arpione=false;
+      arpionex2=false;
+      break;
+    case CLESSIDRA:
+      gameTime+=15;
+      break;
+    case GIRANDOLA:
+      player->setLife(player->getLife()+1);
+      break;
+    case PROTEZIONE:
+      player->setProtezione(true);
+      break;
 
+  }
  /* cout<<"MACHINE GUN "<<machineGun<<endl;
   cout<<"ARPIONEX2 "<<arpionex2<<endl;
   cout<<"ARPIONE ATTACCATO "<<arpione<<endl;*/
 
 }
 
-void GameState::TtlManager()
+void GameState::timerManager()
 {
-  for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
-      {
+    //CONTROLLI TIMER GENERICI
+    if(timeDelay>=timeRate)
+    { //GETSTISCE IL TEMPO IN GAME
+      decreaseTime();
+       // cout<<getMyTime()<<endl;
+      timeDelay=0;
+    }else timeDelay++;
   
-         if((*it2)->getType()==WEAPONS && (*it2)->getTtl()==0 && (*it2)->getTtl()==0 ){  //((*it2)->getType()==BULLET&&(*it2)->getBouncer_x() > SCREEN_W || (*it2)->getType()==BULLET&&(*it2)->getBouncer_y() > SCREEN_H ) 
-         decreaseBulletsNumber();
-           it2=object.erase(it2); 
-          }else 
-          {
-            (*it2)->decreaseTtl();
-            it2++;
-          }
-      }
+    if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
+    {
+      orologio=false;
+      bonusDelay=0;
+    }
+    else
+    {
+      bonusDelay++;
+    }
 }
 
 
@@ -528,7 +524,7 @@ void GameState::TtlManager()
 
 bool GameState::gameOver()
 {
-  if(player->getLife()==0 || gameTime==0)
+  if(/*player->getLife()==0 || */gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
