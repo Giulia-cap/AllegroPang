@@ -444,18 +444,21 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
   }
    return false;
 }
-
+int bonusDropRate=60;
+int bonusDropDelay=0;
 void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
       ran=rand()%15; //10
      //cout<<bonus.size()<<endl;
-     if( ran<=6 && bonus.size()<=3)
+     if( ran<=6 && bonus.size()<=3 && bonusDelay>bonusDropRate)
       {
         newBonus=new Bonus(BONUS,ran,posX,posY);
         bonus.push_back(newBonus);
+        bonusDelay=0;
       }
+      bonusDelay++;
 }
 
 void GameState::findPower(int t)

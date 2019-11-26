@@ -42,7 +42,7 @@ Ball::~Ball()
 
 void Ball::move()  
 {
-   cout<<bouncer_x<< " "<<BOUNCER_SIZE<<endl; 
+  // cout<<bouncer_x<< " "<<BOUNCER_SIZE<<endl; 
    
     if(bouncer_x <= 30 || bouncer_x +BOUNCER_SIZEX > (gameAreaW-40) ) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
             bouncer_dx = -bouncer_dx;         //      si sposti alla stessa velocità su qualsiasi computer.
