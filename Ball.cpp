@@ -42,14 +42,19 @@ Ball::~Ball()
 
 void Ball::move()  
 {
-   cout<<bouncer_x<< " "<<BOUNCER_SIZE<<endl; 
+   //cout<<bouncer_x<< " "<<BOUNCER_SIZE<<endl; 
    
-    if(bouncer_x <= 30 || bouncer_x +BOUNCER_SIZEX > (gameAreaW-40) ) {  //invertire la direzione. Inseriamo la logica nell'evento timer, in modo che la bitmap che rimbalza 
-            bouncer_dx = -bouncer_dx;         //      si sposti alla stessa velocità su qualsiasi computer.
+    if(bouncer_x <= 30 || bouncer_x +BOUNCER_SIZEX > (gameAreaW-40) ) {  
+            bouncer_dx = -bouncer_dx;   
+           // collisionX=false;  
+            // collisionY=false;     
          }
 
-         if(bouncer_y < 0 || bouncer_y > (gameAreaH) - BOUNCER_SIZE) {
-            bouncer_dy = -bouncer_dy;    
+         if(/*bouncer_y < 0 || */bouncer_y > (gameAreaH) - BOUNCER_SIZE) 
+         {
+            bouncer_dy = -bouncer_dy; 
+            cout<<"setto false"<<endl;
+            collisionY=false; 
          }
 
          bouncer_x += bouncer_dx;
