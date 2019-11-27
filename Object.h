@@ -3,7 +3,7 @@
 #ifndef Object_H
 #define Object_H
 
-enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS, WEAPONS };
+enum Type { PLAYER = 0, BALL, OBSTACLE, BONUS, WEAPONS, ANIMAL };
 
 class Object
 {

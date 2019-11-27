@@ -1,8 +1,15 @@
 #include "DynamicObject.h"
 using namespace std;
-
+  
 DynamicObject::DynamicObject(Type t):Object(t){
 	ttl=250;
+	 ALLEGRO_BITMAP *tmp;
+   tmp=al_load_bitmap("./resources/exploMuno.png");
+   explosionImage.push_back(tmp);
+   tmp=al_load_bitmap("./resources/exploMdue.png");
+   explosionImage.push_back(tmp);
+   tmp=al_load_bitmap("./resources/exploMtre.png");
+   explosionImage.push_back(tmp);
 }
 DynamicObject::~DynamicObject(){}
 
@@ -19,20 +26,45 @@ int collisionDelay=0;
 int collisionRate=40;
 bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey)
 {
-		if(collisionDelay>collisionRate){
+		//cout<<collisionX<<" "<<collisionY<<endl;
+  if(!collisionY)
+  {
+    cout<<collisionY<<endl;
+    if(!collision(x,y,sizex,sizey)){/*cout<<"non collido"<<bouncer_x<<" "<<bouncer_y<<endl;*/return false;}
+    if (bouncer_x+BOUNCER_SIZE<=x && bouncer_y <= y+sizey)
+    {
+      collisionX=true; collisionY=true;
+      bouncer_dy=-(bouncer_dy);
+       bouncer_dx=-(bouncer_dx);
+     // cout<<"angolo 1"<<endl;
+      return true;
+    }
+    if (bouncer_x>=x+sizex && bouncer_y<=y+sizey) 
+    { 
+      collisionX=true; collisionY=true;
+      bouncer_dy=-(bouncer_dy);
+      bouncer_dx=-(bouncer_dx);
+      //cout<<"angolo 2"<<endl;
+      return true;
+    }
+    else
+    {
+      if(bouncer_y <= y)
+      {
+        bouncer_dy=-(bouncer_dy); 
+        return true;
+      }
+        else if(bouncer_y >= y)
+        {
+          bouncer_dy=-(bouncer_dy); 
+          collisionY=true; cout<<"Collisione forse sotto"<<endl;
+          return true;
+        }
+    }
+    
+  }
 
-	if(!collision(x,y,sizex,sizey)) return false;
-
-		if(bouncer_y+BOUNCER_SIZE >= y || bouncer_y <= y+sizey )collisionY=true;
-	    if(bouncer_x +BOUNCER_SIZE>= x || bouncer_x <= x+sizex  )collisionX=true;
-	    cout<<"bounc_x "<<bouncer_x<<" bouncer_y "<<bouncer_y<<endl;
-	    cout<<"x matto "<<x<<" y matto "<<y<<endl;
-
-   	changeMovement();
-	return true;
-		 collisionDelay=0;
-}
-collisionDelay++;
+  return false;
 }
 
 void DynamicObject::changeMovement()
@@ -75,4 +107,12 @@ return true;
 void DynamicObject::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
+}
+
+
+void DynamicObject::explodeAnimation(){
+   for(unsigned i=0;i<3;i++){
+   al_draw_bitmap(explosionImage[i],  bouncer_x, bouncer_y, 0);
+   al_flip_display();
+}
 }

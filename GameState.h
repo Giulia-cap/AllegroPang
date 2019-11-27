@@ -35,6 +35,8 @@ class GameState:public State
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
+		bool animalMalus=false;
+		int animalCount=0;
 
 	public:
 		GameState(ALLEGRO_DISPLAY * &,ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);

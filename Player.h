@@ -32,5 +32,6 @@ class Player:public DynamicObject
 		void setProtezione(bool);
 		void respawn(); //riposiziona il player al centro della mappa dopo la morte.
 		bool getLifeRemoved(){return lifeRemoved;}
+		
 };
 #endif

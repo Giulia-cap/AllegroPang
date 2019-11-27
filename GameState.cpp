@@ -1,6 +1,7 @@
 #include <list>
 #include "GameState.h"
 #include "Scoreboard.h"
+#include "Parrot.h"
 #include <ctime>
 #include <sstream>
 
@@ -9,6 +10,7 @@ bool doexit,paused;
 int ran;
 
 Ball *b,*b2,*b3,*b4,*b5,*b6;
+Parrot *p;
 Obstacle *o1,*o2,*o3;
 Weapons *bullet;
 Bonus * newBonus;
@@ -109,7 +111,6 @@ void GameState::tick()
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
       setKey(ev);
-
       if (gameOver())return; 
       if(checkLevelOver())
       { 
@@ -134,7 +135,7 @@ void GameState::tick()
              player->move();
             }
 
-         if(key[SPACE_BAR])
+         if(key[SPACE_BAR]&&!animalMalus)
          {
             if (bulletDelay >= firerate && !player->getLifeRemoved())
             {
@@ -176,7 +177,19 @@ void GameState::tick()
          
          for(list<DynamicObject*>::iterator it=object.begin();it!=object.end();)
          {
+           /*-----------------------------Animals manager--------------------------------------------*/
+            if((*it)->getType()==ANIMAL)
+            {
+              if((*it)->getBouncer_x()>=0 && (*it)->getBouncer_x()<=gameAreaW) animalMalus=true; 
+              else if((*it)->getBouncer_x()>=gameAreaW) {
+                animalMalus=false;
+                animalCount=0;
+                it=object.erase(it); break;
+                cout<<(*it)->getBouncer_x()<<" "<<gameAreaW<<endl;
 
+              }
+            }
+            
           /*-----------------------------ttl manager--------------------------------------------*/
             if((*it)->getType()==WEAPONS && (*it)->getTtl()==0 )
             {  //((*it)->getType()==BULLET&&(*it)->getBouncer_x() > SCREEN_W || (*it)->getType()==BULLET&&(*it)->getBouncer_y() > SCREEN_H ) 
@@ -245,7 +258,7 @@ void GameState::tick()
     hitDelay++;
 
       /*--------------------------------------------------------------*/
-    
+
   }
 
    finish=true; 
@@ -392,6 +405,7 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
+     (*it)->explodeAnimation();  
        if((*it)->BOUNCER_SIZE/2>=16) //CREA LE PALLE PICCOLE 
        {
           b4=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
@@ -450,6 +464,7 @@ void GameState::createBonus(int posX, int posY)
 {
    //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
       //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
+     
       ran=rand()%15; //10
      //cout<<bonus.size()<<endl;
      if( ran<=6 && bonus.size()<=3 && bonusDelay>bonusDropRate)
@@ -519,6 +534,14 @@ void GameState::timerManager()
     {
       bonusDelay++;
     }
+      srand(time(NULL));
+
+      ran=rand()%20;
+     if( ran==1 && animalCount==0)
+      {
+            object.push_back(new Parrot(ANIMAL,-64));
+            animalCount++;
+      }
 }
 
 

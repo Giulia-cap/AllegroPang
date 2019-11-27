@@ -1,4 +1,5 @@
 #include "DynamicObject.h"
+
 #ifndef Ball_H
 #define Ball_H
 
@@ -10,5 +11,6 @@ class Ball:public DynamicObject
 		void move();
 	private:
 		float multiplier=0;
+
 };
 #endif
