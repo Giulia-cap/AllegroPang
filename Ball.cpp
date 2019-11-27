@@ -42,15 +42,11 @@ Ball::~Ball()
 
 void Ball::move()  
 {
-   //cout<<bouncer_x<< " "<<BOUNCER_SIZE<<endl; 
-   
     if(bouncer_x <= 30 || bouncer_x +BOUNCER_SIZEX > (gameAreaW-40) ) {  
-            bouncer_dx = -bouncer_dx;   
-           // collisionX=false;  
-            // collisionY=false;     
+            bouncer_dx = -bouncer_dx;    
          }
 
-         if(/*bouncer_y < 0 || */bouncer_y > (gameAreaH) - BOUNCER_SIZE) 
+         if(bouncer_y > (gameAreaH) - BOUNCER_SIZE) 
          {
             bouncer_dy = -bouncer_dy; 
             cout<<"setto false"<<endl;
