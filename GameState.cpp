@@ -25,7 +25,6 @@ GameState::~GameState()
   for(int i=0;i<7;i++)
     al_destroy_bitmap(sfondi[i]);
   al_destroy_bitmap(Vite);
-
   al_destroy_font(pangFont);
   al_destroy_font(pangFontBig);
 }
