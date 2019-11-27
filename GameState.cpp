@@ -549,7 +549,7 @@ void GameState::timerManager()
 
 bool GameState::gameOver()
 {
-  if(/*player->getLife()==0 || */gameTime==0)
+  if(player->getLife()==0 || gameTime==0)
   {
     OptionMenu(sfondi[3]);
     return true;
