@@ -24,16 +24,14 @@ float Object::getBouncer_y(){return bouncer_y;}
 
 bool Object::collision(float xp, float yp, int sizex, int sizey) //posizione e dimensione dell'oggetto con cui dobbiamo verificare se c'è stata la collisione
 {
-   if ((bouncer_x > xp + sizex ) || // is b1 on the right side of b2?
-        (bouncer_y > yp + sizey ) || // is b1 under b2?
-        (xp > bouncer_x + BOUNCER_SIZEX ) || // is b2 on the right side of b1?
-        (yp > bouncer_y + BOUNCER_SIZE ))   // is b2 under b1?
+   if ((bouncer_x > xp + sizex ) || 
+        (bouncer_y > yp + sizey ) || 
+        (xp > bouncer_x + BOUNCER_SIZEX ) || 
+        (yp > bouncer_y + BOUNCER_SIZE ))  
     {
-        // no collision
         return false;
     }
 
-    // collision
     return true;
 }
 

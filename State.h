@@ -23,7 +23,7 @@ class State
 		   event_queue=e;
 		   timer=t;
 		}
-		virtual ~State(){};
+		virtual ~State(){ };
 		virtual void init()=0;
 		virtual void tick()=0;
 		virtual void render()=0;

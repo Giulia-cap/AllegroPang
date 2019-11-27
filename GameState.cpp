@@ -9,17 +9,10 @@ bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato del
 bool doexit,paused;
 int ran;
 
-Ball *b,*b2,*b3,*b4,*b5,*b6;
-Parrot *p;
-Obstacle *o1,*o2,*o3;
-Weapons *bullet;
-Bonus * newBonus;
+Obstacle *o1,*o2;
 Scoreboard scoreboard;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
-
-ALLEGRO_BITMAP * sfondi[7];
-ALLEGRO_BITMAP * Vite;
 
 //-------------------------------------BLOCCO FUNZIONI 1----------------------------------------
 GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
@@ -27,10 +20,14 @@ GameState::GameState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIME
 
 GameState::~GameState()
 {
-  delete b,b2,b3,b4,b5;
   delete player;
-  delete bullet;
-  delete newBonus;
+  delete o1,o2;
+  for(int i=0;i<7;i++)
+    al_destroy_bitmap(sfondi[i]);
+  al_destroy_bitmap(Vite);
+
+  al_destroy_font(pangFont);
+  al_destroy_font(pangFontBig);
 }
 //--------------------------------------------------------------------------------------------------------
 
@@ -53,7 +50,6 @@ void GameState::init()
    
      player=new Player(PLAYER);
      generateBalls();
-
 
      sfondi[0]=al_load_bitmap("./resources/sfondo1.png");
      sfondi[1]=al_load_bitmap("./resources/sfondo2.png");
@@ -78,24 +74,18 @@ void GameState::generateBalls()
 {
   if(level==1)
   {
-     b=new Ball(BALL,48,320,120,2,3);
-     object.push_back(b);
+     object.push_back(new Ball(BALL,48,320,120,2,3));
      return;
   }
    else 
   {
-     b=new Ball(BALL,48,320,420,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,420,2,-4);
-      object.push_back(b);
-     object.push_back(b2);
-     object.push_back(b3);
-     if(level==3)
+    object.push_back(new Ball(BALL,48,100,100,2,3));
+    object.push_back(new Ball(BALL,48,1000,120,2,-4));
+    if(level==3)
      {
-        b6=new Ball(BALL,48,450,120,2,-3);  //48,320,350,2,-3)
-        object.push_back(b6);
+        object.push_back(new Ball(BALL,48,150,150,-2,4));
         o1=new Obstacle(OBSTACLE,450,350);
-       //obstacle.push_back(o1);
         o2=new Obstacle(OBSTACLE,850,320);
-       //obstacle.push_back(o2);
      }
      return;
   } 
@@ -106,8 +96,6 @@ void GameState::tick()
 {
   while(!doexit)
   {
-    //cout<<bulletsNumber<<endl;
-      //cout<<"OROLOGIO: "<<orologio<<"ARPIONE: "<<arpione<<"MACHINEGUN: "<<machineGun<<endl;
       ALLEGRO_EVENT ev;
       al_wait_for_event(event_queue, &ev);
       setKey(ev);
@@ -119,10 +107,10 @@ void GameState::tick()
         else 
           state=2;     
         doexit=true;
-        break;
+        return;
       }  
 
-
+//break;
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
@@ -144,28 +132,23 @@ void GameState::tick()
               {
                 //bulletsNumber=0;
                  increaseBulletsNumber();
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y(),"hook");
-                object.push_back(bullet);
+                object.push_back(new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y(),"hook"));
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
-                //cout<<"sparo arpione"<<endl;
               }
               else if(machineGun)
               {
                //bulletsNumber=0;
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"machineGun");
-                object.push_back(bullet);
+                object.push_back(new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"machineGun"));
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
                  increaseBulletsNumber();
-                //cout<<"sparo machineGun"<<endl;
               } 
               else if(arpionex2 && getBulletsNumber()<=1)
               {
                 //bulletsNumber=0;
                  increaseBulletsNumber();
-                bullet=new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"hook");
-                object.push_back(bullet);
+                object.push_back(new Weapons(WEAPONS,player->getBouncer_x(),player->getBouncer_y()+32,"hook"));
                 al_set_target_bitmap(al_get_backbuffer(display));
                 bulletDelay=0;
               }
@@ -186,7 +169,6 @@ void GameState::tick()
                 animalCount=0;
                 it=object.erase(it); break;
                 cout<<(*it)->getBouncer_x()<<" "<<gameAreaW<<endl;
-
               }
             }
             
@@ -232,12 +214,10 @@ void GameState::tick()
           //----------------COLLISIONI E MOVIMENTO BONUS---------------------
            for(list<Bonus*>::iterator it4=bonus.begin();it4!=bonus.end();)
             {
-              // cout<<"bonus move"<<endl;
               (*it4)->move();
               //SE IL PLAYER PRENDE IL BONUS
                if((*it4)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
               {
-                //cout<<"bonus preso "<<(*it4)->bonusType<<endl;
                 findPower((*it4)->bonusType);
                 it4=bonus.erase(it4);
               }
@@ -251,7 +231,7 @@ void GameState::tick()
     
 
       else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) { esc=true; 
-         break;}
+         return;}
     
     timerManager(); 
     render();
@@ -282,7 +262,6 @@ void GameState::render()
 
         for(list<Bonus*>::iterator it2=bonus.begin();it2!=bonus.end();it2++){ //cout<<"FOR 3:"<<i<<" "<<object.size()<<endl;
             (*it2)->render(); 
-            //cout<<"bonus render"<<endl;
          }
 
         if(level==3)
@@ -305,7 +284,6 @@ void GameState:: drawBar()
   al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw, 550,ALLEGRO_ALIGN_LEFT, "Life: ");
   for (int i=1;i<=player->getLife();i++)
     al_draw_bitmap(Vite,  lw*i, 600, 0);
-   // al_draw_text(pangFont, al_map_rgb(30, 80, 255), lw*i, 600,ALLEGRO_ALIGN_LEFT, "* ");
 
   string t=convert(gameTime);
   al_draw_text(pangFontBig, al_map_rgb(30, 80, 255), 560, 600,ALLEGRO_ALIGN_LEFT, t.c_str());
@@ -392,13 +370,10 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
 
     if((*it)->collision(player->getBouncer_x(),player->getBouncer_y(),player->BOUNCER_SIZEX,player->BOUNCER_SIZE))
     {
-     // cout<<"sto collidendo con la palla "<<hitDelay<<endl;
-     
       if (hitDelay >= hitRate)
       {
       	if(orologio) orologio = false;
         player->RemoveOneLife();
-        //cout<<"rimuovo vita"<<endl;
         hitDelay=0;
          it++;
       }
@@ -407,13 +382,10 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     {
          if((*it)->BOUNCER_SIZE/2>=16) //CREA LE PALLE PICCOLE 
        {
-          b4=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
-          b5=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
-                                   // cout<<"POSIZIONE PALLA X:"<<(*it)->getBouncer_x()<<" Y:"<<(*it)->getBouncer_y()<<endl;
+          object.push_back(new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy));   
+          object.push_back(new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy));
 
           it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
-          object.push_back(b4);   
-          object.push_back(b5);
        }
        else{
         it=object.erase(it); //DISTRUGGO LA PALLA SE HA TOCCATO UN COLPO
@@ -435,23 +407,23 @@ bool GameState::checkCollision(list<DynamicObject*>::iterator it )
   for(list<DynamicObject*>::iterator it2=object.begin();it2!=object.end();)
   {
      {      
-           if((*it2)->getType()==WEAPONS) 
-           {
-              Object *o=(*it2);
-              if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZEX,o->BOUNCER_SIZE))
-              {
-                 decreaseBulletsNumber();
-                 it2=object.erase(it2);
-                  //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
-                 return true;
-              }
-              if(!machineGun &&((*it)->getBouncer_x()< o->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3 && (*it)->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3>o->getBouncer_x()  && (*it)->getBouncer_y()>o->getBouncer_y()))
-              {
-                decreaseBulletsNumber();
-                 it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
-                 return true;
-              }
-           }
+       if((*it2)->getType()==WEAPONS) 
+       {
+          Object *o=(*it2);
+          if((*it)->collision(o->getBouncer_x(),o->getBouncer_y(),o->BOUNCER_SIZEX,o->BOUNCER_SIZE))
+          {
+             decreaseBulletsNumber();
+             it2=object.erase(it2);
+              //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+             return true;
+          }
+          if(!machineGun &&((*it)->getBouncer_x()< o->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3 && (*it)->getBouncer_x()+((*it)->BOUNCER_SIZE/2)+3>o->getBouncer_x()  && (*it)->getBouncer_y()>o->getBouncer_y()))
+          {
+            decreaseBulletsNumber();
+             it2=object.erase(it2); //DISTRUGGO IL COLPO SE HA TOCCATO UNA PALLA
+             return true;
+          }
+       }
      }
      it2++;
   }
@@ -461,18 +433,13 @@ int bonusDropRate=60;
 int bonusDropDelay=0;
 void GameState::createBonus(int posX, int posY)
 {
-   //FACCIAMO CHE SE ESCE 5(I TIPI DI BONUS SONO 5) IL BONUS NON DEVE USCIRE
-      //ALTRIMENTI GENERIAMO UN BONUS E GLI PASSIAMO IL ran CHE SARÀ IL TIPO DI BONUS
-     
-      ran=rand()%15; //10
-     //cout<<bonus.size()<<endl;
-     if( ran<=6 && bonus.size()<=3 && bonusDelay>bonusDropRate)
-      {
-        newBonus=new Bonus(BONUS,ran,posX,posY);
-        bonus.push_back(newBonus);
-        bonusDelay=0;
-      }
-      bonusDelay++;
+  ran=rand()%15; //10
+  if( ran<=6 && bonus.size()<=3 && bonusDelay>bonusDropRate)
+  {
+    bonus.push_back(new Bonus(BONUS,ran,posX,posY));
+    bonusDelay=0;
+  }
+  bonusDelay++;
 }
 
 void GameState::findPower(int t)
@@ -508,20 +475,15 @@ void GameState::findPower(int t)
       break;
 
   }
- /* cout<<"MACHINE GUN "<<machineGun<<endl;
-  cout<<"ARPIONEX2 "<<arpionex2<<endl;
-  cout<<"ARPIONE ATTACCATO "<<arpione<<endl;*/
-
 }
 
 void GameState::timerManager()
 {
-    //CONTROLLI TIMER GENERICI
-    if(timeDelay>=timeRate)
-    { //GETSTISCE IL TEMPO IN GAME
+    if(timeDelay>=timeRate)//GETSTISCE IL TEMPO IN GAME
+    { 
       decreaseTime();
-       // cout<<getMyTime()<<endl;
       timeDelay=0;
+
     }else timeDelay++;
   
     if(bonusDelay>=bonusRate)//GESTISCE IL TIMER DEL BONUS OROLOGIO PER FAR SBLOCCARE LE PALLE
@@ -533,13 +495,13 @@ void GameState::timerManager()
     {
       bonusDelay++;
     }
-      srand(time(NULL));
-
-      ran=rand()%20;
-     if( ran==1 && animalCount==0)
+     if(level==2)ran=rand()%630;
+     if(level==3)ran=rand()%930;
+     if( ran==3 && animalCount==0)
       {
-            object.push_back(new Parrot(ANIMAL,-64));
-            animalCount++;
+        object.push_back(new Parrot(ANIMAL,-64));
+        animalCount++;
+      
       }
 }
 
@@ -655,16 +617,16 @@ void GameState::reset()
   hitDelay=10.0f; 
   timeRate=60.0f; //ogni 60tick scende 1 secondo
   timeDelay=0.0f;
-  bonusRate=500.0f; //durata bonus orologio
+  bonusRate=250.0f; //durata bonus orologio
   bonusDelay=0.0f;
   bulletsNumber=0; 
   gameTime =120;
   animalMalus=false; //malus dell'uccello
   player->reset();
+  player->respawn();
 
   object.clear();
   bonus.clear();
-  //obstacle.clear();
   generateBalls();
 
 }

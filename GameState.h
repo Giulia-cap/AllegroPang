@@ -19,22 +19,20 @@ class GameState:public State
 	private:
 		Player *player;
 		list<DynamicObject*> object;
-		//list<Obstacle*> obstacle;
 		list<Bonus*> bonus;
-		int bulletDelay;
-		int firerate;
-		int hitDelay;
-		int hitRate;	
-		int timeDelay;
- 		int timeRate;	
- 		int bonusDelay;
- 		int bonusRate;
+		int bulletDelay, firerate;
+		int hitDelay, hitRate;	
+		int timeDelay, timeRate;	
+ 		int bonusDelay, bonusRate;
+ 		int bonusDropRate=60,bonusDropDelay=0;
 		int level=1;
 		int score=0;
 		int gameTime =120;
 		int bulletsNumber=0;
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
+		ALLEGRO_BITMAP * sfondi[7];
+		ALLEGRO_BITMAP * Vite;
 		bool animalMalus=false;
 		int animalCount=0;
 
@@ -80,10 +78,9 @@ class GameState:public State
 
 		bool finish;
 
-		//int getLevel(){return level;}
 		void setLevel(int l){level=l;}
 		int getBulletsNumber(){return bulletsNumber;}
-		void increaseBulletsNumber(){bulletsNumber+=1; cout<<"incremento"<<endl;}
+		void increaseBulletsNumber(){bulletsNumber+=1;}
 		void decreaseBulletsNumber(){bulletsNumber-=1;}
 		void resetBulletsNumber(){bulletsNumber=0;}
 		void decreaseTime(){gameTime-=1;}

@@ -43,28 +43,22 @@ void Player::move()
 	   	  	moveAnimDelay=0;
 	      }
 	   	  else {
-	        moveAnimDelay++;
-
-	        movSx=0;
+	        moveAnimDelay++; movSx=0;
 	      }
 	   	  movDx=0;
-
 	      bouncer_x -= 4.0;
 	   }
 
-	   if(direction==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
+	   else if(direction==1 && bouncer_x <= gameAreaW - (BOUNCER_SIZE +20) - 4.0) //MOVIMENTO A DESTRA
 	   {
 	   	  if(movDx<imagedx.size()-1 && moveAnimDelay>=moveAnimRate){
 	   	  	movDx++;
 	        moveAnimDelay=0;
 	      }
 	   	  else{
-	      moveAnimDelay++;
-	       movDx=0;
+	      moveAnimDelay++; movDx=0;
 	      }
-	   	
 	   	  movSx=0;
-	   	  
 	      bouncer_x += 4.0;
 	   }
 	}
@@ -72,17 +66,14 @@ void Player::move()
 
 void Player::render()
 {
-	
-  if(direction==0&&!lifeRemoved)
-  		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
-  	else if(direction==1&&!lifeRemoved){
-  		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
-    }
+	if(direction==0&&!lifeRemoved)
+		al_draw_bitmap(imagesx[movSx], bouncer_x, bouncer_y, 0);
+	else if(direction==1&&!lifeRemoved)
+		al_draw_bitmap(imagedx[movDx],bouncer_x, bouncer_y, 0);
 
-    if(protezioneAttiva&&!lifeRemoved)
+    if(protezioneAttiva && !lifeRemoved)
       al_draw_bitmap(barriera,bouncer_x, bouncer_y, 0);
-    if(lifeRemoved){
-         
+    else if(lifeRemoved){  
       al_draw_bitmap(dieImage,bouncer_x,bouncer_y+dieDelay,0);
       dieDelay++;
     }
@@ -106,19 +97,18 @@ void Player::RemoveOneLife()
 
 }
 
-void Player::reset()
+void Player::reset()  
 { 
   lifeRemoved=false;
   life=3;
-  bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
-  bouncer_y=(gameAreaH - BOUNCER_SIZE );
   protezioneAttiva=false;
 }
 
 int Player::getLife(){return life;}
 void Player::setLife(int l){life=l;}
 void Player::setProtezione(bool p){protezioneAttiva=p;}
-void Player::respawn(){
+
+void Player::respawn(){                                     
    bouncer_x=(gameAreaW / 2.0) - (BOUNCER_SIZE / 2.0);
   bouncer_y=(gameAreaH - BOUNCER_SIZE ); 
 }

@@ -24,14 +24,13 @@ class Object
 		Type getType();
 		void setType(Type);
 
-
 		void setBouncer_x(float);
 		float getBouncer_x();
 
 		void setBouncer_y(float);
 		float getBouncer_y();
 
-		virtual bool collision(float, float, int, int);
+		bool collision(float, float, int, int);
 		virtual void render()=0; 
 };
 

@@ -10,9 +10,7 @@ class DynamicObject:public Object
 		int ttl;
 
 	public:
-		bool collisionX=false;
 		bool collisionY=false;
-
 		float bouncer_dx;
 		float bouncer_dy;
 		DynamicObject(Type);

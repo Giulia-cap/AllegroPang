@@ -10,21 +10,21 @@ ALLEGRO_VIDEO *video;
 ALLEGRO_MIXER *mixer;
 ALLEGRO_BITMAP *frame;
 ALLEGRO_EVENT ev;
-ALLEGRO_BITMAP *schermata,*schermata2;
+ALLEGRO_BITMAP *schermata,*schermata2,*infoScreen;
 ALLEGRO_BITMAP *image;
 
 int alternator=0;
-bool enableScoreState=false,enableTutorial=false;
+bool enableScoreState=false,enableTutorial=false, enableInfoState=false;
 Scoreboard s;
 
 MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIMER * &t,int w,int h):State(d,e,t,w,h){}
 
 MenuState::~MenuState()
 {
-  //al_destroy_video(video);
   cout<<"distruttore";
   al_destroy_bitmap(schermata);
   al_destroy_bitmap(schermata2);
+  al_destroy_bitmap(infoScreen);
 
 }
 
@@ -39,11 +39,10 @@ void MenuState::init()
     pangFontBig=al_load_ttf_font("pangFont.ttf",50,0 );
     if(!pangFont)
       cout<<"NO FONT";
-if(!al_init_image_addon()) {
+  if(!al_init_image_addon()) {
          fprintf(stderr, "failed to create image!\n");
         return ;
      }
-  //ALLEGRO_SAMPLE *intro_music = al_load_sample("resources/intro_music.ogg");
   
   std::string count = "1";
   std::string name = "resources/intro/intro";
@@ -52,9 +51,6 @@ if(!al_init_image_addon()) {
   std::string buffer;
   bool done = false;
   int c = 0, i = 0;
-
- // al_reserve_samples(1);
-  //al_play_sample(intro_music, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 
   while (!done)
   {
@@ -86,8 +82,9 @@ if(!al_init_image_addon()) {
       done = true;
   }
   //al_destroy_sample(intro_music);
-schermata=al_load_bitmap("./resources/press.png");
-schermata2=al_load_bitmap("./resources/press2.png");
+schermata=al_load_bitmap("./resources/press.jpg");
+schermata2=al_load_bitmap("./resources/press2.jpg");
+infoScreen=al_load_bitmap("./resources/info.jpg");
 
   if(!schermata)
     cout<<"no image";
@@ -132,6 +129,11 @@ void MenuState::tick()
               enableTutorial=false;
               else enableTutorial=true;
               break;
+              case ALLEGRO_KEY_I:
+              if(enableInfoState)
+              enableInfoState=false;
+              else enableInfoState=true;
+              break;
             }
             
         }
@@ -146,6 +148,28 @@ void MenuState::tick()
 
 void MenuState::render()
 {
+if(enableInfoState){
+   bool done = false;
+
+     while (!done)
+  {
+    
+    al_wait_for_event(event_queue, &ev);
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+    {
+      if (ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
+        done = true;
+      enableInfoState=false;
+      break;
+    }
+    else if (ev.type == ALLEGRO_EVENT_TIMER)
+    {
+       al_draw_scaled_bitmap(infoScreen, 0, 0, al_get_bitmap_width(infoScreen), al_get_bitmap_height(infoScreen), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
+    al_flip_display();
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    }
+  }
+}
 if(enableTutorial){
 
   std::string count = "1";
@@ -155,9 +179,6 @@ if(enableTutorial){
   std::string buffer;
   bool done = false;
   int c = 0, i = 0;
-
- // al_reserve_samples(1);
-  //al_play_sample(intro_music, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 
   while (!done)
   {
@@ -226,4 +247,5 @@ alternator++;
 if(alternator>1000)alternator=0;
     al_flip_display();
 }
+
 }

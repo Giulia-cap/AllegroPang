@@ -16,43 +16,36 @@ void DynamicObject::decreaseTtl()
 		ttl-=1;
 }
 
-int collisionDelay=0;
-int collisionRate=3;
-
 bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey)
 {
 	if(!collisionY)
 	{
-		cout<<collisionY<<endl;
-		if(!collision(x,y,sizex,sizey)){/*cout<<"non collido"<<bouncer_x<<" "<<bouncer_y<<endl;*/return false;}
+		if(!collision(x,y,sizex,sizey))return false;
 		if (bouncer_x+BOUNCER_SIZE<=x && bouncer_y <= y+sizey)
 		{
-		  collisionX=true; collisionY=true;
-		  bouncer_dy=-(bouncer_dy);
-		   bouncer_dx=-(bouncer_dx);
-		 // cout<<"angolo 1"<<endl;
-		  return true;
+			collisionY=true;
+			bouncer_dy=-(bouncer_dy);
+			bouncer_dx=-(bouncer_dx);
+			return true;
 		}
 		if (bouncer_x>=x+sizex && bouncer_y<=y+sizey) 
 		{ 
-			collisionX=true; collisionY=true;
+			collisionY=true;
 			bouncer_dy=-(bouncer_dy);
 			bouncer_dx=-(bouncer_dx);
-		  //cout<<"angolo 2"<<endl;
-		  return true;
+		  	return true;
 		}
 		else
 		{
 			if(bouncer_y <= y)
 			{
 				bouncer_dy=-(bouncer_dy); 
-				//collisionY=true; cout<<"COllisione sopra"<<endl; //metti x a true
 				return true;
 			}
 		    else if(bouncer_y >= y)
 		    {
 		    	bouncer_dy=-(bouncer_dy); 
-		    	collisionY=true; cout<<"Collisione forse sotto"<<endl;
+		    	collisionY=true;
 		    	return true;
 		    }
 		}

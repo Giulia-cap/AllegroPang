@@ -6,14 +6,12 @@ Parrot::Parrot(Type t,int posX):DynamicObject(t)
 	bouncer_y=100;
 	BOUNCER_SIZE=32;
 
-	
-ALLEGRO_BITMAP *tmp;
-   tmp=al_load_bitmap("./resources/pappagallo1.png");
-   parrotAnimation.push_back(tmp);
-   tmp=al_load_bitmap("./resources/pappagallo2.png");
-   parrotAnimation.push_back(tmp);
-   tmp=al_load_bitmap("./resources/pappagallo3.png");
-   parrotAnimation.push_back(tmp);
+   image=al_load_bitmap("./resources/pappagallo1.png");
+   parrotAnimation.push_back(image);
+   image=al_load_bitmap("./resources/pappagallo2.png");
+   parrotAnimation.push_back(image);
+   image=al_load_bitmap("./resources/pappagallo3.png");
+   parrotAnimation.push_back(image);
 }
 
 
@@ -36,6 +34,6 @@ void Parrot::render()
 	animDelay++;
 	if(anim==3)anim=0;
 }
-	//al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
+	
 	
 
