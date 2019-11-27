@@ -329,6 +329,9 @@ void GameState::setKey(ALLEGRO_EVENT ev)
 
             case ALLEGRO_KEY_ESCAPE:
             paused=true;
+            key[0]=false;
+            key[1]=false;
+            key[2]=false;
             OptionMenu(sfondi[6]);
               break;
 
@@ -497,7 +500,7 @@ void GameState::timerManager()
     }
      if(level==2)ran=rand()%630;
      if(level==3)ran=rand()%930;
-     if( ran==3 && animalCount==0)
+     if( ran==3 && animalCount==0 && level !=1)
       {
         object.push_back(new Parrot(ANIMAL,-64));
         animalCount++;
