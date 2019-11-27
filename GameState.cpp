@@ -85,16 +85,16 @@ void GameState::generateBalls()
    else 
   {
      b=new Ball(BALL,48,320,420,2,3),b2=new Ball(BALL,48,420,160,-2,4),b3=new Ball(BALL,48,120,420,2,-4);
-     object.push_back(b);
+      object.push_back(b);
      object.push_back(b2);
      object.push_back(b3);
      if(level==3)
      {
-        b6=new Ball(BALL,48,320,350,2,-3);
+        b6=new Ball(BALL,48,450,120,2,-3);  //48,320,350,2,-3)
         object.push_back(b6);
-        o1=new Obstacle(OBSTACLE,550,300);
+        o1=new Obstacle(OBSTACLE,450,350);
        //obstacle.push_back(o1);
-        o2=new Obstacle(OBSTACLE,750,300);
+        o2=new Obstacle(OBSTACLE,850,320);
        //obstacle.push_back(o2);
      }
      return;
