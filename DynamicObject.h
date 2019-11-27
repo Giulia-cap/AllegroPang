@@ -19,8 +19,7 @@ class DynamicObject:public Object
 		virtual~DynamicObject();
 		virtual void render();
 		virtual void move()=0;
-		//virtual void changeMovement();
-		bool collisionWithObstacle(float,float,int,int);
+		virtual bool collisionWithObstacle(float,float,int,int);
 		int getTtl();
   		void decreaseTtl();
 };

@@ -45,8 +45,11 @@ void Weapons::render()
 	}
 }
 
-void Weapons::changeMovement()
+bool Weapons::collisionWithObstacle(float x, float y, int sizex, int sizey)
 {
+	if(!collision(x,y,sizex,sizey)) 
+		return false;
 	stop=true;
+	return true;
 }
 

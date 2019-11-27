@@ -12,6 +12,6 @@ class Weapons:public DynamicObject
 		~Weapons();
 	  	void move();
 	  	virtual void render();
-	  	virtual void changeMovement();
+	  	virtual bool collisionWithObstacle(float, float, int, int);
 };
 #endif
