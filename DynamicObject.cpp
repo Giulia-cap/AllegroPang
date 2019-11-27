@@ -3,13 +3,7 @@ using namespace std;
   
 DynamicObject::DynamicObject(Type t):Object(t){
 	ttl=250;
-	 ALLEGRO_BITMAP *tmp;
-   tmp=al_load_bitmap("./resources/exploMuno.png");
-   explosionImage.push_back(tmp);
-   tmp=al_load_bitmap("./resources/exploMdue.png");
-   explosionImage.push_back(tmp);
-   tmp=al_load_bitmap("./resources/exploMtre.png");
-   explosionImage.push_back(tmp);
+
 }
 DynamicObject::~DynamicObject(){}
 
@@ -71,11 +65,4 @@ bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey
 void DynamicObject::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
-}
-
-void DynamicObject::explodeAnimation(){
-   for(unsigned i=0;i<3;i++){
-   al_draw_bitmap(explosionImage[i],  bouncer_x, bouncer_y, 0);
-   al_flip_display();
-}
 }

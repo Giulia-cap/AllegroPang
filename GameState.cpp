@@ -405,8 +405,7 @@ void GameState::BallCollision(list<DynamicObject*>::iterator &it)
     }
     else if(checkCollision(it)) //VEDE SE LA PALLA COLLIDE CON IL COLPO
     {
-     (*it)->explodeAnimation();  
-       if((*it)->BOUNCER_SIZE/2>=16) //CREA LE PALLE PICCOLE 
+         if((*it)->BOUNCER_SIZE/2>=16) //CREA LE PALLE PICCOLE 
        {
           b4=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),(*it)->bouncer_dx,(*it)->bouncer_dy);
           b5=new Ball(BALL,(*it)->BOUNCER_SIZE-16,(*it)->getBouncer_x(),(*it)->getBouncer_y(),-(*it)->bouncer_dx,(*it)->bouncer_dy);
@@ -658,9 +657,9 @@ void GameState::reset()
   timeDelay=0.0f;
   bonusRate=500.0f; //durata bonus orologio
   bonusDelay=0.0f;
-  bulletsNumber=0;
+  bulletsNumber=0; 
   gameTime =120;
-
+  animalMalus=false; //malus dell'uccello
   player->reset();
 
   object.clear();

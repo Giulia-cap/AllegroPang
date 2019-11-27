@@ -8,7 +8,6 @@ class DynamicObject:public Object
 {
 	protected:
 		int ttl;
-		vector<ALLEGRO_BITMAP *>  explosionImage;
 
 	public:
 		bool collisionX=false;
@@ -24,6 +23,5 @@ class DynamicObject:public Object
 		bool collisionWithObstacle(float,float,int,int);
 		int getTtl();
   		void decreaseTtl();
-  		void explodeAnimation();
 };
 #endif
