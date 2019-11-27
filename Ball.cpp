@@ -42,8 +42,10 @@ Ball::~Ball()
 
 void Ball::move()  
 {
+
     if(bouncer_x <= 30 || bouncer_x +BOUNCER_SIZEX > (gameAreaW-40) ) {  
             bouncer_dx = -bouncer_dx;    
+
          }
 
          if(bouncer_y > (gameAreaH) - BOUNCER_SIZE) 

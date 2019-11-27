@@ -63,16 +63,8 @@ bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey
 }
 
 
-void DynamicObject::changeMovement(bool x, bool y)
-{  
-	if(collisionX) bouncer_dx=-(bouncer_dx);
-       
-    if(collisionY) bouncer_dy=-(bouncer_dy);
-}
-
-
 void DynamicObject::render()
 {
 	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
-	//al_draw_rectangle(bouncer_x,bouncer_y,bouncer_x+BOUNCER_SIZEX,bouncer_y+BOUNCER_SIZE,al_map_rgb(200, 0, 0),0);
+
 }
