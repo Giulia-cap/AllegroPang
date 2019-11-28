@@ -176,20 +176,17 @@ void GameState::tick()
             
           /*-----------------------------ttl manager--------------------------------------------*/
             if((*it)->getType()==WEAPONS && (*it)->getTtl()==0 )
-            {  //((*it)->getType()==BULLET&&(*it)->getBouncer_x() > SCREEN_W || (*it)->getType()==BULLET&&(*it)->getBouncer_y() > SCREEN_H ) 
-//FANNO LA STESSA COSA, SI PUÒ UNIRE    
+            {     
               decreaseBulletsNumber();
               it=object.erase(it); break;
             }
             else 
             {
                 (*it)->decreaseTtl();
-                //it++;
             }
           /*-------------------------MOVIMENTO Object e gestione ttl-------------------------*/
             if((*it)->getType()==WEAPONS && !arpione && (*it)->dead)
             {
-//CON QUESTA
                 decreaseBulletsNumber();
                 it=object.erase(it); break;
             }
@@ -586,7 +583,7 @@ bool GameState::checkLevelOver()
      if(numbBalls==0 && level<3)
      {
         al_clear_to_color(al_map_rgb(0,0,0));
-        al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W, SCREEN_H, 0);
+        al_draw_scaled_bitmap(sfondi[4], 0, 0, al_get_bitmap_width(sfondi[4]), al_get_bitmap_height(sfondi[4]), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
         al_draw_text(pangFont, al_map_rgb(30, 80, 255), 350, 500,ALLEGRO_ALIGN_LEFT, "Get ready for the next level" );
         al_flip_display();
         al_rest(3.0);
