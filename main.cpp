@@ -1,7 +1,6 @@
 #include "includes.h"
 #include "GameState.h"
 #include "MenuState.h"
-//#include "ScoreState.h"
 #include "Scoreboard.h"
 
 using namespace std;
@@ -93,9 +92,9 @@ void init()
         return;
      }
 
-     al_register_event_source(event_queue, al_get_keyboard_event_source());
+   al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+   al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
    al_register_event_source(event_queue, al_get_display_event_source(display));
 
@@ -107,8 +106,6 @@ void init()
   
   gamestate = new GameState(display,event_queue,timer,SCREEN_W,SCREEN_H);
   menuState= new MenuState(display,event_queue,timer,SCREEN_W,SCREEN_H);
-
- // menuState->init();
   tick();
 
     al_destroy_display(display);
