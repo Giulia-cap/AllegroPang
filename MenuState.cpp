@@ -19,12 +19,12 @@ MenuState::MenuState(ALLEGRO_DISPLAY * & d,ALLEGRO_EVENT_QUEUE * &e,ALLEGRO_TIME
 
 MenuState::~MenuState()
 {
-  cout<<"distruttore";
   al_destroy_bitmap(schermata);
   al_destroy_bitmap(schermata2);
   al_destroy_bitmap(infoScreen);
   al_destroy_bitmap(frame);
-  al_destroy_bitmap(image);
+  al_destroy_font(pangFont);
+  al_destroy_font(pangFontBig);
 
 }
 
@@ -64,9 +64,7 @@ void MenuState::init()
     else if (ev.type == ALLEGRO_EVENT_TIMER)
     {
       all_name = name + count + png;
-    //  cout<<all_name<<endl;
       image = al_load_bitmap(all_name.c_str());
-     // al_draw_bitmap(image, 0, 0, 0);
       al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), 0, 0, SCREEN_W/resizeX, SCREEN_H/resizeY, 0);
 
       al_flip_display();
@@ -81,7 +79,7 @@ void MenuState::init()
     if (i == 60)
       done = true;
   }
-  //al_destroy_sample(intro_music);
+
 schermata=al_load_bitmap("./resources/press.jpg");
 schermata2=al_load_bitmap("./resources/press2.jpg");
 infoScreen=al_load_bitmap("./resources/info.jpg");
@@ -92,8 +90,6 @@ infoScreen=al_load_bitmap("./resources/info.jpg");
   al_init_video_addon();
 
   al_clear_to_color(al_map_rgb(0,0,0));
-
-  //al_start_timer(timer); 
  
   al_flip_display();
 
@@ -111,13 +107,13 @@ void MenuState::tick()
             switch (ev.keyboard.keycode)
             {
             	case ALLEGRO_KEY_ENTER:
+              if(!enableScoreState)
           		dexit=true;
               state=1;
               break;
               case ALLEGRO_KEY_ESCAPE:
               esc=true;
               dexit=true;
-              cout<<"esc";
               break;
               case ALLEGRO_KEY_S:
               if(enableScoreState)
@@ -170,7 +166,8 @@ if(enableInfoState){
     }
   }
 }
-if(enableTutorial){
+if(enableTutorial)
+{
 
   std::string count = "1";
   std::string name = "resources/tutorial/tutorial";
@@ -218,7 +215,8 @@ if(enableTutorial){
   }
 
 }
-if(enableScoreState){
+if(enableScoreState)
+{
   vector<string> score=s.readFromFile();
   al_clear_to_color(al_map_rgb(0,0,0));
    for(unsigned i=0;i<10;i++){

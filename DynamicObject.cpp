@@ -54,8 +54,21 @@ bool DynamicObject::collisionWithObstacle(float x, float y, int sizex, int sizey
 	return false;
 }
 
+bool DynamicObject::collision(float xp, float yp, int sizex, int sizey) //posizione e dimensione dell'oggetto con cui dobbiamo verificare se c'è stata la collisione
+{
+   if ((bouncer_x > xp + sizex ) || 
+        (bouncer_y > yp + sizey ) || 
+        (xp > bouncer_x + BOUNCER_SIZEX ) || 
+        (yp > bouncer_y + BOUNCER_SIZE ))  
+    {
+        return false;
+    }
+
+    return true;
+}
+
 
 void DynamicObject::render()
 {
-	al_draw_bitmap(image, bouncer_x, bouncer_y, 0);
+	Object::render();
 }

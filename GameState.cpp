@@ -9,7 +9,7 @@ bool key[3] = { false, false ,false };  //Qui è dove memorizzeremo lo stato del
 bool doexit,paused;
 int ran;
 
-Obstacle *o1,*o2;
+Object *o1,*o2;
 Scoreboard scoreboard;
 //VARIABILI CHE SERVONO PER ATTIVARE I BONUS PRESI 
 bool orologio,arpione,machineGun,arpionex2;
@@ -25,7 +25,6 @@ GameState::~GameState()
   for(int i=0;i<7;i++)
     al_destroy_bitmap(sfondi[i]);
   al_destroy_bitmap(Vite);
-
   al_destroy_font(pangFont);
   al_destroy_font(pangFontBig);
 }
@@ -84,8 +83,12 @@ void GameState::generateBalls()
     if(level==3)
      {
         object.push_back(new Ball(BALL,48,150,150,-2,4));
-        o1=new Obstacle(OBSTACLE,450,350);
-        o2=new Obstacle(OBSTACLE,850,320);
+        o1=new Object(OBSTACLE);
+        o1->setBouncer_x(450);
+        o1->setBouncer_y(350);
+        o2=new Object(OBSTACLE);
+        o2->setBouncer_x(850);
+        o2->setBouncer_y(320);
      }
      return;
   } 
@@ -110,7 +113,6 @@ void GameState::tick()
         return;
       }  
 
-//break;
       if(ev.type == ALLEGRO_EVENT_TIMER) 
       {
          /*-------------------MOVIMENTO PLAYER---------------------*/
@@ -329,6 +331,9 @@ void GameState::setKey(ALLEGRO_EVENT ev)
 
             case ALLEGRO_KEY_ESCAPE:
             paused=true;
+            key[0]=false;
+            key[1]=false;
+            key[2]=false;
             OptionMenu(sfondi[6]);
               break;
 
@@ -497,7 +502,7 @@ void GameState::timerManager()
     }
      if(level==2)ran=rand()%630;
      if(level==3)ran=rand()%930;
-     if( ran==3 && animalCount==0)
+     if( ran==3 && animalCount==0 && level !=1)
       {
         object.push_back(new Parrot(ANIMAL,-64));
         animalCount++;

@@ -20,8 +20,6 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_TRANSFORM t;
 
-enum _State{MENU=0, GAME,LEVEL1, LEVEL2, LEVEL3};
-//_State state=MENU;
 int state=0;
 
 GameState *gamestate;
@@ -142,5 +140,5 @@ void tick()
 
 void setState(int s)
 {
-  state=(_State)s;
+  state=(s);
 }

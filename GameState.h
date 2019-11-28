@@ -5,7 +5,6 @@
 #include <list>
 #include "State.h"
 #include "Bonus.h"
-#include "obstacle.h"
 
 #ifndef GameState_H
 #define GameState_H

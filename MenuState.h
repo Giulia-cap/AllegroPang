@@ -8,7 +8,6 @@ private:
 		ALLEGRO_FONT * pangFont;
 		ALLEGRO_FONT *pangFontBig;
 
-		//IL CODICE SOPRA VA RIMOSSO E VA GENERALIZZATO NELL'INCLUDES.H
 	public:
 		MenuState(ALLEGRO_DISPLAY * &, ALLEGRO_EVENT_QUEUE * &,ALLEGRO_TIMER * &, int,int);
 		~MenuState();
