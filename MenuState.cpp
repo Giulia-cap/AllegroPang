@@ -6,8 +6,6 @@
 
 bool dexit;
 
-ALLEGRO_VIDEO *video;
-ALLEGRO_MIXER *mixer;
 ALLEGRO_BITMAP *frame;
 ALLEGRO_EVENT ev;
 ALLEGRO_BITMAP *schermata,*schermata2,*infoScreen;
@@ -25,6 +23,8 @@ MenuState::~MenuState()
   al_destroy_bitmap(schermata);
   al_destroy_bitmap(schermata2);
   al_destroy_bitmap(infoScreen);
+  al_destroy_bitmap(frame);
+  al_destroy_bitmap(image);
 
 }
 
